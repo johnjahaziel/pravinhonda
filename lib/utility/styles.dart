@@ -4,6 +4,7 @@ import 'package:pravinhonda/utility/size_config.dart';
 Color kred = Color(0xffCC0000);
 Color kblack = Color(0xff000000);
 Color kwhite = Color(0xffFFFFFF);
+Color kgrey = Color(0xff808080);
 
 //Font Sizes
 

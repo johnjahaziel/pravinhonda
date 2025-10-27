@@ -4,14 +4,6 @@ import 'package:pravinhonda/utility/styles.dart';
 PreferredSizeWidget appBar() {
   return AppBar(
     centerTitle: true,
-    leading: IconButton(
-      constraints: const BoxConstraints(),
-      onPressed: () {},
-      icon: Icon(
-        Icons.menu_rounded,
-        color: kblack,
-      ),
-    ),
     title: Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
