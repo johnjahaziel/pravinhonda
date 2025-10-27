@@ -32,6 +32,9 @@ class MyApp extends StatelessWidget {
         },
         theme: ThemeData(
           scaffoldBackgroundColor: kwhite,
+          appBarTheme: AppBarTheme(
+            backgroundColor: kwhite,
+          ),
           primaryColor: kwhite,
           fontFamily: 'Poppins',
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pravinhonda/loginscreens/Navigation.dart';
 import 'package:pravinhonda/utility/custom.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/versiontext.dart';
@@ -28,7 +29,7 @@ class _LoginState extends State<Login> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: SizeConfig.h(100)),
+              SizedBox(height: SizeConfig.h(80)),
               Image(
                 image: AssetImage('images/pravin_honda_logo.png'),
                 height: SizeConfig.h(150),
@@ -61,7 +62,17 @@ class _LoginState extends State<Login> {
                 passwordcontroller,
               ),
               SizedBox(height: SizeConfig.h(60)),
-              button("Login", () {}),
+              button(
+                "Login",
+                () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Navigation(),
+                    ),
+                  );
+                }
+              ),
               SizedBox(height: SizeConfig.h(80)),
               Divider(
                 color: Colors.grey[300],

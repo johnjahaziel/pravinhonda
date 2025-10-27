@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   font_awesome_flutter: ^10.8.0
   package_info_plus: ^8.3.1
+  fl_chart: ^1.1.1
 
 dev_dependencies:
   flutter_test:
@@ -96,6 +97,7 @@ flutter:
         - asset: fonts/Poppins-Regular.ttf
         - asset: fonts/Poppins-Bold.ttf
         - asset: fonts/Poppins-Medium.ttf
+        - asset: fonts/Poppins-SemiBold.ttf
 
   #
   # For details regarding fonts from package dependencies,
