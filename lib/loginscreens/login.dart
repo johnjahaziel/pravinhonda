@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pravinhonda/utility/custom.dart';
+import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/versiontext.dart';
 
 class Login extends StatefulWidget {
-  const Login({super.key});
+  Login({super.key});
 
   @override
   State<Login> createState() => _LoginState();
@@ -17,72 +18,62 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig.init(context);
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomInset: true, // ✅ allows scroll when keyboard pops
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
-        body: LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: constraints.maxHeight, // ✅ makes it fill screen
-                ),
-                child: IntrinsicHeight(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center, // ✅ center
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Image(
-                        image: AssetImage('images/pravin_honda_logo.png'),
-                        height: 150,
-                        width: 200,
-                      ),
-                      const SizedBox(height: 40),
-                      textfield(
-                        'User ID',
-                        useridcontroller
-                      ),
-                      const SizedBox(height: 20),
-                      password(
-                        'Password',
-                        Padding(
-                          padding: const EdgeInsets.only(right: 5),
-                          child: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                isPassword = !isPassword;
-                              });
-                            },
-                            icon: isPassword
-                                ? const Icon(FontAwesomeIcons.solidEyeSlash,
-                                    color: Colors.black, size: 20)
-                                : const Icon(FontAwesomeIcons.solidEye,
-                                    color: Colors.black, size: 20),
-                          ),
-                        ),
-                        isPassword,
-                        passwordcontroller,
-                      ),
-                      const SizedBox(height: 40),
-                      button("Login", () {}),
-                      const Spacer(),
-                      Divider(
-                        color: Colors.grey[300],
-                        thickness: 1,
-                        indent: 25,
-                        endIndent: 25,
-                      ),
-                      const SizedBox(height: 20),
-                      const Versiontext(),
-                      const SizedBox(height: 20),
-                    ],
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: SizeConfig.h(100)),
+              Image(
+                image: AssetImage('images/pravin_honda_logo.png'),
+                height: SizeConfig.h(150),
+                width: SizeConfig.w(200),
+              ),
+              SizedBox(height: SizeConfig.h(40)),
+              textfield(
+                'User ID',
+                useridcontroller
+              ),
+              SizedBox(height: SizeConfig.h(20)),
+              password(
+                'Password',
+                Padding(
+                  padding: EdgeInsets.only(right: 5),
+                  child: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        isPassword = !isPassword;
+                      });
+                    },
+                    icon: isPassword
+                        ? Icon(FontAwesomeIcons.solidEyeSlash,
+                            color: Colors.black, size: 20)
+                        : Icon(FontAwesomeIcons.solidEye,
+                            color: Colors.black, size: 20),
                   ),
                 ),
+                isPassword,
+                passwordcontroller,
               ),
-            );
-          },
+              SizedBox(height: SizeConfig.h(60)),
+              button("Login", () {}),
+              SizedBox(height: SizeConfig.h(80)),
+              Divider(
+                color: Colors.grey[300],
+                thickness: 1,
+                indent: 25,
+                endIndent: 25,
+              ),
+              SizedBox(height: SizeConfig.h(20)),
+              Versiontext(),
+              SizedBox(height: SizeConfig.h(20)),
+            ],
+          ),
         ),
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
 textfield(String title, TextEditingController controller) => Column(
@@ -8,7 +9,7 @@ textfield(String title, TextEditingController controller) => Column(
       padding: const EdgeInsets.only(left: 25),
       child: Text(
         title,
-        style: t12()
+        style: text12
       ),
     ),
     Padding(
@@ -44,7 +45,7 @@ password(String title, suffixIcon,bool isPassword,TextEditingController controll
       padding: const EdgeInsets.only(left: 25),
       child: Text(
         title,
-        style: t12()
+        style: text12
       ),
     ),
     Padding(
@@ -80,7 +81,7 @@ button(String title, VoidCallback onPressed) => Padding(
     fillColor: kred,
     constraints: BoxConstraints.tightFor(
       width: double.infinity,
-      height: 55
+      height: SizeConfig.h(55)
     ),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10)
@@ -91,7 +92,7 @@ button(String title, VoidCallback onPressed) => Padding(
         fontFamily: 'Poppins',
         fontWeight: FontWeight.bold,
         color: Colors.white,
-        fontSize: 16
+        fontSize: fs16
       ),
     )
   ),

@@ -29,7 +29,10 @@ class _VersiontextState extends State<Versiontext> {
   Widget build(BuildContext context) {
     return Text(
       'Version $_version',
-      style: t12(color: const Color.fromRGBO(117, 117, 117, 1))
+      style: customtext(
+        fs12,
+        Color.fromRGBO(117, 117, 117, 1),
+      )
     );
   }
 }
