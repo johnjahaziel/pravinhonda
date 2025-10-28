@@ -184,6 +184,9 @@ class _HomescreenState extends State<Homescreen> {
                     padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(10)),
                     child: Column(
                       children: [
+                        SizedBox(
+                          height: SizeConfig.h(8),
+                        ),
                         Row(
                           children: [
                             Expanded(
@@ -244,6 +247,9 @@ class _HomescreenState extends State<Homescreen> {
                               ),
                             )
                           ],
+                        ),
+                        SizedBox(
+                          height: SizeConfig.h(5)
                         ),
                         if(recentactivity == true && todolist == false)
                         recentactivitycolumn(),

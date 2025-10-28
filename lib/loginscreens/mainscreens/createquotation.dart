@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pravinhonda/loginscreens/mainscreens/createquotation.dart';
+import 'package:lottie/lottie.dart';
 import 'package:pravinhonda/utility/customs/customappBar.dart';
 import 'package:pravinhonda/utility/customs/customdatefield.dart';
 import 'package:pravinhonda/utility/customs/customdrawer.dart';
@@ -8,15 +8,14 @@ import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
-class Createenquiry extends StatefulWidget {
-  const Createenquiry({super.key});
+class Createquotation extends StatefulWidget {
+  const Createquotation({super.key});
 
   @override
-  State<Createenquiry> createState() => _CreateenquiryState();
+  State<Createquotation> createState() => _CreatequotationState();
 }
 
-class _CreateenquiryState extends State<Createenquiry> {
-
+class _CreatequotationState extends State<Createquotation> {
   List<Map<String, String>> customercategoryitems = [
     {'label': 'Individual', 'value': 'Individual'},
   ];
@@ -126,7 +125,7 @@ class _CreateenquiryState extends State<Createenquiry> {
               SizedBox(height: SizeConfig.h(20)),
               Center(
                 child: Text(
-                  'Create Enquiry',
+                  'Create Quotation',
                   style: customtext(
                     fs18,
                     kred,
@@ -309,11 +308,15 @@ class _CreateenquiryState extends State<Createenquiry> {
               ),
               SizedBox(height: SizeConfig.h(20)),
               button(
-                'Create Enquiry',
+                'Create Quotation',
                 () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder : (context) => Createquotation()),
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (_) => QuotationSuccessPopup(
+                      name: "Rojar",
+                      number: "87548 01550",
+                    ),
                   );
                 }
               ),
@@ -326,3 +329,90 @@ class _CreateenquiryState extends State<Createenquiry> {
     );
   }
 }
+
+class QuotationSuccessPopup extends StatelessWidget {
+  final String name;
+  final String number;
+
+  const QuotationSuccessPopup({
+    super.key,
+    required this.name,
+    required this.number,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      constraints: BoxConstraints.tightFor(
+        width: double.infinity
+      ),
+      backgroundColor: kwhite,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      contentPadding: EdgeInsets.all(10),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Name : $name",
+                    style: textmedium12,
+                  ),
+                  Text(
+                    "Number : $number",
+                    style: textmedium12,
+                  ),
+                ],
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: Icon(Icons.close, size: 20, color: Colors.black54),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: SizeConfig.h(20)),
+          LottieBuilder(
+            height: SizeConfig.h(120),
+            width: SizeConfig.w(120),
+            lottie: AssetLottie(
+              'lottie/completed.json',
+            )
+          ),
+          SizedBox(height: SizeConfig.h(2)),
+          Text(
+            "Thanks For Creating The Quotation!",
+            textAlign: TextAlign.center,
+            style: textmedium12
+          ),
+          SizedBox(height: SizeConfig.h(20)),
+          Text(
+            "Please Download It And\nGive A Hard Copy To The Customer.",
+            textAlign: TextAlign.center,
+            style: textmedium12
+          ),
+          SizedBox(height: SizeConfig.h(20)),
+          Text(
+            "Thank You!",
+            textAlign: TextAlign.center,
+            style: textmedium12
+          ),
+          SizedBox(height: SizeConfig.h(20)),
+          button(
+            'Print',
+            () {}
+          ),
+          SizedBox(height: SizeConfig.h(30)),
+        ]
+      ),
+    );
+  }
+}
+
