@@ -5,6 +5,13 @@ Color kred = Color(0xffCC0000);
 Color kblack = Color(0xff000000);
 Color kwhite = Color(0xffFFFFFF);
 Color kgrey = Color(0xff808080);
+Color kyellow = Color(0xffFFD700);
+Color kgreen = Color(0xff48B33B);
+Color kgreen2 = Color(0xff81E04B);
+Color klightgreen = Color(0xff9CBA01);
+Color kblue = Color(0xff50C8FF);
+Color kdarkblue = Color(0xff1556BE);
+Color kpurple = Color(0xffBE158E);
 
 //Font Sizes
 
