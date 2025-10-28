@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
 textfield(String title, TextEditingController controller) => Column(
@@ -72,28 +71,4 @@ password(String title, suffixIcon,bool isPassword,TextEditingController controll
       ),
     ),
   ],
-);
-
-button(String title, VoidCallback onPressed) => Padding(
-  padding: const EdgeInsets.only(left: 25,right: 25),
-  child: RawMaterialButton(
-    onPressed: onPressed,
-    fillColor: kred,
-    constraints: BoxConstraints.tightFor(
-      width: double.infinity,
-      height: SizeConfig.h(55)
-    ),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(10)
-    ),
-    child: Text(
-      title,
-      style: TextStyle(
-        fontFamily: 'Poppins',
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-        fontSize: fs16
-      ),
-    )
-  ),
 );

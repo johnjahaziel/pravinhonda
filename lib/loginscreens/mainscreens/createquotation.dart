@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:pravinhonda/loginscreens/mainscreens/createbooking.dart';
 import 'package:pravinhonda/utility/customs/customappBar.dart';
 import 'package:pravinhonda/utility/customs/customdatefield.dart';
 import 'package:pravinhonda/utility/customs/customdrawer.dart';
@@ -407,7 +408,12 @@ class QuotationSuccessPopup extends StatelessWidget {
           SizedBox(height: SizeConfig.h(20)),
           button(
             'Print',
-            () {}
+            () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Createbooking())
+              );
+            }
           ),
           SizedBox(height: SizeConfig.h(30)),
         ]
