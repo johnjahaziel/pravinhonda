@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pravinhonda/loginscreens/mainscreens/createenquiry.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
@@ -266,8 +267,14 @@ class _HomescreenState extends State<Homescreen> {
           height: SizeConfig.h(40),
           width: SizeConfig.w(40),
           child: FloatingActionButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Createenquiry())
+              );
+            },
             shape: CircleBorder(),
+            elevation: 10,
             backgroundColor: kred,
             child: Icon(
               Icons.add_circle_outline_rounded,
@@ -458,6 +465,7 @@ class _HomescreenState extends State<Homescreen> {
                           color: kwhite,
                         ),
                       ),
+                      SizedBox(height: SizeConfig.h(5)),
                       RawMaterialButton(
                         onPressed: () {},
                         constraints: BoxConstraints.tightFor(
