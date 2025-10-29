@@ -357,18 +357,21 @@ class QuotationSuccessPopup extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Name : $name",
-                    style: textmedium12,
-                  ),
-                  Text(
-                    "Number : $number",
-                    style: textmedium12,
-                  ),
-                ],
+              Padding(
+                padding: EdgeInsets.only(top: SizeConfig.h(5),left: SizeConfig.w(5)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Name : $name",
+                      style: textmedium12,
+                    ),
+                    Text(
+                      "Number : $number",
+                      style: textmedium12,
+                    ),
+                  ],
+                ),
               ),
               Align(
                 alignment: Alignment.topRight,
@@ -405,7 +408,7 @@ class QuotationSuccessPopup extends StatelessWidget {
             textAlign: TextAlign.center,
             style: textmedium12
           ),
-          SizedBox(height: SizeConfig.h(20)),
+          SizedBox(height: SizeConfig.h(40)),
           button(
             'Print',
             () {

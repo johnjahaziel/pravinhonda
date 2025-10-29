@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:pravinhonda/utility/customs/customappBar.dart';
 import 'package:pravinhonda/utility/customs/customdatefield.dart';
 import 'package:pravinhonda/utility/customs/customdrawer.dart';
@@ -208,12 +209,105 @@ class _CreatebookingState extends State<Createbooking> {
               SizedBox(height: SizeConfig.h(20)),
               button(
                 'Create Booking',
-                () {}
+                () {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (_) => BookingSuccessPopup(
+                      name: "Rojar",
+                      number: "87548 01550",
+                    ),
+                  );
+                }
               ),
               SizedBox(height: SizeConfig.h(40)),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class BookingSuccessPopup extends StatelessWidget {
+  final String name;
+  final String number;
+
+  const BookingSuccessPopup({
+    super.key,
+    required this.name,
+    required this.number,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      constraints: BoxConstraints.tightFor(
+        width: double.infinity
+      ),
+      backgroundColor: kwhite,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      contentPadding: EdgeInsets.all(10),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: SizeConfig.h(5),left: SizeConfig.w(5)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Name : $name",
+                      style: textmedium12,
+                    ),
+                    Text(
+                      "Number : $number",
+                      style: textmedium12,
+                    ),
+                  ],
+                ),
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: Icon(Icons.close, size: 20, color: Colors.black54),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: SizeConfig.h(20)),
+          LottieBuilder(
+            height: SizeConfig.h(120),
+            width: SizeConfig.w(120),
+            lottie: AssetLottie(
+              'lottie/completed.json',
+            )
+          ),
+          SizedBox(height: SizeConfig.h(2)),
+          Text(
+            "Thanks For Creating The Quotation!",
+            textAlign: TextAlign.center,
+            style: textmedium12
+          ),
+          SizedBox(height: SizeConfig.h(20)),
+          Text(
+            "Please Download It And\nGive A Hard Copy To The Customer.",
+            textAlign: TextAlign.center,
+            style: textmedium12
+          ),
+          SizedBox(height: SizeConfig.h(20)),
+          Text(
+            "Thank You!",
+            textAlign: TextAlign.center,
+            style: textmedium12
+          ),
+          SizedBox(height: SizeConfig.h(30)),
+        ]
       ),
     );
   }
