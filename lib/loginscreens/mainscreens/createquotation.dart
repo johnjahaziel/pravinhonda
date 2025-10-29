@@ -121,209 +121,212 @@ class _CreatequotationState extends State<Createquotation> {
         appBar: appBar(),
         drawer: Customdrawer(),
         body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(height: SizeConfig.h(20)),
-              Center(
-                child: Text(
-                  'Create Quotation',
-                  style: customtext(
-                    fs18,
-                    kred,
-                    FontWeight.bold
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(20)),
+            child: Column(
+              children: [
+                SizedBox(height: SizeConfig.h(20)),
+                Center(
+                  child: Text(
+                    'Create Quotation',
+                    style: customtext(
+                      fs18,
+                      kred,
+                      FontWeight.bold
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height: SizeConfig.h(10)),
-              textfieldy(
-                'Enquiry ID',
-                enquiryid
-              ),
-              textfieldy(
-                'Wings Enquiry Number',
-                wingsenquiry
-              ),
-              CustomDropdown(
-                title: 'Customer Category',
-                selectedCustomDropdown: selectedcustomercategoryitems,
-                customDropdownItems: customercategoryitems,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedcustomercategoryitems = newValue;
-                  });
-                },
-              ),
-              CustomDropdown(
-                title: 'Enquiry Category',
-                selectedCustomDropdown: selectedenquirycategoryitems,
-                customDropdownItems: enquirycategoryitems,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedenquirycategoryitems = newValue;
-                  });
-                },
-              ),
-              CustomDropdown(
-                title: 'Enquiry Category',
-                selectedCustomDropdown: selectedcustomertypeitems,
-                customDropdownItems: customertypeitems,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedcustomertypeitems = newValue;
-                  });
-                },
-              ),
-              textfieldy(
-                'Customer Contact Number',
-                customercontactnumber
-              ),
-              textfieldy(
-                'Customer Name',
-                customername
-              ),
-              CustomDropdown(
-                title: 'Gender',
-                selectedCustomDropdown: selectedgenderitems,
-                customDropdownItems: genderitems,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedgenderitems = newValue;
-                  });
-                },
-              ),
-              Customdatefield(
-                title: 'Date of Birth',
-                datecontroller: datecontroller
-              ),
-              CustomDropdown(
-                title: 'Martial Status',
-                selectedCustomDropdown: selectedmartialstatusitems,
-                customDropdownItems: martialstatusitems,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedmartialstatusitems = newValue;
-                  });
-                },
-              ),
-              textfieldy(
-                "Email ID",
-                emailid
-              ),
-              CustomDropdown(
-                title: 'Enquiry Type',
-                selectedCustomDropdown: selectedenquirytypeitems,
-                customDropdownItems: enquirytypeitems,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedenquirytypeitems = newValue;
-                  });
-                },
-              ),
-              CustomDropdown(
-                title: 'Enquiry Source',
-                selectedCustomDropdown: selectedenquirysourceitems,
-                customDropdownItems: enquirysourceitems,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedenquirysourceitems = newValue;
-                  });
-                },
-              ),
-              CustomDropdown(
-                title: 'Model Category',
-                selectedCustomDropdown: selectedmodelcategoryitems,
-                customDropdownItems: modelcategoryitems,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedmodelcategoryitems = newValue;
-                  });
-                },
-              ),
-              CustomDropdown(
-                title: 'Model Name',
-                selectedCustomDropdown: selectedmodelnameitems,
-                customDropdownItems: modelnameitems,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedmodelnameitems = newValue;
-                  });
-                },
-              ),
-              CustomDropdown(
-                title: 'Model Variant',
-                selectedCustomDropdown: selectedmodelvariantitems,
-                customDropdownItems: modelvariantitems,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedmodelvariantitems = newValue;
-                  });
-                },
-              ),
-              CustomDropdown(
-                title: 'Model Color',
-                selectedCustomDropdown: selectedmodelcoloritems,
-                customDropdownItems: modelcoloritems,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedmodelcoloritems = newValue;
-                  });
-                },
-              ),
-              CustomDropdown(
-                title: 'Purchase Type',
-                selectedCustomDropdown: selectedpurchasetypeitems,
-                customDropdownItems: purchasetypeitems,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedpurchasetypeitems = newValue;
-                  });
-                },
-              ),
-              CustomDropdown(
-                title: 'Exchange Flag',
-                selectedCustomDropdown: selectedexchangeflagitems,
-                customDropdownItems: exchangeflagitems,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedexchangeflagitems = newValue;
-                  });
-                },
-              ),
-              Customdatefield(
-                title: 'Follow Up Date',
-                datecontroller: followupdatecontroller
-              ),
-              CustomDropdown(
-                title: 'Test Ride',
-                selectedCustomDropdown: selectedtestrideitems,
-                customDropdownItems: testrideitems,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedtestrideitems = newValue;
-                  });
-                },
-              ),
-              description(
-                'Customer Remarks',
-                customerremarks
-              ),
-              SizedBox(height: SizeConfig.h(20)),
-              button(
-                'Create Quotation',
-                () {
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (_) => QuotationSuccessPopup(
-                      name: "Rojar",
-                      number: "87548 01550",
-                    ),
-                  );
-                }
-              ),
-
-              SizedBox(height: SizeConfig.h(40)),
-            ],
+                SizedBox(height: SizeConfig.h(10)),
+                textfieldy(
+                  'Enquiry ID',
+                  enquiryid
+                ),
+                textfieldy(
+                  'Wings Enquiry Number',
+                  wingsenquiry
+                ),
+                CustomDropdown(
+                  title: 'Customer Category',
+                  selectedCustomDropdown: selectedcustomercategoryitems,
+                  customDropdownItems: customercategoryitems,
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedcustomercategoryitems = newValue;
+                    });
+                  },
+                ),
+                CustomDropdown(
+                  title: 'Enquiry Category',
+                  selectedCustomDropdown: selectedenquirycategoryitems,
+                  customDropdownItems: enquirycategoryitems,
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedenquirycategoryitems = newValue;
+                    });
+                  },
+                ),
+                CustomDropdown(
+                  title: 'Enquiry Category',
+                  selectedCustomDropdown: selectedcustomertypeitems,
+                  customDropdownItems: customertypeitems,
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedcustomertypeitems = newValue;
+                    });
+                  },
+                ),
+                textfieldy(
+                  'Customer Contact Number',
+                  customercontactnumber
+                ),
+                textfieldy(
+                  'Customer Name',
+                  customername
+                ),
+                CustomDropdown(
+                  title: 'Gender',
+                  selectedCustomDropdown: selectedgenderitems,
+                  customDropdownItems: genderitems,
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedgenderitems = newValue;
+                    });
+                  },
+                ),
+                Customdatefield(
+                  title: 'Date of Birth',
+                  datecontroller: datecontroller
+                ),
+                CustomDropdown(
+                  title: 'Martial Status',
+                  selectedCustomDropdown: selectedmartialstatusitems,
+                  customDropdownItems: martialstatusitems,
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedmartialstatusitems = newValue;
+                    });
+                  },
+                ),
+                textfieldy(
+                  "Email ID",
+                  emailid
+                ),
+                CustomDropdown(
+                  title: 'Enquiry Type',
+                  selectedCustomDropdown: selectedenquirytypeitems,
+                  customDropdownItems: enquirytypeitems,
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedenquirytypeitems = newValue;
+                    });
+                  },
+                ),
+                CustomDropdown(
+                  title: 'Enquiry Source',
+                  selectedCustomDropdown: selectedenquirysourceitems,
+                  customDropdownItems: enquirysourceitems,
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedenquirysourceitems = newValue;
+                    });
+                  },
+                ),
+                CustomDropdown(
+                  title: 'Model Category',
+                  selectedCustomDropdown: selectedmodelcategoryitems,
+                  customDropdownItems: modelcategoryitems,
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedmodelcategoryitems = newValue;
+                    });
+                  },
+                ),
+                CustomDropdown(
+                  title: 'Model Name',
+                  selectedCustomDropdown: selectedmodelnameitems,
+                  customDropdownItems: modelnameitems,
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedmodelnameitems = newValue;
+                    });
+                  },
+                ),
+                CustomDropdown(
+                  title: 'Model Variant',
+                  selectedCustomDropdown: selectedmodelvariantitems,
+                  customDropdownItems: modelvariantitems,
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedmodelvariantitems = newValue;
+                    });
+                  },
+                ),
+                CustomDropdown(
+                  title: 'Model Color',
+                  selectedCustomDropdown: selectedmodelcoloritems,
+                  customDropdownItems: modelcoloritems,
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedmodelcoloritems = newValue;
+                    });
+                  },
+                ),
+                CustomDropdown(
+                  title: 'Purchase Type',
+                  selectedCustomDropdown: selectedpurchasetypeitems,
+                  customDropdownItems: purchasetypeitems,
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedpurchasetypeitems = newValue;
+                    });
+                  },
+                ),
+                CustomDropdown(
+                  title: 'Exchange Flag',
+                  selectedCustomDropdown: selectedexchangeflagitems,
+                  customDropdownItems: exchangeflagitems,
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedexchangeflagitems = newValue;
+                    });
+                  },
+                ),
+                Customdatefield(
+                  title: 'Follow Up Date',
+                  datecontroller: followupdatecontroller
+                ),
+                CustomDropdown(
+                  title: 'Test Ride',
+                  selectedCustomDropdown: selectedtestrideitems,
+                  customDropdownItems: testrideitems,
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedtestrideitems = newValue;
+                    });
+                  },
+                ),
+                description(
+                  'Customer Remarks',
+                  customerremarks
+                ),
+                SizedBox(height: SizeConfig.h(20)),
+                button(
+                  'Create Quotation',
+                  () {
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) => QuotationSuccessPopup(
+                        name: "Rojar",
+                        number: "87548 01550",
+                      ),
+                    );
+                  }
+                ),
+            
+                SizedBox(height: SizeConfig.h(40)),
+              ],
+            ),
           ),
         ),
       ),

@@ -59,7 +59,7 @@ class _CustomdatefieldState extends State<Customdatefield> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 25, top: 15),
+          padding: const EdgeInsets.only(top: 15),
           child: Text(
             widget.title,
             style: TextStyle(
@@ -69,7 +69,7 @@ class _CustomdatefieldState extends State<Customdatefield> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 25, right: 25, top: 5),
+          padding: const EdgeInsets.only(top: 5),
           child: TextField(
             controller: widget.datecontroller,
             keyboardType: TextInputType.datetime,

@@ -6,31 +6,28 @@ textfieldy(String title, TextEditingController controller, {bool star = true}) =
   child: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Padding(
-        padding: const EdgeInsets.only(left: 25),
-        child: Row(
-          children: [
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: fs12,
-                fontFamily: 'Poppins',
-                color: Color(0xff919EAB)
-              ),
+      Row(
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: fs12,
+              fontFamily: 'Poppins',
+              color: Color(0xff919EAB)
             ),
-            // if(star)
-            // Text(
-            //   '*',
-            //   style: TextStyle(
-            //     fontFamily: 'Poppins',
-            //     color: kred
-            //   ),
-            // ),
-          ],
-        ),
+          ),
+          // if(star)
+          // Text(
+          //   '*',
+          //   style: TextStyle(
+          //     fontFamily: 'Poppins',
+          //     color: kred
+          //   ),
+          // ),
+        ],
       ),
       Padding(
-        padding: const EdgeInsets.only(left: 25,right: 25,top: 5),
+        padding: const EdgeInsets.only(top: 5),
         child: SizedBox(
           child: TextField(
             controller: controller,
@@ -61,30 +58,27 @@ description(String title,TextEditingController controller, {bool star = false}) 
   child: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Padding(
-        padding: const EdgeInsets.only(left: 25),
-        child: Row(
-          children: [
-            Text(
-              title,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                color: Color(0xff919EAB)
-              ),
+      Row(
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              color: Color(0xff919EAB)
             ),
-            // if(star)
-            // Text(
-            //   '*',
-            //   style: TextStyle(
-            //     fontFamily: 'Poppins',
-            //     color: kred
-            //   ),
-            // ),
-          ],
-        ),
+          ),
+          // if(star)
+          // Text(
+          //   '*',
+          //   style: TextStyle(
+          //     fontFamily: 'Poppins',
+          //     color: kred
+          //   ),
+          // ),
+        ],
       ),
       Padding(
-        padding: const EdgeInsets.only(left: 25,right: 25,top: 5),
+        padding: const EdgeInsets.only(top: 5),
         child: SizedBox(
           height: 150,
           child: TextField(

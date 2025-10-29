@@ -22,7 +22,7 @@ class CustomDropdown extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 25,top: 15),
+          padding: const EdgeInsets.only(top: 15),
           child: Row(
             children: [
               Text(
@@ -43,7 +43,7 @@ class CustomDropdown extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 25, right: 25,top: 5),
+          padding: const EdgeInsets.only(top: 5),
           child: Container(
             height: 58,
             padding: const EdgeInsets.symmetric(horizontal: 12),
