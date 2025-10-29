@@ -88,7 +88,7 @@ class _CreatebookingState extends State<Createbooking> {
               SizedBox(height: SizeConfig.h(20)),
               Center(
                 child: Text(
-                  'Create Quotation',
+                  'Create Booking',
                   style: customtext(
                     fs18,
                     kred,
