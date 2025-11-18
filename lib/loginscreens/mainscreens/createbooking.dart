@@ -289,7 +289,8 @@ class BookingSuccessPopup extends StatelessWidget {
             width: SizeConfig.w(120),
             lottie: AssetLottie(
               'lottie/completed.json',
-            )
+            ),
+            repeat: false,
           ),
           SizedBox(height: SizeConfig.h(2)),
           Text(

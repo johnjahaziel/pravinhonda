@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
 textfieldy(String title, TextEditingController controller, {bool star = true}) => Padding(
@@ -53,8 +54,8 @@ textfieldy(String title, TextEditingController controller, {bool star = true}) =
   ),
 );
 
-description(String title,TextEditingController controller, {bool star = false}) => Padding(
-  padding: const EdgeInsets.only(top: 15),
+description(String title,TextEditingController controller, {bool star = false, bool padding = false}) => Padding(
+  padding: padding == true ? EdgeInsets.symmetric(horizontal: SizeConfig.w(20)) : EdgeInsets.only(top: 15),
   child: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -104,23 +105,26 @@ description(String title,TextEditingController controller, {bool star = false}) 
   ),
 );
 
-button(String title, VoidCallback onPressed) => RawMaterialButton(
-  onPressed: onPressed,
-  fillColor: kred,
-  constraints: BoxConstraints.tightFor(
-    width: double.infinity,
-    height: 55
-  ),
-  shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(10)
-  ),
-  child: Text(
-    title,
-    style: TextStyle(
-      fontFamily: 'Poppins',
-      fontWeight: FontWeight.bold,
-      color: Colors.white,
-      fontSize: 16
+button(String title, VoidCallback onPressed) => Padding(
+  padding: const EdgeInsets.only(left: 25,right: 25),
+  child: RawMaterialButton(
+    onPressed: onPressed,
+    fillColor: kred,
+    constraints: BoxConstraints.tightFor(
+      width: double.infinity,
+      height: 55
     ),
-  )
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10)
+    ),
+    child: Text(
+      title,
+      style: TextStyle(
+        fontFamily: 'Poppins',
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+        fontSize: 16
+      ),
+    )
+  ),
 );

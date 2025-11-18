@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pravinhonda/utility/boxes.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
@@ -33,36 +32,6 @@ class _PdiState extends State<Pdi> {
                   ),
                 ),
                 SizedBox(height: SizeConfig.h(10)),
-                hondabox(
-                  'ID',
-                  'Customer Name',
-                  'Contact Number',
-                  'Status'
-                ),
-                hondabox(
-                  'ID',
-                  'Customer Name',
-                  'Contact Number',
-                  'Status'
-                ),
-                hondabox(
-                  'ID',
-                  'Customer Name',
-                  'Contact Number',
-                  'Status'
-                ),
-                hondabox(
-                  'ID',
-                  'Customer Name',
-                  'Contact Number',
-                  'Status'
-                ),
-                hondabox(
-                  'ID',
-                  'Customer Name',
-                  'Contact Number',
-                  'Status'
-                ),
               ],
             ),
           ),

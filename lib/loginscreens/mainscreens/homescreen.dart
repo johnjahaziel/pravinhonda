@@ -1,6 +1,5 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:pravinhonda/utility/boxes.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
@@ -343,36 +342,6 @@ class _HomescreenState extends State<Homescreen> {
   Widget recentactivitycolumn() {
     return Column(
       children: [
-        hondabox(
-          'ID',
-          'Customer Name',
-          'Contact Number',
-          'Status'
-        ),
-        hondabox(
-          'ID',
-          'Customer Name',
-          'Contact Number',
-          'Status'
-        ),
-        hondabox(
-          'ID',
-          'Customer Name',
-          'Contact Number',
-          'Status'
-        ),
-        hondabox(
-          'ID',
-          'Customer Name',
-          'Contact Number',
-          'Status'
-        ),
-        hondabox(
-          'ID',
-          'Customer Name',
-          'Contact Number',
-          'Status'
-        ),
       ],
     );
   }

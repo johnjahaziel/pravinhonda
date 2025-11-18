@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
 class Customdatefield extends StatefulWidget {
   final String title;
   final TextEditingController datecontroller;
+  final bool padding;
   const Customdatefield({
     super.key,
     required this.title,
-    required this.datecontroller
+    required this.datecontroller,
+    this.padding = false
     });
 
   @override
@@ -54,65 +57,68 @@ class _CustomdatefieldState extends State<Customdatefield> {
   
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 15),
-          child: Text(
-            widget.title,
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              color: kgrey
+    return Padding(
+      padding: widget.padding == true ? EdgeInsets.symmetric(horizontal: SizeConfig.w(20)) : EdgeInsets.zero,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 15),
+            child: Text(
+              widget.title,
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                color: kgrey
+              ),
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 5),
-          child: TextField(
-            controller: widget.datecontroller,
-            keyboardType: TextInputType.datetime,
-            maxLines: 1,
-            inputFormatters: [
-              FilteringTextInputFormatter.digitsOnly,
-            ],
-            decoration: InputDecoration(
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: kgrey),
+          Padding(
+            padding: const EdgeInsets.only(top: 5),
+            child: TextField(
+              controller: widget.datecontroller,
+              keyboardType: TextInputType.datetime,
+              maxLines: 1,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+              ],
+              decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: kgrey),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: kgrey),
+                ),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.date_range),
+                  onPressed: _selectDate,
+                ),
+                hintText: "dd-mm-yyyy",
+                hintStyle: TextStyle(
+                  fontSize: fs10
+                )
               ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: kgrey),
-              ),
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.date_range),
-                onPressed: _selectDate,
-              ),
-              hintText: "dd-mm-yyyy",
-              hintStyle: TextStyle(
-                fontSize: fs10
-              )
-            ),
-            onChanged: (value) {
-              if (value.length == 10) {
-                try {
-                  DateTime dob = DateFormat("dd-MM-yyyy").parseStrict(value);
-
-                  if (dob.isAfter(DateTime.now())) {
-                    Fluttertoast.showToast(msg: "Date cannot be in the future");
+              onChanged: (value) {
+                if (value.length == 10) {
+                  try {
+                    DateTime dob = DateFormat("dd-MM-yyyy").parseStrict(value);
+      
+                    if (dob.isAfter(DateTime.now())) {
+                      Fluttertoast.showToast(msg: "Date cannot be in the future");
+                      widget.datecontroller.clear();
+                    }
+                  } catch (e) {
+                    Fluttertoast.showToast(msg: "Invalid date format or value");
                     widget.datecontroller.clear();
                   }
-                } catch (e) {
-                  Fluttertoast.showToast(msg: "Invalid date format or value");
-                  widget.datecontroller.clear();
                 }
-              }
-            },
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
