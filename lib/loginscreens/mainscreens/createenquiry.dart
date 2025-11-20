@@ -137,21 +137,21 @@ class _CreateenquiryState extends State<Createenquiry> {
   TextEditingController followupdatecontroller = TextEditingController();
   TextEditingController customerremarks = TextEditingController();
 
-  List<dynamic> customeride = [];
-  List<dynamic> wingsenquirye = [];
-  List<dynamic> customercategorye = [];
-  List<dynamic> enquirycategorye = [];
-  List<dynamic> customertypee = [];
-  List<dynamic> customernamee = [];
-  List<dynamic> customercontactnumbere = [];
-  List<dynamic> emailide = [];
-  List<dynamic> addresse = [];
-  List<dynamic> enquirytypee = [];
-  List<dynamic> enquirysourcee = [];
-  List<dynamic> modelcategorye = [];
-  List<dynamic> modelnamee = [];
-  List<dynamic> modelvariante = [];
-  List<dynamic> modelcolore = [];
+  String customeride = '';
+  String wingsenquirye = '';
+  String customercategorye = '';
+  String enquirycategorye = '';
+  String customertypee = '';
+  String customernamee = '';
+  String customercontactnumbere = '';
+  String emailide = '';
+  String addresse = '';
+  String enquirytypee = '';
+  String enquirysourcee = '';
+  String modelcategorye = '';
+  String modelnamee = '';
+  String modelvariante = '';
+  String modelcolore = '';
 
   Future<void> apiconnection() async {
     final url = Uri.parse('https://app.pravinhonda.com/api/enquiries');
@@ -222,10 +222,24 @@ class _CreateenquiryState extends State<Createenquiry> {
         );
       } else if (response.statusCode == 422) {
 
-          final Map<String,dynamic> errormessage = responseData['errors'];
+          final Map<String, dynamic> errormessage = responseData['errors'];
 
           setState(() {
-            customeride = errormessage['customer_id'];
+            customeride = errormessage['customer_id'] ?? '';
+            wingsenquirye = errormessage['wings_enquiry_number'] ?? '';
+            customercategorye = errormessage['customer_category'] ?? '';
+            enquirycategorye = errormessage['enquiry_category'] ?? '';
+            customertypee = errormessage['customer_type'] ?? '';
+            customernamee = errormessage['customer_name'] ?? '';
+            customercontactnumbere = errormessage['customer_contact_number'] ?? '';
+            emailide = errormessage['email_id'] ?? '';
+            addresse = errormessage['address'] ?? '';
+            enquirytypee = errormessage['enquiry_type'] ?? '';
+            enquirysourcee = errormessage['enquiry_source'] ?? '';
+            modelcategorye = errormessage['model_category'] ?? '';
+            modelnamee = errormessage['model_name'] ?? '';
+            modelvariante = errormessage['model_variant'] ?? '';
+            modelcolore = errormessage['model_color'] ?? '';
           });
 
           print(customeride);
@@ -272,11 +286,14 @@ class _CreateenquiryState extends State<Createenquiry> {
                   'Customer ID',
                   customerid
                 ),
-                errormessage(customeride.toString()),
+                if(customeride.isNotEmpty)
+                errormessage(customeride),
                 textfieldy(
                   'Wings Enquiry Number',
                   wingsenquiry
                 ),
+                if(wingsenquirye.isNotEmpty)
+                errormessage(wingsenquirye),
                 CustomDropdown(
                   title: 'Customer Category',
                   selectedCustomDropdown: selectedcustomercategoryitems,
@@ -287,6 +304,8 @@ class _CreateenquiryState extends State<Createenquiry> {
                     });
                   },
                 ),
+                if(customercategorye.isNotEmpty)
+                errormessage(customercategorye),
                 CustomDropdown(
                   title: 'Enquiry Category',
                   selectedCustomDropdown: selectedenquirycategoryitems,
@@ -297,8 +316,10 @@ class _CreateenquiryState extends State<Createenquiry> {
                     });
                   },
                 ),
+                if(enquirycategorye.isNotEmpty)
+                errormessage(enquirycategorye),
                 CustomDropdown(
-                  title: 'Enquiry Category',
+                  title: 'Customer Type',
                   selectedCustomDropdown: selectedcustomertypeitems,
                   customDropdownItems: customertypeitems,
                   onChanged: (newValue) {
@@ -307,14 +328,20 @@ class _CreateenquiryState extends State<Createenquiry> {
                     });
                   },
                 ),
+                if(customertypee.isNotEmpty)
+                errormessage(customertypee),
                 textfieldy(
                   'Customer Contact Number',
                   customercontactnumber
                 ),
+                if(customercontactnumbere.isNotEmpty)
+                errormessage(customercontactnumbere),
                 textfieldy(
                   'Customer Name',
                   customername
                 ),
+                if(customernamee.isNotEmpty)
+                errormessage(customernamee),
                 CustomDropdown(
                   title: 'Gender',
                   selectedCustomDropdown: selectedgenderitems,
@@ -325,10 +352,12 @@ class _CreateenquiryState extends State<Createenquiry> {
                     });
                   },
                 ),
+                
                 Customdatefield(
                   title: 'Date of Birth',
                   datecontroller: datecontroller
                 ),
+
                 CustomDropdown(
                   title: 'Martial Status',
                   selectedCustomDropdown: selectedmartialstatusitems,
@@ -339,14 +368,19 @@ class _CreateenquiryState extends State<Createenquiry> {
                     });
                   },
                 ),
+                
                 textfieldy(
                   "Email ID",
                   emailid
                 ),
+                if(emailide.isNotEmpty)
+                errormessage(emailide),
                 textfieldy(
                   "Address",
                   address
                 ),
+                if(addresse.isNotEmpty)
+                errormessage(addresse),
                 CustomDropdown(
                   title: 'Enquiry Type',
                   selectedCustomDropdown: selectedenquirytypeitems,
@@ -357,6 +391,8 @@ class _CreateenquiryState extends State<Createenquiry> {
                     });
                   },
                 ),
+                if(enquirytypee.isNotEmpty)
+                errormessage(enquirytypee),
                 CustomDropdown(
                   title: 'Enquiry Source',
                   selectedCustomDropdown: selectedenquirysourceitems,
@@ -367,6 +403,8 @@ class _CreateenquiryState extends State<Createenquiry> {
                     });
                   },
                 ),
+                if(enquirysourcee.isNotEmpty)
+                errormessage(enquirysourcee),
                 CustomDropdown(
                   title: 'Model Category',
                   selectedCustomDropdown: selectedmodelcategoryitems,
@@ -377,6 +415,8 @@ class _CreateenquiryState extends State<Createenquiry> {
                     });
                   },
                 ),
+                if(modelcategorye.isNotEmpty)
+                errormessage(modelcategorye),
                 CustomDropdown(
                   title: 'Model Name',
                   selectedCustomDropdown: selectedmodelnameitems,
@@ -387,6 +427,8 @@ class _CreateenquiryState extends State<Createenquiry> {
                     });
                   },
                 ),
+                if(modelnamee.isNotEmpty)
+                errormessage(modelnamee),
                 CustomDropdown(
                   title: 'Model Variant',
                   selectedCustomDropdown: selectedmodelvariantitems,
@@ -397,6 +439,8 @@ class _CreateenquiryState extends State<Createenquiry> {
                     });
                   },
                 ),
+                if(modelvariante.isNotEmpty)
+                errormessage(modelvariante),
                 CustomDropdown(
                   title: 'Model Color',
                   selectedCustomDropdown: selectedmodelcoloritems,
@@ -407,6 +451,8 @@ class _CreateenquiryState extends State<Createenquiry> {
                     });
                   },
                 ),
+                if(modelcolore.isNotEmpty)
+                errormessage(modelcolore),
                 CustomDropdown(
                   title: 'Purchase Type',
                   selectedCustomDropdown: selectedpurchasetypeitems,
