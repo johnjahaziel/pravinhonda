@@ -18,15 +18,15 @@ class _BookingState extends State<Booking> {
   bool isLoading = true;
 
   Future<void> getalldata() async{
-    final url = Uri.parse('https://app.pravinhonda.com/api/enquiries');
+    final url = Uri.parse('https://app.pravinhonda.com/api/bookings');
 
-    try{
+    try {
       final response = await http.get(url);
 
       if(response.statusCode == 200) {
-        
-        final Map<String, dynamic> responsedata = jsonDecode(response.body);
-        final List<dynamic> data = (responsedata['data'] as List);
+
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+        final List<dynamic> data = (responseData['data'] as List);
 
         setState(() {
           alldata = data;
@@ -92,13 +92,13 @@ class _BookingState extends State<Booking> {
                   itemBuilder: (context, index) {
                     final data = alldata[index];
                     return Hondabox(
-                      id: data['customer_id'],
-                      customername: data['customer_name'],
-                      contactnumber: data['customer_contact_number'],
-                      status: data['status'].toString(),
-                      cashfinance: data['purchase_type'],
-                      textride: data['test_ride'],
-                      exchange: data['exchange_flag']
+                      id: data['customer_id']?.toString() ?? '',
+                      customername: data['customer_name']?.toString() ?? '',
+                      contactnumber: data['customer_contact_number']?.toString() ?? '',
+                      status: data['status']?.toString() ?? '',
+                      cashfinance: data['purchase_type']?.toString() ?? '',
+                      textride: data['test_ride']?.toString() ?? '',
+                      exchange: data['exchange_flag']?.toString() ?? '',
                     );
                   }
                 )

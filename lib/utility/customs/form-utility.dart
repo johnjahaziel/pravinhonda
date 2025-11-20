@@ -105,8 +105,8 @@ description(String title,TextEditingController controller, {bool star = false, b
   ),
 );
 
-button(String title, VoidCallback onPressed) => Padding(
-  padding: const EdgeInsets.only(left: 25,right: 25),
+button(String title, VoidCallback onPressed, {bool padding = false}) => Padding(
+  padding: padding == true ? EdgeInsets.symmetric(horizontal: SizeConfig.w(20)) : EdgeInsets.only(top: 15),
   child: RawMaterialButton(
     onPressed: onPressed,
     fillColor: kred,
@@ -128,3 +128,16 @@ button(String title, VoidCallback onPressed) => Padding(
     )
   ),
 );
+
+errormessage(String message) {
+  return Padding(
+    padding: EdgeInsets.only(top: SizeConfig.h(5)),
+    child: Text(
+      message,
+      style: customtext(
+        fs10,
+        kred
+      ),
+    ),
+  );
+}

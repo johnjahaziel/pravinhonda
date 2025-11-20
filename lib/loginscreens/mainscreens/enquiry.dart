@@ -88,13 +88,13 @@ class _EnquiryState extends State<Enquiry> {
                           itemBuilder: (context, index) {
                             final data = alldata[index];
                             return Hondabox(
-                              id: data['customer_id'],
-                              customername: data['customer_name'],
-                              contactnumber: data['customer_contact_number'],
-                              status: data['status'].toString(),
-                              cashfinance: data['purchase_type'],
-                              textride: data['test_ride'],
-                              exchange: data['exchange_flag']
+                              id: data['customer_id']?.toString() ?? '',
+                              customername: data['customer_name']?.toString() ?? '',
+                              contactnumber: data['customer_contact_number']?.toString() ?? '',
+                              status: data['status']?.toString() ?? '',
+                              cashfinance: data['purchase_type']?.toString() ?? '',
+                              textride: data['test_ride']?.toString() ?? '',
+                              exchange: data['exchange_flag']?.toString() ?? '',
                             );
                           },
                         ),

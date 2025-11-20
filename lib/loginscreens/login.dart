@@ -72,7 +72,8 @@ class _LoginState extends State<Login> {
                       builder: (context) => Navigation(),
                     ),
                   );
-                }
+                },
+                padding: true
               ),
               SizedBox(height: SizeConfig.h(80)),
               Divider(

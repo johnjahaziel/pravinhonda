@@ -313,7 +313,8 @@ class _ReviewBoxesState extends State<ReviewBoxes> {
                   ),
                 );
               }
-            }
+            },
+            padding: true
           ),
           SizedBox(height: SizeConfig.h(30)),
         ]
@@ -406,7 +407,8 @@ class _LostcustomerState extends State<Lostcustomer> {
                 MaterialPageRoute(builder: (context) => LostcustomerReason()),
                 ((route) => false)
               );
-            }
+            },
+            padding: true
           ),
           SizedBox(height: SizeConfig.h(30)),
         ]

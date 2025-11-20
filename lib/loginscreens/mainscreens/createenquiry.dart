@@ -24,94 +24,110 @@ class _CreateenquiryState extends State<Createenquiry> {
 
   List<Map<String, String>> customercategoryitems = [
     {'label': 'Individual', 'value': 'Individual'},
+    {'label': 'CSD', 'value': 'CSD'},
+    {'label': 'KPKB', 'value': 'KPKB'},
+    {'label': 'Corporate', 'value': 'Corporate'},
   ];
 
   String? selectedcustomercategoryitems;
 
   List<Map<String, String>> enquirycategoryitems = [
     {'label': 'Individual', 'value': 'Individual'},
+    {'label': 'Institutional Customer', 'value': 'Institutional Customer'},
+    {'label': 'Exchange with ELV', 'value': 'Exchange with ELV'},
   ];
 
   String? selectedenquirycategoryitems;
 
   List<Map<String, String>> customertypeitems = [
     {'label': 'First Time Buyer', 'value': 'First Time Buyer'},
+    {'label': 'Additional Buyer', 'value': 'Additional Buyer'},
+    {'label': 'Replacement Buyer', 'value': 'Replacement Buyer'},
   ];
 
   String? selectedcustomertypeitems;
 
   List<Map<String, String>> genderitems = [
-    {'label': 'Male', 'value': 'Male'},
-    {'label': 'Female', 'value': 'Female'},
-    {'label': 'Other', 'value': 'Other'},
+    {'label': 'Male', 'value': 'male'},
+    {'label': 'Female', 'value': 'female'},
   ];
 
   String? selectedgenderitems;
 
   List<Map<String, String>> martialstatusitems = [
-    {'label': 'Married', 'value': 'Married'},
-    {'label': 'Single', 'value': 'Single'},
+    {'label': 'Married', 'value': 'married'},
+    {'label': 'Single', 'value': 'single'},
   ];
 
   String? selectedmartialstatusitems;
 
   List<Map<String, String>> enquirytypeitems = [
-    {'label': 'Enquiry Type', 'value': 'Enquiry Type'},
+    {'label': 'Digital', 'value': 'Digital'},
+    {'label': 'Walk-In', 'value': 'Walk-In'},
+    {'label': 'Telephonic', 'value': 'Telephonic'},
+    {'label': 'Outdoor Activity', 'value': 'Outdoor Activity'},
   ];
 
   String? selectedenquirytypeitems;
 
   List<Map<String, String>> enquirysourceitems = [
-    {'label': 'Enquiry Source', 'value': 'Enquiry Source'},
+    {'label': 'Showroom Walk In', 'value': 'Showroom Walk In'},
+    {'label': 'Railway', 'value': 'Railway'},
+    {'label': 'Auto-Expo 2025', 'value': 'Auto-Expo 2025'},
+    {'label': 'NEWS', 'value': 'NEWS'},
+    {'label': 'Online Booking', 'value': 'Online Booking'},
+    {'label': 'TV', 'value': 'TV'},
+    {'label': 'Facebook', 'value': 'Facebook'},
   ];
 
   String? selectedenquirysourceitems;
 
   List<Map<String, String>> modelcategoryitems = [
-    {'label': 'Model Category', 'value': 'Model Category'},
+    {'label': 'BW', 'value': 'BW'},
   ];
 
   String? selectedmodelcategoryitems;
 
   List<Map<String, String>> modelnameitems = [
-    {'label': 'Model Name', 'value': 'Model Name'},
+    {'label': 'honda shine', 'value': 'honda shine'},
   ];
 
   String? selectedmodelnameitems;
 
   List<Map<String, String>> modelvariantitems = [
-    {'label': 'Model Variant', 'value': 'Model Variant'},
+    {'label': 'sp120', 'value': 'sp120'},
   ];
 
   String? selectedmodelvariantitems;
 
   List<Map<String, String>> modelcoloritems = [
-    {'label': 'Model Color', 'value': 'Model Color'},
+    {'label': 'Imperial Red Metallic', 'value': 'Imperial Red Metallic'},
   ];
 
   String? selectedmodelcoloritems;
 
   List<Map<String, String>> purchasetypeitems = [
-    {'label': 'Cash', 'value': 'Cash'},
-    {'label': 'Finance', 'value': 'Finance'},
+    {'label': 'Cash', 'value': 'cash'},
+    {'label': 'Finance', 'value': 'finance'},
   ];
 
   String? selectedpurchasetypeitems;
 
   List<Map<String, String>> exchangeflagitems = [
-    {'label': 'Yes', 'value': 'Yes'},
-    {'label': 'No', 'value': 'No'},
+    {'label': 'Yes', 'value': 'yes'},
+    {'label': 'No', 'value': 'no'},
   ];
 
   String? selectedexchangeflagitems;
 
   List<Map<String, String>> testrideitems = [
-    {'label': 'Test Ride', 'value': 'Test Ride'},
+    {'label': 'Yes', 'value': 'yes'},
+    {'label': 'No', 'value': 'no'},
   ];
 
   String? selectedtestrideitems;
 
-  TextEditingController enquiryid = TextEditingController();
+  TextEditingController customerid = TextEditingController();
   TextEditingController wingsenquiry = TextEditingController();
   TextEditingController customercontactnumber = TextEditingController();
   TextEditingController customername = TextEditingController();
@@ -120,6 +136,22 @@ class _CreateenquiryState extends State<Createenquiry> {
   TextEditingController address = TextEditingController();
   TextEditingController followupdatecontroller = TextEditingController();
   TextEditingController customerremarks = TextEditingController();
+
+  List<dynamic> customeride = [];
+  List<dynamic> wingsenquirye = [];
+  List<dynamic> customercategorye = [];
+  List<dynamic> enquirycategorye = [];
+  List<dynamic> customertypee = [];
+  List<dynamic> customernamee = [];
+  List<dynamic> customercontactnumbere = [];
+  List<dynamic> emailide = [];
+  List<dynamic> addresse = [];
+  List<dynamic> enquirytypee = [];
+  List<dynamic> enquirysourcee = [];
+  List<dynamic> modelcategorye = [];
+  List<dynamic> modelnamee = [];
+  List<dynamic> modelvariante = [];
+  List<dynamic> modelcolore = [];
 
   Future<void> apiconnection() async {
     final url = Uri.parse('https://app.pravinhonda.com/api/enquiries');
@@ -131,7 +163,7 @@ class _CreateenquiryState extends State<Createenquiry> {
           'Content-Type': 'application/json',
         },
         body: jsonEncode({
-          'enquiry_id': enquiryid.text,
+          'customer_id': customerid.text,
           'wings_enquiry_number': wingsenquiry.text,
           'customer_category' : selectedcustomercategoryitems,
           'enquiry_category' : selectedenquirycategoryitems,
@@ -164,13 +196,8 @@ class _CreateenquiryState extends State<Createenquiry> {
           msg: responseData['message'],
           toastLength: Toast.LENGTH_LONG,
         );
-      } else if (response.statusCode == 200) {
-        Fluttertoast.showToast(
-          msg: responseData['message'],
-          toastLength: Toast.LENGTH_LONG,
-        );
 
-        if(selectedpurchasetypeitems == 'Finance') {
+        if(selectedpurchasetypeitems == 'finance') {
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -179,7 +206,7 @@ class _CreateenquiryState extends State<Createenquiry> {
               )
             ),
           );
-        } else if (selectedpurchasetypeitems != 'Finance' && selectedexchangeflagitems == 'Yes') {
+        } else if (selectedpurchasetypeitems != 'finance' && selectedexchangeflagitems == 'yes') {
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -188,6 +215,20 @@ class _CreateenquiryState extends State<Createenquiry> {
           );
         }
 
+      } else if (response.statusCode == 200) {
+        Fluttertoast.showToast(
+          msg: responseData['message'],
+          toastLength: Toast.LENGTH_LONG,
+        );
+      } else if (response.statusCode == 422) {
+
+          final Map<String,dynamic> errormessage = responseData['errors'];
+
+          setState(() {
+            customeride = errormessage['customer_id'];
+          });
+
+          print(customeride);
 
       } else {
         Fluttertoast.showToast(
@@ -195,6 +236,7 @@ class _CreateenquiryState extends State<Createenquiry> {
           toastLength: Toast.LENGTH_LONG,
         );
         print('Failed to create enquiry. Status code: ${response.statusCode}');
+        print(response.body);
       }
     } catch (error) {
       print('Error occurred: $error');
@@ -212,6 +254,7 @@ class _CreateenquiryState extends State<Createenquiry> {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(20)),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: SizeConfig.h(20)),
                 Center(
@@ -226,9 +269,10 @@ class _CreateenquiryState extends State<Createenquiry> {
                 ),
                 SizedBox(height: SizeConfig.h(10)),
                 textfieldy(
-                  'Enquiry ID',
-                  enquiryid
+                  'Customer ID',
+                  customerid
                 ),
+                errormessage(customeride.toString()),
                 textfieldy(
                   'Wings Enquiry Number',
                   wingsenquiry
