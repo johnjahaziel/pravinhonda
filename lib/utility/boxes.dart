@@ -24,7 +24,7 @@ class Hondabox extends StatefulWidget {
     required this.status,
     required this.cashfinance,
     this.textride = 'No',
-    this.exchange = 'finance',
+    this.exchange = 'No',
   });
 
   @override
@@ -105,7 +105,7 @@ class _HondaboxState extends State<Hondabox> {
                     children: [
                       RawMaterialButton(
                         onPressed: () {
-                          // callNumber(widget.contactnumber);
+                          callNumber(widget.contactnumber);
                           showDialog(
                             context: context,
                             barrierDismissible: false,
@@ -175,14 +175,14 @@ class _HondaboxState extends State<Hondabox> {
                         ),
                         padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(5),vertical: SizeConfig.h(1)),
                         child: Text(
-                          widget.cashfinance,
+                          '${widget.cashfinance[0].toUpperCase()}${widget.cashfinance.substring(1)}',
                           style: textmedium8,
                         ),
                       ),
                       SizedBox(width: SizeConfig.w(4)),
                     ],
                   ),
-                  if(widget.exchange == 'finance')
+                  if(widget.exchange == 'yes')
                   Container(
                     decoration: BoxDecoration(
                       color: kgreen2,

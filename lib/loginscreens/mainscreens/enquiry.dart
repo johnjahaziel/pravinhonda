@@ -17,7 +17,7 @@ class _EnquiryState extends State<Enquiry> {
   List<dynamic> alldata = [];
   bool isLoading = true;
 
-  Future<void> getallenquiry() async{
+  Future<void> getalldata() async{
     final url = Uri.parse('https://app.pravinhonda.com/api/enquiries');
 
     try {
@@ -25,10 +25,11 @@ class _EnquiryState extends State<Enquiry> {
 
       if(response.statusCode == 200) {
 
-        List<dynamic> responseData = jsonDecode(response.body);
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+        final List<dynamic> data = (responseData['data'] as List);
 
         setState(() {
-          alldata = responseData;
+          alldata = data;
           isLoading = false;
         });
       } else {
@@ -45,7 +46,7 @@ class _EnquiryState extends State<Enquiry> {
   @override
   void initState() {
     super.initState();
-    getallenquiry();
+    getalldata();
   }
 
   @override
@@ -72,14 +73,14 @@ class _EnquiryState extends State<Enquiry> {
                     ),
                     SizedBox(height: SizeConfig.h(10)),
                     if (alldata.isEmpty)
-                      Expanded(
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Text('No enquiries found.'),
-                          ),
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          'No enquiries found.',
+                          style: text12,
                         ),
-                      )
+                      ),
+                    )
                     else
                       Expanded(
                         child: ListView.builder(
