@@ -82,11 +82,14 @@ class _CreateenquiryState extends State<Createenquiry> {
 
   String? selectedenquirysourceitems;
 
-  List<Map<String, String>> modelcategoryitems = [
-    {'label': 'BW', 'value': 'BW'},
-  ];
+  // List<Map<String, String>> modelcategoryitems = [
+  //   {'label': 'BW', 'value': 'BW'},
+  //   {'label': 'EV', 'value': 'EV'},
+  //   {'label': 'MC', 'value': 'MC'},
+  //   {'label': 'SC', 'value': 'SC'},
+  // ];
 
-  String? selectedmodelcategoryitems;
+  // String? selectedmodelcategoryitems;
 
   List<Map<String, String>> modelnameitems = [
     {'label': 'honda shine', 'value': 'honda shine'},
@@ -148,7 +151,7 @@ class _CreateenquiryState extends State<Createenquiry> {
   String addresse = '';
   String enquirytypee = '';
   String enquirysourcee = '';
-  String modelcategorye = '';
+// String modelcategorye = '';
   String modelnamee = '';
   String modelvariante = '';
   String modelcolore = '';
@@ -171,13 +174,13 @@ class _CreateenquiryState extends State<Createenquiry> {
           'customer_contact_number' : customercontactnumber.text,
           'customer_name' : customername.text,
           'gender' : selectedgenderitems,
-          'date_of_birth' : datecontroller.text,
+          'dob' : datecontroller.text,
           'martial_status' : selectedmartialstatusitems,
           'email_id' : emailid.text,
           'address' : address.text,
           'enquiry_type' : selectedenquirytypeitems,
           'enquiry_source' : selectedenquirysourceitems,
-          'model_category' : selectedmodelcategoryitems,
+          // 'model_category' : selectedmodelcategoryitems,
           'model_name' : selectedmodelnameitems,
           'model_variant' : selectedmodelvariantitems,
           'model_color' : selectedmodelcoloritems,
@@ -236,7 +239,7 @@ class _CreateenquiryState extends State<Createenquiry> {
             addresse = errormessage['address'] ?? '';
             enquirytypee = errormessage['enquiry_type'] ?? '';
             enquirysourcee = errormessage['enquiry_source'] ?? '';
-            modelcategorye = errormessage['model_category'] ?? '';
+            // modelcategorye = errormessage['model_category'] ?? '';
             modelnamee = errormessage['model_name'] ?? '';
             modelvariante = errormessage['model_variant'] ?? '';
             modelcolore = errormessage['model_color'] ?? '';
@@ -351,11 +354,13 @@ class _CreateenquiryState extends State<Createenquiry> {
                       selectedgenderitems = newValue;
                     });
                   },
+                  star: false,
                 ),
                 
                 Customdatefield(
                   title: 'Date of Birth',
-                  datecontroller: datecontroller
+                  datecontroller: datecontroller,
+                  star: false,
                 ),
 
                 CustomDropdown(
@@ -367,6 +372,7 @@ class _CreateenquiryState extends State<Createenquiry> {
                       selectedmartialstatusitems = newValue;
                     });
                   },
+                  star: false,
                 ),
                 
                 textfieldy(
@@ -405,18 +411,18 @@ class _CreateenquiryState extends State<Createenquiry> {
                 ),
                 if(enquirysourcee.isNotEmpty)
                 errormessage(enquirysourcee),
-                CustomDropdown(
-                  title: 'Model Category',
-                  selectedCustomDropdown: selectedmodelcategoryitems,
-                  customDropdownItems: modelcategoryitems,
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedmodelcategoryitems = newValue;
-                    });
-                  },
-                ),
-                if(modelcategorye.isNotEmpty)
-                errormessage(modelcategorye),
+                // CustomDropdown(
+                //   title: 'Model Category',
+                //   selectedCustomDropdown: selectedmodelcategoryitems,
+                //   customDropdownItems: modelcategoryitems,
+                //   onChanged: (newValue) {
+                //     setState(() {
+                //       selectedmodelcategoryitems = newValue;
+                //     });
+                //   },
+                // ),
+                // if(modelcategorye.isNotEmpty)
+                // errormessage(modelcategorye),
                 CustomDropdown(
                   title: 'Model Name',
                   selectedCustomDropdown: selectedmodelnameitems,
@@ -475,7 +481,8 @@ class _CreateenquiryState extends State<Createenquiry> {
                 ),
                 Customdatefield(
                   title: 'Follow Up Date',
-                  datecontroller: followupdatecontroller
+                  datecontroller: followupdatecontroller,
+                  star: false,
                 ),
                 CustomDropdown(
                   title: 'Test Ride',
@@ -486,6 +493,7 @@ class _CreateenquiryState extends State<Createenquiry> {
                       selectedtestrideitems = newValue;
                     });
                   },
+                  star: false,
                 ),
                 description(
                   'Customer Remarks',

@@ -75,14 +75,14 @@ class _LoginState extends State<Login> {
                 },
                 padding: true
               ),
-              SizedBox(height: SizeConfig.h(80)),
+              SizedBox(height: SizeConfig.h(100)),
               Divider(
                 color: Colors.grey[300],
                 thickness: 1,
                 indent: 25,
                 endIndent: 25,
               ),
-              SizedBox(height: SizeConfig.h(20)),
+              SizedBox(height: SizeConfig.h(30)),
               Versiontext(),
               SizedBox(height: SizeConfig.h(20)),
             ],

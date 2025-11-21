@@ -9,11 +9,14 @@ class Customdatefield extends StatefulWidget {
   final String title;
   final TextEditingController datecontroller;
   final bool padding;
+  final bool star;
+
   const Customdatefield({
     super.key,
     required this.title,
     required this.datecontroller,
-    this.padding = false
+    this.padding = false,
+    this.star = true
     });
 
   @override
@@ -65,12 +68,24 @@ class _CustomdatefieldState extends State<Customdatefield> {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 15),
-            child: Text(
-              widget.title,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                color: kgrey
-              ),
+            child: Row(
+              children: [
+                Text(
+                  widget.title,
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    color: Color(0xff919EAB)
+                  ),
+                ),
+                if(widget.star)
+                Text(
+                  '*',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    color: kred
+                  ),
+                ),
+              ],
             ),
           ),
           Padding(

@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:pravinhonda/utility/size_config.dart';
+import 'package:pravinhonda/utility/styles.dart';
 
 class CustomDropdown extends StatelessWidget {
   final String title;
@@ -8,6 +9,7 @@ class CustomDropdown extends StatelessWidget {
   final List<Map<String, String>> customDropdownItems;
   final Function(String?) onChanged;
   final bool padding;
+  final bool star;
 
   const CustomDropdown({
     super.key,
@@ -16,6 +18,7 @@ class CustomDropdown extends StatelessWidget {
     required this.customDropdownItems,
     required this.onChanged,
     this.padding = false,
+    this.star = true
   });
 
   @override
@@ -37,13 +40,14 @@ class CustomDropdown extends StatelessWidget {
                     color: Color(0xff919EAB)
                   ),
                 ),
-                // Text(
-                //   '*',
-                //   style: TextStyle(
-                //     fontFamily: 'Poppins',
-                //     color: kred
-                //   ),
-                // ),
+                if(star)
+                Text(
+                  '*',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    color: kred
+                  ),
+                ),
               ],
             ),
           ),
