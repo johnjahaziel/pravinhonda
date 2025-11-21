@@ -92,19 +92,19 @@ class _CreateenquiryState extends State<Createenquiry> {
   // String? selectedmodelcategoryitems;
 
   List<Map<String, String>> modelnameitems = [
-    {'label': 'honda shine', 'value': 'honda shine'},
+    {'label': 'hondasp125', 'value': 'hondasp125'},
   ];
 
   String? selectedmodelnameitems;
 
   List<Map<String, String>> modelvariantitems = [
-    {'label': 'sp120', 'value': 'sp120'},
+    {'label': 'Deluxe', 'value': 'Deluxe'},
   ];
 
   String? selectedmodelvariantitems;
 
   List<Map<String, String>> modelcoloritems = [
-    {'label': 'Imperial Red Metallic', 'value': 'Imperial Red Metallic'},
+    {'label': 'mat marvel blue', 'value': 'mat marvel blue'},
   ];
 
   String? selectedmodelcoloritems;
@@ -155,6 +155,8 @@ class _CreateenquiryState extends State<Createenquiry> {
   String modelnamee = '';
   String modelvariante = '';
   String modelcolore = '';
+  String purchasetypee = '';
+  String exchangeflage = '';
 
   Future<void> apiconnection() async {
     final url = Uri.parse('https://app.pravinhonda.com/api/enquiries');
@@ -224,28 +226,29 @@ class _CreateenquiryState extends State<Createenquiry> {
           toastLength: Toast.LENGTH_LONG,
         );
       } else if (response.statusCode == 422) {
+          // setState(() {
+          //   customeride = responseData['errors']['customer_id'] ?? '';
+          //   wingsenquirye = responseData['errors']['wings_enquiry_number'] ?? '';
+          //   customercategorye = responseData['errors']['customer_category'] ?? '';
+          //   enquirycategorye = responseData['errors']['enquiry_category'] ?? '';
+          //   customertypee = responseData['errors']['customer_type'] ?? '';
+          //   customernamee = responseData['errors']['customer_name'] ?? '';
+          //   customercontactnumbere = responseData['errors']['customer_contact_number'] ?? '';
+          //   emailide = responseData['errors']['email_id'] ?? '';
+          //   addresse = responseData['errors']['address'] ?? '';
+          //   enquirytypee = responseData['errors']['enquiry_type'] ?? '';
+          //   enquirysourcee = responseData['errors']['enquiry_source'] ?? '';
+          //   // modelcategorye = responseData['errors']['model_category'] ?? '';
+          //   modelnamee = responseData['errors']['model_name'] ?? '';
+          //   modelvariante = responseData['errors']['model_variant'] ?? '';
+          //   modelcolore = responseData['errors']['model_color'] ?? '';
+          //   purchasetypee = responseData['errors']['purchase_type'] ?? '';
+          //   exchangeflage = responseData['errors']['exchange_flag'] ?? '';
+          // });
 
-          final Map<String, dynamic> errormessage = responseData['errors'];
+          Fluttertoast.showToast(msg: responseData['message']);
 
-          setState(() {
-            customeride = errormessage['customer_id'] ?? '';
-            wingsenquirye = errormessage['wings_enquiry_number'] ?? '';
-            customercategorye = errormessage['customer_category'] ?? '';
-            enquirycategorye = errormessage['enquiry_category'] ?? '';
-            customertypee = errormessage['customer_type'] ?? '';
-            customernamee = errormessage['customer_name'] ?? '';
-            customercontactnumbere = errormessage['customer_contact_number'] ?? '';
-            emailide = errormessage['email_id'] ?? '';
-            addresse = errormessage['address'] ?? '';
-            enquirytypee = errormessage['enquiry_type'] ?? '';
-            enquirysourcee = errormessage['enquiry_source'] ?? '';
-            // modelcategorye = errormessage['model_category'] ?? '';
-            modelnamee = errormessage['model_name'] ?? '';
-            modelvariante = errormessage['model_variant'] ?? '';
-            modelcolore = errormessage['model_color'] ?? '';
-          });
-
-          print(customeride);
+          print('errrorrr $customeride');
 
       } else {
         Fluttertoast.showToast(
@@ -422,7 +425,7 @@ class _CreateenquiryState extends State<Createenquiry> {
                 //   },
                 // ),
                 // if(modelcategorye.isNotEmpty)
-                // errormessage(modelcategorye),
+                // errormessage('$modelcategorye'),
                 CustomDropdown(
                   title: 'Model Name',
                   selectedCustomDropdown: selectedmodelnameitems,
@@ -469,6 +472,8 @@ class _CreateenquiryState extends State<Createenquiry> {
                     });
                   },
                 ),
+                if(purchasetypee.isNotEmpty)
+                errormessage(purchasetypee),
                 CustomDropdown(
                   title: 'Exchange Flag',
                   selectedCustomDropdown: selectedexchangeflagitems,
@@ -479,6 +484,8 @@ class _CreateenquiryState extends State<Createenquiry> {
                     });
                   },
                 ),
+                if(exchangeflage.isNotEmpty)
+                errormessage(exchangeflage),
                 Customdatefield(
                   title: 'Follow Up Date',
                   datecontroller: followupdatecontroller,
