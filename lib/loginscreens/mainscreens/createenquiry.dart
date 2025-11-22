@@ -226,25 +226,25 @@ class _CreateenquiryState extends State<Createenquiry> {
           toastLength: Toast.LENGTH_LONG,
         );
       } else if (response.statusCode == 422) {
-          // setState(() {
-          //   customeride = responseData['errors']['customer_id'] ?? '';
-          //   wingsenquirye = responseData['errors']['wings_enquiry_number'] ?? '';
-          //   customercategorye = responseData['errors']['customer_category'] ?? '';
-          //   enquirycategorye = responseData['errors']['enquiry_category'] ?? '';
-          //   customertypee = responseData['errors']['customer_type'] ?? '';
-          //   customernamee = responseData['errors']['customer_name'] ?? '';
-          //   customercontactnumbere = responseData['errors']['customer_contact_number'] ?? '';
-          //   emailide = responseData['errors']['email_id'] ?? '';
-          //   addresse = responseData['errors']['address'] ?? '';
-          //   enquirytypee = responseData['errors']['enquiry_type'] ?? '';
-          //   enquirysourcee = responseData['errors']['enquiry_source'] ?? '';
-          //   // modelcategorye = responseData['errors']['model_category'] ?? '';
-          //   modelnamee = responseData['errors']['model_name'] ?? '';
-          //   modelvariante = responseData['errors']['model_variant'] ?? '';
-          //   modelcolore = responseData['errors']['model_color'] ?? '';
-          //   purchasetypee = responseData['errors']['purchase_type'] ?? '';
-          //   exchangeflage = responseData['errors']['exchange_flag'] ?? '';
-          // });
+          setState(() {
+            customeride = responseData['errors']['customer_id'] ?? '';
+            wingsenquirye = responseData['errors']['wings_enquiry_number'] ?? '';
+            customercategorye = responseData['errors']['customer_category'] ?? '';
+            enquirycategorye = responseData['errors']['enquiry_category'] ?? '';
+            customertypee = responseData['errors']['customer_type'] ?? '';
+            customernamee = responseData['errors']['customer_name'] ?? '';
+            customercontactnumbere = responseData['errors']['customer_contact_number'] ?? '';
+            emailide = responseData['errors']['email_id'] ?? '';
+            addresse = responseData['errors']['address'] ?? '';
+            enquirytypee = responseData['errors']['enquiry_type'] ?? '';
+            enquirysourcee = responseData['errors']['enquiry_source'] ?? '';
+            // modelcategorye = responseData['errors']['model_category'] ?? '';
+            modelnamee = responseData['errors']['model_name'] ?? '';
+            modelvariante = responseData['errors']['model_variant'] ?? '';
+            modelcolore = responseData['errors']['model_color'] ?? '';
+            purchasetypee = responseData['errors']['purchase_type'] ?? '';
+            exchangeflage = responseData['errors']['exchange_flag'] ?? '';
+          });
 
           Fluttertoast.showToast(msg: responseData['message']);
 
