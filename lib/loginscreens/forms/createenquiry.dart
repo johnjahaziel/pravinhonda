@@ -241,30 +241,28 @@ class _CreateenquiryState extends State<Createenquiry> {
           toastLength: Toast.LENGTH_LONG,
         );
       } else if (response.statusCode == 422) {
-          setState(() {
-            customeride = responseData['errors']['customer_id'] ?? '';
-            wingsenquirye = responseData['errors']['wings_enquiry_number'] ?? '';
-            customercategorye = responseData['errors']['customer_category'] ?? '';
-            enquirycategorye = responseData['errors']['enquiry_category'] ?? '';
-            customertypee = responseData['errors']['customer_type'] ?? '';
-            customernamee = responseData['errors']['customer_name'] ?? '';
-            customercontactnumbere = responseData['errors']['customer_contact_number'] ?? '';
-            emailide = responseData['errors']['email_id'] ?? '';
-            addresse = responseData['errors']['address'] ?? '';
-            enquirytypee = responseData['errors']['enquiry_type'] ?? '';
-            enquirysourcee = responseData['errors']['enquiry_source'] ?? '';
-            // modelcategorye = responseData['errors']['model_category'] ?? '';
-            modelnamee = responseData['errors']['model_name'] ?? '';
-            modelvariante = responseData['errors']['model_variant'] ?? '';
-            modelcolore = responseData['errors']['model_color'] ?? '';
-            purchasetypee = responseData['errors']['purchase_type'] ?? '';
-            exchangeflage = responseData['errors']['exchange_flag'] ?? '';
-          });
+        final errors = responseData['errors'] ?? {};
 
-          Fluttertoast.showToast(msg: responseData['message']);
+        setState(() {
+          customeride = errors['customer_id']?.toString() ?? '';
+          wingsenquirye = errors['wings_enquiry_number']?.toString() ?? '';
+          customercategorye = errors['customer_category']?.toString() ?? '';
+          enquirycategorye = errors['enquiry_category']?.toString() ?? '';
+          customertypee = errors['customer_type']?.toString() ?? '';
+          customernamee = errors['customer_name']?.toString() ?? '';
+          customercontactnumbere = errors['customer_contact_number']?.toString() ?? '';
+          emailide = errors['email_id']?.toString() ?? '';
+          addresse = errors['address']?.toString() ?? '';
+          enquirytypee = errors['enquiry_type']?.toString() ?? '';
+          enquirysourcee = errors['enquiry_source']?.toString() ?? '';
+          modelnamee = errors['model_name']?.toString() ?? '';
+          modelvariante = errors['model_variant']?.toString() ?? '';
+          modelcolore = errors['model_color']?.toString() ?? '';
+          purchasetypee = errors['purchase_type']?.toString() ?? '';
+          exchangeflage = errors['exchange_flag']?.toString() ?? '';
+        });
 
-          print('errrorrr $customeride');
-
+        Fluttertoast.showToast(msg: responseData['message'] ?? "Validation error");
       } else {
         Fluttertoast.showToast(
           msg: responseData['message'],
@@ -378,7 +376,6 @@ class _CreateenquiryState extends State<Createenquiry> {
                 Customdatefield(
                   title: 'Date of Birth',
                   datecontroller: datecontroller,
-                  star: false,
                 ),
 
                 CustomDropdown(

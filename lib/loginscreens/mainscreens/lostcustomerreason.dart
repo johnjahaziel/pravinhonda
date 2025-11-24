@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pravinhonda/loginscreens/Navigation.dart';
 import 'package:pravinhonda/utility/customs/customappBar.dart';
 import 'package:pravinhonda/utility/customs/customdrawer.dart';
 import 'package:pravinhonda/utility/customs/customdropdown.dart';
@@ -239,7 +240,13 @@ class _LostcustomerReasonState extends State<LostcustomerReason> {
                     SizedBox(height: SizeConfig.h(40)),
                     button(
                       'Submit',
-                      () {}
+                      () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Navigation())
+                        );
+                      },
+                      padding: true
                     ),
                     SizedBox(height: SizeConfig.h(40)),
                   ],

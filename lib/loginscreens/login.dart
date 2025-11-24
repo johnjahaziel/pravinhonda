@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart' as http;
 import 'package:pravinhonda/loginscreens/Navigation.dart';
 import 'package:pravinhonda/utility/custom.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
@@ -17,6 +21,40 @@ class _LoginState extends State<Login> {
   bool isPassword = false;
   final TextEditingController useridcontroller = TextEditingController();
   final TextEditingController passwordcontroller = TextEditingController();
+
+  Future<void> login() async {
+    final url = Uri.parse('https://app.pravinhonda.com/api/login');
+
+    try {
+      final response = await http.post(
+        url,
+        body: {
+          'username': useridcontroller.text,
+          'password': passwordcontroller.text,
+        },
+      );
+
+      final responseData = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Navigation(),
+          ),
+        );
+
+        Fluttertoast.showToast(msg: responseData['message']);
+
+      } else {
+        print('Server error: ${response.statusCode}');
+        Fluttertoast.showToast(msg: responseData['message']);
+      }
+    } catch (e) {
+      print('Error during login: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,12 +104,7 @@ class _LoginState extends State<Login> {
               button(
                 "Login",
                 () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Navigation(),
-                    ),
-                  );
+                  login();
                 },
                 padding: true
               ),
