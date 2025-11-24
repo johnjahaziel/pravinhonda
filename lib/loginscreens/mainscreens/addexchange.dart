@@ -116,7 +116,7 @@ class _AddexchangeState extends State<Addexchange> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => Createquotation()
+                        builder: (context) => Createquotation(enquiryid: 1,)
                       )
                     );
                   }

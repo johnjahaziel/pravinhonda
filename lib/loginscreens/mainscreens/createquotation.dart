@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
-import 'package:pravinhonda/loginscreens/mainscreens/createbooking.dart';
+import 'package:pravinhonda/loginscreens/mainscreens/addexchange.dart';
+import 'package:pravinhonda/loginscreens/mainscreens/addfinance.dart';
 import 'package:pravinhonda/utility/customs/customappBar.dart';
 import 'package:pravinhonda/utility/customs/customdatefield.dart';
 import 'package:pravinhonda/utility/customs/customdrawer.dart';
@@ -8,110 +13,278 @@ import 'package:pravinhonda/utility/customs/customdropdown.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Createquotation extends StatefulWidget {
-  const Createquotation({super.key});
+  final int enquiryid;
+  const Createquotation({
+    super.key,
+    required this.enquiryid
+  });
 
   @override
   State<Createquotation> createState() => _CreatequotationState();
 }
 
 class _CreatequotationState extends State<Createquotation> {
+
   List<Map<String, String>> customercategoryitems = [
     {'label': 'Individual', 'value': 'Individual'},
+    {'label': 'CSD', 'value': 'CSD'},
+    {'label': 'KPKB', 'value': 'KPKB'},
+    {'label': 'Corporate', 'value': 'Corporate'},
   ];
 
   String? selectedcustomercategoryitems;
 
   List<Map<String, String>> enquirycategoryitems = [
     {'label': 'Individual', 'value': 'Individual'},
+    {'label': 'Institutional Customer', 'value': 'Institutional Customer'},
+    {'label': 'Exchange with ELV', 'value': 'Exchange with ELV'},
   ];
 
   String? selectedenquirycategoryitems;
 
   List<Map<String, String>> customertypeitems = [
     {'label': 'First Time Buyer', 'value': 'First Time Buyer'},
+    {'label': 'Additional Buyer', 'value': 'Additional Buyer'},
+    {'label': 'Replacement Buyer', 'value': 'Replacement Buyer'},
   ];
 
   String? selectedcustomertypeitems;
 
   List<Map<String, String>> genderitems = [
-    {'label': 'Male', 'value': 'Male'},
-    {'label': 'Female', 'value': 'Female'},
-    {'label': 'Other', 'value': 'Other'},
+    {'label': 'Male', 'value': 'male'},
+    {'label': 'Female', 'value': 'female'},
   ];
 
   String? selectedgenderitems;
 
   List<Map<String, String>> martialstatusitems = [
-    {'label': 'Married', 'value': 'Married'},
-    {'label': 'Single', 'value': 'Single'},
+    {'label': 'Married', 'value': 'married'},
+    {'label': 'Single', 'value': 'single'},
   ];
 
   String? selectedmartialstatusitems;
 
   List<Map<String, String>> enquirytypeitems = [
-    {'label': 'Enquiry Type', 'value': 'Enquiry Type'},
+    {'label': 'Digital', 'value': 'Digital'},
+    {'label': 'Walk-In', 'value': 'Walk-In'},
+    {'label': 'Telephonic', 'value': 'Telephonic'},
+    {'label': 'Outdoor Activity', 'value': 'Outdoor Activity'},
   ];
 
   String? selectedenquirytypeitems;
 
   List<Map<String, String>> enquirysourceitems = [
-    {'label': 'Enquiry Source', 'value': 'Enquiry Source'},
+    {'label': 'Showroom Walk In', 'value': 'Showroom Walk In'},
+    {'label': 'Railway', 'value': 'Railway'},
+    {'label': 'Auto-Expo 2025', 'value': 'Auto-Expo 2025'},
+    {'label': 'NEWS', 'value': 'NEWS'},
+    {'label': 'Online Booking', 'value': 'Online Booking'},
+    {'label': 'TV', 'value': 'TV'},
+    {'label': 'Facebook', 'value': 'Facebook'},
   ];
 
   String? selectedenquirysourceitems;
 
-  List<Map<String, String>> modelcategoryitems = [
-    {'label': 'Model Category', 'value': 'Model Category'},
-  ];
+  // List<Map<String, String>> modelcategoryitems = [
+  //   {'label': 'BW', 'value': 'BW'},
+  //   {'label': 'EV', 'value': 'EV'},
+  //   {'label': 'MC', 'value': 'MC'},
+  //   {'label': 'SC', 'value': 'SC'},
+  // ];
 
-  String? selectedmodelcategoryitems;
+  // String? selectedmodelcategoryitems;
 
   List<Map<String, String>> modelnameitems = [
-    {'label': 'Model Name', 'value': 'Model Name'},
+    {'label': 'hondasp125', 'value': 'hondasp125'},
   ];
 
   String? selectedmodelnameitems;
 
   List<Map<String, String>> modelvariantitems = [
-    {'label': 'Model Variant', 'value': 'Model Variant'},
+    {'label': 'Deluxe', 'value': 'Deluxe'},
   ];
 
   String? selectedmodelvariantitems;
 
   List<Map<String, String>> modelcoloritems = [
-    {'label': 'Model Color', 'value': 'Model Color'},
+    {'label': 'mat marvel blue', 'value': 'mat marvel blue'},
   ];
 
   String? selectedmodelcoloritems;
 
   List<Map<String, String>> purchasetypeitems = [
-    {'label': 'Purchase Type', 'value': 'Purchase Type'},
+    {'label': 'Cash', 'value': 'cash'},
+    {'label': 'Finance', 'value': 'finance'},
   ];
 
   String? selectedpurchasetypeitems;
 
   List<Map<String, String>> exchangeflagitems = [
-    {'label': 'Exchange Flag', 'value': 'Exchange Flag'},
+    {'label': 'Yes', 'value': 'yes'},
+    {'label': 'No', 'value': 'no'},
   ];
 
   String? selectedexchangeflagitems;
 
   List<Map<String, String>> testrideitems = [
-    {'label': 'Test Ride', 'value': 'Test Ride'},
+    {'label': 'Yes', 'value': 'yes'},
+    {'label': 'No', 'value': 'no'},
   ];
 
   String? selectedtestrideitems;
 
-  TextEditingController enquiryid = TextEditingController();
+  TextEditingController customerid = TextEditingController();
   TextEditingController wingsenquiry = TextEditingController();
   TextEditingController customercontactnumber = TextEditingController();
   TextEditingController customername = TextEditingController();
   TextEditingController datecontroller = TextEditingController();
   TextEditingController emailid = TextEditingController();
+  TextEditingController address = TextEditingController();
   TextEditingController followupdatecontroller = TextEditingController();
   TextEditingController customerremarks = TextEditingController();
+
+  String customeride = '';
+  String wingsenquirye = '';
+  String customercategorye = '';
+  String enquirycategorye = '';
+  String customertypee = '';
+  String customernamee = '';
+  String customercontactnumbere = '';
+  String emailide = '';
+  String addresse = '';
+  String enquirytypee = '';
+  String enquirysourcee = '';
+// String modelcategorye = '';
+  String modelnamee = '';
+  String modelvariante = '';
+  String modelcolore = '';
+  String purchasetypee = '';
+  String exchangeflage = '';
+
+  bool onEditpressed = false;
+
+  bool edit() {
+    if(onEditpressed == true) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  Future<void> apiconnection() async {
+    final url = Uri.parse('https://app.pravinhonda.com/api/enquiries/50');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: jsonEncode({
+          'customer_id': customerid.text,
+          'wings_enquiry_number': wingsenquiry.text,
+          'customer_category': selectedcustomercategoryitems?.toString(),
+          'enquiry_category': selectedenquirycategoryitems?.toString(),
+          'customer_type': selectedcustomertypeitems?.toString(),
+          'customer_contact_number': customercontactnumber.text,
+          'customer_name': customername.text,
+          'gender': selectedgenderitems?.toString(),
+          'dob': datecontroller.text,
+          'martial_status': selectedmartialstatusitems?.toString(),
+          'email_id': emailid.text,
+          'address': address.text,
+          'enquiry_type': selectedenquirytypeitems?.toString(),
+          'enquiry_source': selectedenquirysourceitems?.toString(),
+          'model_name': selectedmodelnameitems?.toString(),
+          'model_variant': selectedmodelvariantitems?.toString(),
+          'model_color': selectedmodelcoloritems?.toString(),
+          'purchase_type': selectedpurchasetypeitems?.toString(),
+          'exchange_flag': selectedexchangeflagitems?.toString(),
+          'follow_up_date': followupdatecontroller.text,
+          'test_ride': selectedtestrideitems?.toString(),
+          'customer_remarks': customerremarks.text,
+        }),
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        print('response data: $responseData');
+
+        Fluttertoast.showToast(
+          msg: responseData['message'],
+          toastLength: Toast.LENGTH_LONG,
+        );
+
+        if(selectedpurchasetypeitems == 'finance') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Addfinance(
+                exchangeflag: selectedexchangeflagitems,
+              )
+            ),
+          );
+        } else if (selectedpurchasetypeitems != 'finance' && selectedexchangeflagitems == 'yes') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Addexchange()
+            )
+          );
+        }
+
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => QuotationSuccessPopup(
+            name: '${responseData['data']['enquiry']['customer_name']}',
+            number: '${responseData['data']['enquiry']['customer_contact_number']}',
+            enquiryid: responseData['data']['enquiry']['enquiry_id'],
+          ),
+        );
+
+      } else if (response.statusCode == 422) {
+          setState(() {
+            customeride = responseData['errors']['customer_id'] ?? '';
+            wingsenquirye = responseData['errors']['wings_enquiry_number'] ?? '';
+            customercategorye = responseData['errors']['customer_category'] ?? '';
+            enquirycategorye = responseData['errors']['enquiry_category'] ?? '';
+            customertypee = responseData['errors']['customer_type'] ?? '';
+            customernamee = responseData['errors']['customer_name'] ?? '';
+            customercontactnumbere = responseData['errors']['customer_contact_number'] ?? '';
+            emailide = responseData['errors']['email_id'] ?? '';
+            addresse = responseData['errors']['address'] ?? '';
+            enquirytypee = responseData['errors']['enquiry_type'] ?? '';
+            enquirysourcee = responseData['errors']['enquiry_source'] ?? '';
+            // modelcategorye = responseData['errors']['model_category'] ?? '';
+            modelnamee = responseData['errors']['model_name'] ?? '';
+            modelvariante = responseData['errors']['model_variant'] ?? '';
+            modelcolore = responseData['errors']['model_color'] ?? '';
+            purchasetypee = responseData['errors']['purchase_type'] ?? '';
+            exchangeflage = responseData['errors']['exchange_flag'] ?? '';
+          });
+
+          Fluttertoast.showToast(msg: responseData['message']);
+
+          print('errrorrr $customeride');
+
+      } else {
+        Fluttertoast.showToast(
+          msg: responseData['message'],
+          toastLength: Toast.LENGTH_LONG,
+        );
+        print('Failed to create enquiry. Status code: ${response.statusCode}');
+        print(response.body);
+      }
+    } catch (error) {
+      print('Error submitting finance form: $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,229 +293,370 @@ class _CreatequotationState extends State<Createquotation> {
       child: Scaffold(
         appBar: appBar(),
         drawer: Customdrawer(),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(20)),
-            child: Column(
-              children: [
-                SizedBox(height: SizeConfig.h(20)),
-                Center(
-                  child: Text(
-                    'Create Quotation',
-                    style: customtext(
-                      fs18,
-                      kred,
-                      FontWeight.bold
+        body: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(20)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: SizeConfig.h(20)),
+                    Center(
+                      child: Text(
+                        'Quotation',
+                        style: customtext(
+                          fs18,
+                          kred,
+                          FontWeight.bold
+                        ),
+                      ),
                     ),
+                    SizedBox(height: SizeConfig.h(10)),
+                    textfieldy(
+                      'Customer ID',
+                      customerid,
+                      // readonly: edit(),
+                    ),
+                    if(customeride.isNotEmpty)
+                    errormessage(customeride),
+                    textfieldy(
+                      'Wings Enquiry Number',
+                      wingsenquiry
+                    ),
+                    if(wingsenquirye.isNotEmpty)
+                    errormessage(wingsenquirye),
+                    CustomDropdown(
+                      title: 'Customer Category',
+                      selectedCustomDropdown: selectedcustomercategoryitems,
+                      customDropdownItems: customercategoryitems,
+                      onChanged: (newValue) {
+                        setState(() {
+                          selectedcustomercategoryitems = newValue;
+                        });
+                      },
+                      // readOnly: edit(),
+                    ),
+                    if(customercategorye.isNotEmpty)
+                    errormessage(customercategorye),
+                    CustomDropdown(
+                      title: 'Enquiry Category',
+                      selectedCustomDropdown: selectedenquirycategoryitems,
+                      customDropdownItems: enquirycategoryitems,
+                      onChanged: (newValue) {
+                        setState(() {
+                          selectedenquirycategoryitems = newValue;
+                        });
+                      },
+                    ),
+                    if(enquirycategorye.isNotEmpty)
+                    errormessage(enquirycategorye),
+                    CustomDropdown(
+                      title: 'Customer Type',
+                      selectedCustomDropdown: selectedcustomertypeitems,
+                      customDropdownItems: customertypeitems,
+                      onChanged: (newValue) {
+                        setState(() {
+                          selectedcustomertypeitems = newValue;
+                        });
+                      },
+                    ),
+                    if(customertypee.isNotEmpty)
+                    errormessage(customertypee),
+                    textfieldy(
+                      'Customer Contact Number',
+                      customercontactnumber
+                    ),
+                    if(customercontactnumbere.isNotEmpty)
+                    errormessage(customercontactnumbere),
+                    textfieldy(
+                      'Customer Name',
+                      customername
+                    ),
+                    if(customernamee.isNotEmpty)
+                    errormessage(customernamee),
+                    CustomDropdown(
+                      title: 'Gender',
+                      selectedCustomDropdown: selectedgenderitems,
+                      customDropdownItems: genderitems,
+                      onChanged: (newValue) {
+                        setState(() {
+                          selectedgenderitems = newValue;
+                        });
+                      },
+                      star: false,
+                    ),
+                    
+                    Customdatefield(
+                      title: 'Date of Birth',
+                      datecontroller: datecontroller,
+                      star: false,
+                    ),
+
+                    CustomDropdown(
+                      title: 'Martial Status',
+                      selectedCustomDropdown: selectedmartialstatusitems,
+                      customDropdownItems: martialstatusitems,
+                      onChanged: (newValue) {
+                        setState(() {
+                          selectedmartialstatusitems = newValue;
+                        });
+                      },
+                      star: false,
+                    ),
+                    
+                    textfieldy(
+                      "Email ID",
+                      emailid
+                    ),
+                    if(emailide.isNotEmpty)
+                    errormessage(emailide),
+                    textfieldy(
+                      "Address",
+                      address
+                    ),
+                    if(addresse.isNotEmpty)
+                    errormessage(addresse),
+                    CustomDropdown(
+                      title: 'Enquiry Type',
+                      selectedCustomDropdown: selectedenquirytypeitems,
+                      customDropdownItems: enquirytypeitems,
+                      onChanged: (newValue) {
+                        setState(() {
+                          selectedenquirytypeitems = newValue;
+                        });
+                      },
+                    ),
+                    if(enquirytypee.isNotEmpty)
+                    errormessage(enquirytypee),
+                    CustomDropdown(
+                      title: 'Enquiry Source',
+                      selectedCustomDropdown: selectedenquirysourceitems,
+                      customDropdownItems: enquirysourceitems,
+                      onChanged: (newValue) {
+                        setState(() {
+                          selectedenquirysourceitems = newValue;
+                        });
+                      },
+                    ),
+                    if(enquirysourcee.isNotEmpty)
+                    errormessage(enquirysourcee),
+                    // CustomDropdown(
+                    //   title: 'Model Category',
+                    //   selectedCustomDropdown: selectedmodelcategoryitems,
+                    //   customDropdownItems: modelcategoryitems,
+                    //   onChanged: (newValue) {
+                    //     setState(() {
+                    //       selectedmodelcategoryitems = newValue;
+                    //     });
+                    //   },
+                    // ),
+                    // if(modelcategorye.isNotEmpty)
+                    // errormessage('$modelcategorye'),
+                    CustomDropdown(
+                      title: 'Model Name',
+                      selectedCustomDropdown: selectedmodelnameitems,
+                      customDropdownItems: modelnameitems,
+                      onChanged: (newValue) {
+                        setState(() {
+                          selectedmodelnameitems = newValue;
+                        });
+                      },
+                    ),
+                    if(modelnamee.isNotEmpty)
+                    errormessage(modelnamee),
+                    CustomDropdown(
+                      title: 'Model Variant',
+                      selectedCustomDropdown: selectedmodelvariantitems,
+                      customDropdownItems: modelvariantitems,
+                      onChanged: (newValue) {
+                        setState(() {
+                          selectedmodelvariantitems = newValue;
+                        });
+                      },
+                    ),
+                    if(modelvariante.isNotEmpty)
+                    errormessage(modelvariante),
+                    CustomDropdown(
+                      title: 'Model Color',
+                      selectedCustomDropdown: selectedmodelcoloritems,
+                      customDropdownItems: modelcoloritems,
+                      onChanged: (newValue) {
+                        setState(() {
+                          selectedmodelcoloritems = newValue;
+                        });
+                      },
+                    ),
+                    if(modelcolore.isNotEmpty)
+                    errormessage(modelcolore),
+                    CustomDropdown(
+                      title: 'Purchase Type',
+                      selectedCustomDropdown: selectedpurchasetypeitems,
+                      customDropdownItems: purchasetypeitems,
+                      onChanged: (newValue) {
+                        setState(() {
+                          selectedpurchasetypeitems = newValue;
+                        });
+                      },
+                      readOnly: edit(),
+                    ),
+                    if(purchasetypee.isNotEmpty)
+                    errormessage(purchasetypee),
+                    CustomDropdown(
+                      title: 'Exchange Flag',
+                      selectedCustomDropdown: selectedexchangeflagitems,
+                      customDropdownItems: exchangeflagitems,
+                      onChanged: (newValue) {
+                        setState(() {
+                          selectedexchangeflagitems = newValue;
+                        });
+                      },
+                      readOnly: edit(),
+                    ),
+                    if(exchangeflage.isNotEmpty)
+                    errormessage(exchangeflage),
+                    Customdatefield(
+                      title: 'Follow Up Date',
+                      datecontroller: followupdatecontroller,
+                      star: false,
+                    ),
+                    CustomDropdown(
+                      title: 'Test Ride',
+                      selectedCustomDropdown: selectedtestrideitems,
+                      customDropdownItems: testrideitems,
+                      onChanged: (newValue) {
+                        setState(() {
+                          selectedtestrideitems = newValue;
+                        });
+                      },
+                      star: false,
+                    ),
+                    description(
+                      'Customer Remarks',
+                      customerremarks
+                    ),
+                    SizedBox(height: SizeConfig.h(20)),
+                    button(
+                      'Confirm Quotation',
+                      () {
+                        apiconnection();
+                      }
+                    ),
+                    SizedBox(height: SizeConfig.h(40)),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              right: 10,
+              top: 10,
+              child: ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    onEditpressed = !onEditpressed;
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: onEditpressed ? kwhite : klightgrey,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)
+                  ),
+                  elevation: 2,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: SizeConfig.w(12),
+                    vertical: SizeConfig.h(2)
                   ),
                 ),
-                SizedBox(height: SizeConfig.h(10)),
-                textfieldy(
-                  'Enquiry ID',
-                  enquiryid
-                ),
-                textfieldy(
-                  'Wings Enquiry Number',
-                  wingsenquiry
-                ),
-                CustomDropdown(
-                  title: 'Customer Category',
-                  selectedCustomDropdown: selectedcustomercategoryitems,
-                  customDropdownItems: customercategoryitems,
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedcustomercategoryitems = newValue;
-                    });
-                  },
-                ),
-                CustomDropdown(
-                  title: 'Enquiry Category',
-                  selectedCustomDropdown: selectedenquirycategoryitems,
-                  customDropdownItems: enquirycategoryitems,
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedenquirycategoryitems = newValue;
-                    });
-                  },
-                ),
-                CustomDropdown(
-                  title: 'Enquiry Category',
-                  selectedCustomDropdown: selectedcustomertypeitems,
-                  customDropdownItems: customertypeitems,
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedcustomertypeitems = newValue;
-                    });
-                  },
-                ),
-                textfieldy(
-                  'Customer Contact Number',
-                  customercontactnumber
-                ),
-                textfieldy(
-                  'Customer Name',
-                  customername
-                ),
-                CustomDropdown(
-                  title: 'Gender',
-                  selectedCustomDropdown: selectedgenderitems,
-                  customDropdownItems: genderitems,
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedgenderitems = newValue;
-                    });
-                  },
-                ),
-                Customdatefield(
-                  title: 'Date of Birth',
-                  datecontroller: datecontroller
-                ),
-                CustomDropdown(
-                  title: 'Martial Status',
-                  selectedCustomDropdown: selectedmartialstatusitems,
-                  customDropdownItems: martialstatusitems,
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedmartialstatusitems = newValue;
-                    });
-                  },
-                ),
-                textfieldy(
-                  "Email ID",
-                  emailid
-                ),
-                CustomDropdown(
-                  title: 'Enquiry Type',
-                  selectedCustomDropdown: selectedenquirytypeitems,
-                  customDropdownItems: enquirytypeitems,
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedenquirytypeitems = newValue;
-                    });
-                  },
-                ),
-                CustomDropdown(
-                  title: 'Enquiry Source',
-                  selectedCustomDropdown: selectedenquirysourceitems,
-                  customDropdownItems: enquirysourceitems,
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedenquirysourceitems = newValue;
-                    });
-                  },
-                ),
-                CustomDropdown(
-                  title: 'Model Category',
-                  selectedCustomDropdown: selectedmodelcategoryitems,
-                  customDropdownItems: modelcategoryitems,
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedmodelcategoryitems = newValue;
-                    });
-                  },
-                ),
-                CustomDropdown(
-                  title: 'Model Name',
-                  selectedCustomDropdown: selectedmodelnameitems,
-                  customDropdownItems: modelnameitems,
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedmodelnameitems = newValue;
-                    });
-                  },
-                ),
-                CustomDropdown(
-                  title: 'Model Variant',
-                  selectedCustomDropdown: selectedmodelvariantitems,
-                  customDropdownItems: modelvariantitems,
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedmodelvariantitems = newValue;
-                    });
-                  },
-                ),
-                CustomDropdown(
-                  title: 'Model Color',
-                  selectedCustomDropdown: selectedmodelcoloritems,
-                  customDropdownItems: modelcoloritems,
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedmodelcoloritems = newValue;
-                    });
-                  },
-                ),
-                CustomDropdown(
-                  title: 'Purchase Type',
-                  selectedCustomDropdown: selectedpurchasetypeitems,
-                  customDropdownItems: purchasetypeitems,
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedpurchasetypeitems = newValue;
-                    });
-                  },
-                ),
-                CustomDropdown(
-                  title: 'Exchange Flag',
-                  selectedCustomDropdown: selectedexchangeflagitems,
-                  customDropdownItems: exchangeflagitems,
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedexchangeflagitems = newValue;
-                    });
-                  },
-                ),
-                Customdatefield(
-                  title: 'Follow Up Date',
-                  datecontroller: followupdatecontroller
-                ),
-                CustomDropdown(
-                  title: 'Test Ride',
-                  selectedCustomDropdown: selectedtestrideitems,
-                  customDropdownItems: testrideitems,
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedtestrideitems = newValue;
-                    });
-                  },
-                ),
-                description(
-                  'Customer Remarks',
-                  customerremarks
-                ),
-                SizedBox(height: SizeConfig.h(20)),
-                button(
-                  'Create Quotation',
-                  () {
-                    showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (_) => QuotationSuccessPopup(
-                        name: "Rojar",
-                        number: "87548 01550",
-                      ),
-                    );
-                  }
-                ),
-            
-                SizedBox(height: SizeConfig.h(40)),
-              ],
-            ),
-          ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.edit,
+                      size: 16,
+                      color: kblack,
+                    ),
+                    SizedBox(width: SizeConfig.w(3)),
+                    Text(
+                      'Edit',
+                      style: textmedium12,
+                    )
+                  ],
+                )
+              ),
+            )
+          ],
         ),
       ),
     );
   }
 }
 
-class QuotationSuccessPopup extends StatelessWidget {
+class QuotationSuccessPopup extends StatefulWidget {
   final String name;
   final String number;
+  final int enquiryid;
 
   const QuotationSuccessPopup({
     super.key,
     required this.name,
     required this.number,
+    required this.enquiryid,
   });
+
+  @override
+  State<QuotationSuccessPopup> createState() => _QuotationSuccessPopupState();
+}
+
+class _QuotationSuccessPopupState extends State<QuotationSuccessPopup> {
+
+  Future<void> openUrl(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  Future<void> generatepdf() async {
+    final url = Uri.parse('https://app.pravinhonda.com/api/enquiries/${widget.enquiryid}/generate-pdf');
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        print('response data: $responseData');
+
+        Fluttertoast.showToast(
+          msg: responseData['message'],
+          toastLength: Toast.LENGTH_LONG,
+        );
+
+        openUrl(responseData['file']);
+
+        print(responseData['file']);
+
+      } else {
+        Fluttertoast.showToast(
+          msg: responseData['message'],
+          toastLength: Toast.LENGTH_LONG,
+        );
+        print('Failed to generate PDF. Status code: ${response.statusCode}');
+        print(response.body);
+      }
+
+    } catch (error) {
+      print('Error generating PDF: $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -366,11 +680,11 @@ class QuotationSuccessPopup extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Name : $name",
+                      "Name : ${widget.name}",
                       style: textmedium12,
                     ),
                     Text(
-                      "Number : $number",
+                      "Number : ${widget.number}",
                       style: textmedium12,
                     ),
                   ],
@@ -391,7 +705,8 @@ class QuotationSuccessPopup extends StatelessWidget {
             width: SizeConfig.w(120),
             lottie: AssetLottie(
               'lottie/completed.json',
-            )
+            ),
+            repeat: false,
           ),
           SizedBox(height: SizeConfig.h(2)),
           Text(
@@ -411,15 +726,17 @@ class QuotationSuccessPopup extends StatelessWidget {
             textAlign: TextAlign.center,
             style: textmedium12
           ),
-          SizedBox(height: SizeConfig.h(40)),
+          SizedBox(height: SizeConfig.h(30)),
           button(
             'Print',
             () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Createbooking())
-              );
-            }
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => Createbooking())
+              // );
+              generatepdf();
+            },
+            padding: true
           ),
           SizedBox(height: SizeConfig.h(30)),
         ]

@@ -20,7 +20,7 @@ class Addfinance extends StatefulWidget {
 class _AddfinanceState extends State<Addfinance> {
 
   List<Map<String, String>> financeitems = [
-    {'label': 'INDUS INDBANK LTD', 'value': 'INDUS INDBANK LTD'},
+    {'label': 'Personal Loan', 'value': 'Personal Loan'},
   ];
 
   String? selectedfinanceitems;
@@ -38,7 +38,42 @@ class _AddfinanceState extends State<Addfinance> {
   TextEditingController loaninterest = TextEditingController();
   TextEditingController emi = TextEditingController();
 
+  String financeitemse = '';
+  String vehiclecoste = '';
+  String loanperioditemse = '';
+  String initialpaymente = '';
+  String documentchargese = '';
+  String downpaymente = '';
+  String loanintereste = '';
+  // String emie = '';
 
+  // Future<void> finaceform() async {
+  //   final url = Uri.parse('https://app.pravinhonda.com/api/finance');
+
+  //   try{
+      
+  //     final response = await http.post(
+  //       url,
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Accept': 'application/json',
+  //       },
+  //       body: jsonEncode({
+  //         'enquiry_id': 2,
+  //         'finance': selectedfinanceitems?.toString(),
+  //         'vehicle_cost': vehiclecost.text,
+  //         'initial_payment': initialpayment.text,
+  //         'document_charges': documentcharges.text,
+  //         'down_payment': downpayment.text,
+  //         'loan_interest': loaninterest.text,
+  //         'loan_period': selectedloanperioditems?.toString(),
+  //       }),
+  //     );
+
+  //   } catch (error) {
+  //     print('Error submitting finance form: $error');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

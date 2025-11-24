@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/loginscreens/mainscreens/addexchange.dart';
 import 'package:pravinhonda/loginscreens/mainscreens/addfinance.dart';
+import 'package:pravinhonda/loginscreens/mainscreens/createquotation.dart';
 import 'package:pravinhonda/utility/customs/customappBar.dart';
 import 'package:pravinhonda/utility/customs/customdatefield.dart';
 import 'package:pravinhonda/utility/customs/customdrawer.dart';
@@ -166,37 +167,39 @@ class _CreateenquiryState extends State<Createenquiry> {
         url,
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
         body: jsonEncode({
           'customer_id': customerid.text,
           'wings_enquiry_number': wingsenquiry.text,
-          'customer_category' : selectedcustomercategoryitems,
-          'enquiry_category' : selectedenquirycategoryitems,
-          'customer_type' : selectedcustomertypeitems,
-          'customer_contact_number' : customercontactnumber.text,
-          'customer_name' : customername.text,
-          'gender' : selectedgenderitems,
-          'dob' : datecontroller.text,
-          'martial_status' : selectedmartialstatusitems,
-          'email_id' : emailid.text,
-          'address' : address.text,
-          'enquiry_type' : selectedenquirytypeitems,
-          'enquiry_source' : selectedenquirysourceitems,
-          // 'model_category' : selectedmodelcategoryitems,
-          'model_name' : selectedmodelnameitems,
-          'model_variant' : selectedmodelvariantitems,
-          'model_color' : selectedmodelcoloritems,
-          'purchase_type' : selectedpurchasetypeitems,
-          'exchange_flag' : selectedexchangeflagitems,
-          'follow_up_date' : followupdatecontroller.text,
-          'test_ride' : selectedtestrideitems,
-          'customer_remarks' : customerremarks.text,
+          'customer_category': selectedcustomercategoryitems?.toString(),
+          'enquiry_category': selectedenquirycategoryitems?.toString(),
+          'customer_type': selectedcustomertypeitems?.toString(),
+          'customer_contact_number': customercontactnumber.text,
+          'customer_name': customername.text,
+          'gender': selectedgenderitems?.toString(),
+          'dob': datecontroller.text,
+          'martial_status': selectedmartialstatusitems?.toString(),
+          'email_id': emailid.text,
+          'address': address.text,
+          'enquiry_type': selectedenquirytypeitems?.toString(),
+          'enquiry_source': selectedenquirysourceitems?.toString(),
+          'model_name': selectedmodelnameitems?.toString(),
+          'model_variant': selectedmodelvariantitems?.toString(),
+          'model_color': selectedmodelcoloritems?.toString(),
+          'purchase_type': selectedpurchasetypeitems?.toString(),
+          'exchange_flag': selectedexchangeflagitems?.toString(),
+          'follow_up_date': followupdatecontroller.text,
+          'test_ride': selectedtestrideitems?.toString(),
+          'customer_remarks': customerremarks.text,
         }),
       );
 
       final responseData = jsonDecode(response.body);
 
       if (response.statusCode == 201) {
+        print('response data: $responseData');
+
         Fluttertoast.showToast(
           msg: responseData['message'],
           toastLength: Toast.LENGTH_LONG,
@@ -219,6 +222,17 @@ class _CreateenquiryState extends State<Createenquiry> {
             )
           );
         }
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Createquotation(
+              enquiryid: responseData['data']['enquiry']['enquiry_id'],
+            )
+          )
+        );
+
+        print(responseData['data']['enquiry']['enquiry_id']);
 
       } else if (response.statusCode == 200) {
         Fluttertoast.showToast(
@@ -259,7 +273,7 @@ class _CreateenquiryState extends State<Createenquiry> {
         print(response.body);
       }
     } catch (error) {
-      print('Error occurred: $error');
+      print('Error submitting finance form: $error');
     }
   }
 
@@ -511,6 +525,14 @@ class _CreateenquiryState extends State<Createenquiry> {
                   'Create Enquiry',
                   () {
                     apiconnection();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Createquotation(
+                          enquiryid: 50,
+                        )
+                      )
+                    );
                   }
                 ),
             
