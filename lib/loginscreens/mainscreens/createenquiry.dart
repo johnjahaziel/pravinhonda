@@ -228,6 +228,7 @@ class _CreateenquiryState extends State<Createenquiry> {
           MaterialPageRoute(
             builder: (context) => Createquotation(
               enquiryid: responseData['data']['enquiry']['enquiry_id'],
+              apiResponse: responseData,
             )
           )
         );
@@ -525,14 +526,6 @@ class _CreateenquiryState extends State<Createenquiry> {
                   'Create Enquiry',
                   () {
                     apiconnection();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Createquotation(
-                          enquiryid: 50,
-                        )
-                      )
-                    );
                   }
                 ),
             

@@ -17,9 +17,11 @@ import 'package:url_launcher/url_launcher.dart';
 
 class Createquotation extends StatefulWidget {
   final int enquiryid;
+  final Map<String, dynamic> apiResponse;
   const Createquotation({
     super.key,
-    required this.enquiryid
+    required this.enquiryid,
+    required this.apiResponse,
   });
 
   @override
@@ -136,15 +138,50 @@ class _CreatequotationState extends State<Createquotation> {
 
   String? selectedtestrideitems;
 
-  TextEditingController customerid = TextEditingController();
-  TextEditingController wingsenquiry = TextEditingController();
-  TextEditingController customercontactnumber = TextEditingController();
-  TextEditingController customername = TextEditingController();
-  TextEditingController datecontroller = TextEditingController();
-  TextEditingController emailid = TextEditingController();
-  TextEditingController address = TextEditingController();
-  TextEditingController followupdatecontroller = TextEditingController();
-  TextEditingController customerremarks = TextEditingController();
+  late TextEditingController customerid;
+  late TextEditingController wingsenquiry;
+  late TextEditingController customercontactnumber;
+  late TextEditingController customername;
+  late TextEditingController datecontroller;
+  late TextEditingController emailid;
+  late TextEditingController address;
+  late TextEditingController followupdatecontroller;
+  late TextEditingController customerremarks;
+
+  @override
+  void initState() {
+    super.initState();
+    _initControllersFromResponse(widget.apiResponse);
+  }
+
+  void _initControllersFromResponse(Map<String, dynamic> resp) {
+    final customer = resp['data']?['customer'] ?? {};
+    final enquiry = resp['data']?['enquiry'] ?? {};
+
+    customerid = TextEditingController(text: customer['customer_id']?.toString() ?? '');
+    wingsenquiry = TextEditingController(text: enquiry['wings_enquiry_number'] ?? '');
+    selectedcustomercategoryitems = enquiry['customer_category'];
+    selectedenquirycategoryitems = enquiry['enquiry_category'];
+    selectedcustomertypeitems = enquiry['customer_type'];
+    selectedgenderitems = customer['gender'];
+    selectedmartialstatusitems = customer['martial_status'];
+    selectedenquirytypeitems = enquiry['enquiry_type'];
+    selectedenquirysourceitems = enquiry['enquiry_source'];
+    // selectedmodelcategoryitems = enquiry['model_category'];
+    selectedmodelnameitems = enquiry['model_name'];
+    selectedmodelvariantitems = enquiry['model_variant'];
+    selectedmodelcoloritems = enquiry['model_color'];
+    selectedpurchasetypeitems = enquiry['purchase_type'];
+    selectedexchangeflagitems = enquiry['exchange_flag'];
+    selectedtestrideitems = enquiry['test_ride'];
+    customername = TextEditingController(text: customer['customer_name'] ?? enquiry['customer_name'] ?? '');
+    customercontactnumber = TextEditingController(text: customer['customer_contact_number'] ?? enquiry['customer_contact_number'] ?? '');
+    emailid = TextEditingController(text: customer['email_id'] ?? enquiry['email_id'] ?? '');
+    address = TextEditingController(text: customer['address'] ?? enquiry['address'] ?? '');
+    datecontroller = TextEditingController(text: customer['dob'] ?? enquiry['dob'] ?? '');
+    followupdatecontroller = TextEditingController(text: enquiry['follow_up_date'] ?? '');
+    customerremarks = TextEditingController(text: enquiry['customer_remarks'] ?? '');
+  }
 
   String customeride = '';
   String wingsenquirye = '';
@@ -175,7 +212,7 @@ class _CreatequotationState extends State<Createquotation> {
   }
 
   Future<void> apiconnection() async {
-    final url = Uri.parse('https://app.pravinhonda.com/api/enquiries/50');
+    final url = Uri.parse('https://app.pravinhonda.com/api/enquiries/${widget.enquiryid}');
 
     try {
       final response = await http.post(
@@ -316,13 +353,14 @@ class _CreatequotationState extends State<Createquotation> {
                     textfieldy(
                       'Customer ID',
                       customerid,
-                      // readonly: edit(),
+                      readonly: edit(),
                     ),
                     if(customeride.isNotEmpty)
                     errormessage(customeride),
                     textfieldy(
                       'Wings Enquiry Number',
-                      wingsenquiry
+                      wingsenquiry,
+                      readonly: edit(),
                     ),
                     if(wingsenquirye.isNotEmpty)
                     errormessage(wingsenquirye),
@@ -335,7 +373,7 @@ class _CreatequotationState extends State<Createquotation> {
                           selectedcustomercategoryitems = newValue;
                         });
                       },
-                      // readOnly: edit(),
+                      readOnly: edit(),
                     ),
                     if(customercategorye.isNotEmpty)
                     errormessage(customercategorye),
@@ -348,6 +386,7 @@ class _CreatequotationState extends State<Createquotation> {
                           selectedenquirycategoryitems = newValue;
                         });
                       },
+                      readOnly: edit(),
                     ),
                     if(enquirycategorye.isNotEmpty)
                     errormessage(enquirycategorye),
@@ -360,18 +399,21 @@ class _CreatequotationState extends State<Createquotation> {
                           selectedcustomertypeitems = newValue;
                         });
                       },
+                      readOnly: edit(),
                     ),
                     if(customertypee.isNotEmpty)
                     errormessage(customertypee),
                     textfieldy(
                       'Customer Contact Number',
-                      customercontactnumber
+                      customercontactnumber,
+                      readonly: edit(),
                     ),
                     if(customercontactnumbere.isNotEmpty)
                     errormessage(customercontactnumbere),
                     textfieldy(
                       'Customer Name',
-                      customername
+                      customername,
+                      readonly: edit(),
                     ),
                     if(customernamee.isNotEmpty)
                     errormessage(customernamee),
@@ -385,12 +427,14 @@ class _CreatequotationState extends State<Createquotation> {
                         });
                       },
                       star: false,
+                      readOnly: edit(),
                     ),
                     
                     Customdatefield(
                       title: 'Date of Birth',
                       datecontroller: datecontroller,
                       star: false,
+                      readOnly: edit(),
                     ),
 
                     CustomDropdown(
@@ -403,17 +447,20 @@ class _CreatequotationState extends State<Createquotation> {
                         });
                       },
                       star: false,
+                      readOnly: edit(),
                     ),
                     
                     textfieldy(
                       "Email ID",
-                      emailid
+                      emailid,
+                      readonly: edit(),
                     ),
                     if(emailide.isNotEmpty)
                     errormessage(emailide),
                     textfieldy(
                       "Address",
-                      address
+                      address,
+                      readonly: edit(),
                     ),
                     if(addresse.isNotEmpty)
                     errormessage(addresse),
@@ -426,6 +473,7 @@ class _CreatequotationState extends State<Createquotation> {
                           selectedenquirytypeitems = newValue;
                         });
                       },
+                      readOnly: edit(),
                     ),
                     if(enquirytypee.isNotEmpty)
                     errormessage(enquirytypee),
@@ -438,6 +486,7 @@ class _CreatequotationState extends State<Createquotation> {
                           selectedenquirysourceitems = newValue;
                         });
                       },
+                      readOnly: edit(),
                     ),
                     if(enquirysourcee.isNotEmpty)
                     errormessage(enquirysourcee),
@@ -450,6 +499,7 @@ class _CreatequotationState extends State<Createquotation> {
                     //       selectedmodelcategoryitems = newValue;
                     //     });
                     //   },
+                    //   readOnly: edit(),
                     // ),
                     // if(modelcategorye.isNotEmpty)
                     // errormessage('$modelcategorye'),
@@ -462,6 +512,7 @@ class _CreatequotationState extends State<Createquotation> {
                           selectedmodelnameitems = newValue;
                         });
                       },
+                      readOnly: edit(),
                     ),
                     if(modelnamee.isNotEmpty)
                     errormessage(modelnamee),
@@ -474,6 +525,7 @@ class _CreatequotationState extends State<Createquotation> {
                           selectedmodelvariantitems = newValue;
                         });
                       },
+                      readOnly: edit(),
                     ),
                     if(modelvariante.isNotEmpty)
                     errormessage(modelvariante),
@@ -486,6 +538,7 @@ class _CreatequotationState extends State<Createquotation> {
                           selectedmodelcoloritems = newValue;
                         });
                       },
+                      readOnly: edit(),
                     ),
                     if(modelcolore.isNotEmpty)
                     errormessage(modelcolore),
@@ -519,6 +572,7 @@ class _CreatequotationState extends State<Createquotation> {
                       title: 'Follow Up Date',
                       datecontroller: followupdatecontroller,
                       star: false,
+                      readOnly: edit(),
                     ),
                     CustomDropdown(
                       title: 'Test Ride',
@@ -530,10 +584,12 @@ class _CreatequotationState extends State<Createquotation> {
                         });
                       },
                       star: false,
+                      readOnly: edit(),
                     ),
                     description(
                       'Customer Remarks',
-                      customerremarks
+                      customerremarks,
+                      readonly: edit()
                     ),
                     SizedBox(height: SizeConfig.h(20)),
                     button(
@@ -609,13 +665,25 @@ class QuotationSuccessPopup extends StatefulWidget {
 
 class _QuotationSuccessPopupState extends State<QuotationSuccessPopup> {
 
-  Future<void> openUrl(String url) async {
-    final Uri uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
-      throw 'Could not launch $url';
+  Future<void> openUrl(BuildContext context, String urlString) async {
+    final uri = Uri.parse(urlString);
+
+    try {
+      final bool ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
+      if (ok) {
+        print('Launched externally: $uri');
+        return;
+      } else {
+        print('launchUrl (external) returned false for $uri');
+      }
+    } catch (e) {
+      print('launchUrl external exception: $e');
     }
+
+    Fluttertoast.showToast(msg: 'Could not open URL');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Could not open: ${uri.toString()}')),
+    );
   }
 
   Future<void> generatepdf() async {
@@ -640,7 +708,7 @@ class _QuotationSuccessPopupState extends State<QuotationSuccessPopup> {
           toastLength: Toast.LENGTH_LONG,
         );
 
-        openUrl(responseData['file']);
+        openUrl(context, responseData['file']);
 
         print(responseData['file']);
 
