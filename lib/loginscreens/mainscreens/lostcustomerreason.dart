@@ -1,4 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
+import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/loginscreens/Navigation.dart';
 import 'package:pravinhonda/utility/customs/customappBar.dart';
 import 'package:pravinhonda/utility/customs/customdrawer.dart';
@@ -15,14 +21,7 @@ class LostcustomerReason extends StatefulWidget {
 }
 
 class _LostcustomerReasonState extends State<LostcustomerReason> {
-  bool duetobrand = false;
-  bool otherhondadealer = false;
-  bool discount = false;
-  bool product = false;
-  bool service = false;
-  bool availablility = false;
-  bool price = false;
-  bool others = false;
+  String? selectedReason;
 
   String? selectedduetobranditems;
 
@@ -38,42 +37,48 @@ class _LostcustomerReasonState extends State<LostcustomerReason> {
     {'label': 'No', 'value': 'No'},
   ];
 
-  String? selecteddiscountitems;
-
-  List<Map<String, String>> discountitems = [
-    {'label': 'Yes', 'value': 'Yes'},
-    {'label': 'No', 'value': 'No'},
-  ];
-
-  String? selectedproductitems;
-
-  List<Map<String, String>> productitems = [
-    {'label': 'Yes', 'value': 'Yes'},
-    {'label': 'No', 'value': 'No'},
-  ];
-
-  String? selectedserviceitems;
-
-  List<Map<String, String>> serviceitems = [
-    {'label': 'Yes', 'value': 'Yes'},
-    {'label': 'No', 'value': 'No'},
-  ];
-
-  String? selectedavailablilityitems;
-
-  List<Map<String, String>> availablilityitems = [
-    {'label': 'Yes', 'value': 'Yes'},
-    {'label': 'No', 'value': 'No'},
-  ];
-
-  String? selectedpriceitems;
-
-  List<Map<String, String>> priceitems = [
-    {'label': 'Yes', 'value': 'Yes'},
-    {'label': 'No', 'value': 'No'},
-  ];
-
   TextEditingController otherscomments = TextEditingController();
+
+  Future<void> apiconnection() async {
+    final url = Uri.parse('https://app.pravinhonda.com/api/mark-loss-customer/23');
+
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    try {
+
+      final response = await http.post(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode({
+          'reason': selectedReason,
+        })
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if(response.statusCode == 200) {
+        Fluttertoast.showToast(msg: responseData['message']);
+        print('Data submitted successfully.');
+
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => Navigation()),
+          ((route) => false)
+        );
+
+      } else {
+        Fluttertoast.showToast(msg: responseData['message']);
+        print('Failed to submit data. Status Code: ${response.statusCode}');
+      }
+      
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,11 +105,15 @@ class _LostcustomerReasonState extends State<LostcustomerReason> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Customcheckbox(
-                      isChecked: duetobrand,
+                      isChecked: selectedReason == 'Due to Brand',
                       title: 'Due to Brand',
-                      onChanged: (val) => setState(() => duetobrand = val),
+                      onChanged: (val) {
+                        setState(() {
+                          selectedReason = 'Due to Brand';
+                        });
+                      },
                     ),
-                    if(duetobrand == true)
+                    if (selectedReason == 'Due to Brand')
                     CustomDropdown(
                       title: 'Choose the Brand',
                       selectedCustomDropdown: selectedduetobranditems,
@@ -116,13 +125,17 @@ class _LostcustomerReasonState extends State<LostcustomerReason> {
                       },
                       padding: true,
                     ),
-          
+
                     Customcheckbox(
-                      isChecked: otherhondadealer,
+                      isChecked: selectedReason == 'Other Honda Dealer',
                       title: 'Other Honda Dealer',
-                      onChanged: (val) => setState(() => otherhondadealer = val),
+                      onChanged: (val) {
+                        setState(() {
+                          selectedReason = 'Other Honda Dealer';
+                        });
+                      },
                     ),
-                    if(otherhondadealer == true)
+                    if (selectedReason == 'Other Honda Dealer')
                     CustomDropdown(
                       title: 'Choose the Brand',
                       selectedCustomDropdown: selectedotherhondadealeritems,
@@ -136,115 +149,76 @@ class _LostcustomerReasonState extends State<LostcustomerReason> {
                     ),
 
                     Customcheckbox(
-                      isChecked: discount,
+                      isChecked: selectedReason == 'Discount',
                       title: 'Discount',
-                      onChanged: (val) => setState(() => discount = val),
-                    ),
-                    if(discount == true)
-                    CustomDropdown(
-                      title: 'Choose the Brand',
-                      selectedCustomDropdown: selecteddiscountitems,
-                      customDropdownItems: discountitems,
-                      onChanged: (newValue) {
+                      onChanged: (val) {
                         setState(() {
-                          selecteddiscountitems = newValue;
+                          selectedReason = 'Discount';
                         });
                       },
-                      padding: true,
                     ),
 
                     Customcheckbox(
-                      isChecked: product,
+                      isChecked: selectedReason == 'Product',
                       title: 'Product',
-                      onChanged: (val) => setState(() => product = val),
-                    ),
-                    if(product == true)
-                    CustomDropdown(
-                      title: 'Choose the Brand',
-                      selectedCustomDropdown: selectedproductitems,
-                      customDropdownItems: productitems,
-                      onChanged: (newValue) {
+                      onChanged: (val) {
                         setState(() {
-                          selectedproductitems = newValue;
+                          selectedReason = 'Product';
                         });
                       },
-                      padding: true,
                     ),
 
                     Customcheckbox(
-                      isChecked: service,
+                      isChecked: selectedReason == 'Service',
                       title: 'Service',
-                      onChanged: (val) => setState(() => service = val),
-                    ),
-                    if(service == true)
-                    CustomDropdown(
-                      title: 'Choose the Brand',
-                      selectedCustomDropdown: selectedserviceitems,
-                      customDropdownItems: serviceitems,
-                      onChanged: (newValue) {
+                      onChanged: (val) {
                         setState(() {
-                          selectedserviceitems = newValue;
+                          selectedReason = 'Service';
                         });
                       },
-                      padding: true,
                     ),
 
                     Customcheckbox(
-                      isChecked: availablility,
+                      isChecked: selectedReason == 'Availability',
                       title: 'Availability',
-                      onChanged: (val) => setState(() => availablility = val),
-                    ),
-                    if(availablility == true)
-                    CustomDropdown(
-                      title: 'Choose the Brand',
-                      selectedCustomDropdown: selectedavailablilityitems,
-                      customDropdownItems: availablilityitems,
-                      onChanged: (newValue) {
+                      onChanged: (val) {
                         setState(() {
-                          selectedavailablilityitems = newValue;
+                          selectedReason = 'Availability';
                         });
                       },
-                      padding: true,
                     ),
 
                     Customcheckbox(
-                      isChecked: price,
+                      isChecked: selectedReason == 'Price',
                       title: 'Price',
-                      onChanged: (val) => setState(() => price = val),
-                    ),
-                    if(price == true)
-                    CustomDropdown(
-                      title: 'Choose the Brand',
-                      selectedCustomDropdown: selectedpriceitems,
-                      customDropdownItems: priceitems,
-                      onChanged: (newValue) {
+                      onChanged: (val) {
                         setState(() {
-                          selectedpriceitems = newValue;
+                          selectedReason = 'Price';
                         });
                       },
-                      padding: true,
                     ),
 
                     Customcheckbox(
-                      isChecked: others,
+                      isChecked: selectedReason == 'Others',
                       title: 'Others',
-                      onChanged: (val) => setState(() => others = val),
+                      onChanged: (val) {
+                        setState(() {
+                          selectedReason = 'Others';
+                        });
+                      },
                     ),
-                    if(others == true)
+                    if (selectedReason == 'Others')
                     description(
                       '',
                       otherscomments,
                       padding: true
                     ),
 
-                    SizedBox(height: SizeConfig.h(40)),
+                    SizedBox(height: SizeConfig.h(20)),
                     button(
                       'Submit',
                       () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Navigation())
-                        );
+                        apiconnection();
                       },
                       padding: true
                     ),

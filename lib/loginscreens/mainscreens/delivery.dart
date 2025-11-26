@@ -92,6 +92,7 @@ class _DeliveryState extends State<Delivery> {
                   itemBuilder: (context, index) {
                     final data = alldata[index];
                     return Hondabox(
+                      enquiryid: data['enquiry_id'] ?? 0,
                       id: data['customer_id']?.toString() ?? '',
                       customername: data['customer_name']?.toString() ?? '',
                       contactnumber: data['customer_contact_number']?.toString() ?? '',
@@ -99,6 +100,7 @@ class _DeliveryState extends State<Delivery> {
                       cashfinance: data['purchase_type']?.toString() ?? '',
                       textride: data['test_ride']?.toString() ?? '',
                       exchange: data['exchange_flag']?.toString() ?? '',
+                      onTap: () {}
                     );
                   }
                 )

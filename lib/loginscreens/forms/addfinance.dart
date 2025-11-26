@@ -77,6 +77,7 @@ class _AddfinanceState extends State<Addfinance> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig.init(context);
     return SafeArea(
       child: Scaffold(
         appBar: appBar(),

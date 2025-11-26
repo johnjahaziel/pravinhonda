@@ -1,6 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
+import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/loginscreens/mainscreens/lostcustomerreason.dart';
 import 'package:pravinhonda/utility/customs/customdatefield.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
@@ -9,6 +15,7 @@ import 'package:pravinhonda/utility/styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Hondabox extends StatefulWidget {
+  final int enquiryid;
   final String id;
   final String customername;
   final String contactnumber;
@@ -16,8 +23,10 @@ class Hondabox extends StatefulWidget {
   final String cashfinance;
   final String textride;
   final String exchange;
+  final VoidCallback onTap;
   const Hondabox({
     super.key,
+    required this.enquiryid,
     required this.id,
     required this.customername,
     required this.contactnumber,
@@ -25,6 +34,7 @@ class Hondabox extends StatefulWidget {
     required this.cashfinance,
     this.textride = 'No',
     this.exchange = 'No',
+    required this.onTap,
   });
 
   @override
@@ -51,7 +61,7 @@ class _HondaboxState extends State<Hondabox> {
     return Padding(
       padding: EdgeInsets.only(top: SizeConfig.h(5),bottom: SizeConfig.h(5)),
       child: RawMaterialButton(
-        onPressed: () {},
+        onPressed: widget.onTap,
         child: Container(
           width: double.infinity,
           decoration: BoxDecoration(
@@ -112,8 +122,9 @@ class _HondaboxState extends State<Hondabox> {
                               context: context,
                               barrierDismissible: false,
                               builder: (_) => ReviewBoxes(
-                                name: "Rojar",
-                                number: "87548 01550",
+                                name: widget.customername,
+                                number: widget.contactnumber,
+                                enquiryid: widget.enquiryid,
                               ),
                             );
                           },
@@ -132,6 +143,15 @@ class _HondaboxState extends State<Hondabox> {
                         RawMaterialButton(
                           onPressed: () {
                             openWhatsApp(widget.contactnumber);
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (_) => ReviewBoxes(
+                                name: widget.customername,
+                                number: widget.contactnumber,
+                                enquiryid: widget.enquiryid,
+                              ),
+                            );
                           },
                           constraints: BoxConstraints.tightFor(
                             height: SizeConfig.h(40),
@@ -210,11 +230,13 @@ class _HondaboxState extends State<Hondabox> {
 class ReviewBoxes extends StatefulWidget {
   final String name;
   final String number;
+  final int enquiryid;
 
   const ReviewBoxes({
     super.key,
     required this.name,
     required this.number,
+    required this.enquiryid,
   });
 
   @override
@@ -226,6 +248,42 @@ class _ReviewBoxesState extends State<ReviewBoxes> {
   TextEditingController commemts = TextEditingController();
 
   bool isChecked = false;
+
+  Future<void> apiconnection() async {
+    final url = Uri.parse('https://app.pravinhonda.com/api/enquiry/${widget.enquiryid}/followup');
+
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          'followupdate': datecontroller.text,
+          'followupnote': commemts.text,
+        }),
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        print('Follow-up updated successfully.');
+
+        Fluttertoast.showToast(msg: responseData['message']);
+
+        Navigator.pop(context);
+      } else {
+        Fluttertoast.showToast(msg: responseData['message']);
+        print('Failed to update follow-up. Status Code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error occurred: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -306,13 +364,14 @@ class _ReviewBoxesState extends State<ReviewBoxes> {
           button(
             'Update',
             () {
+              apiconnection();
               if(isChecked == true) {
                 showDialog(
                   context: context,
                   barrierDismissible: false,
                   builder: (_) => Lostcustomer(
-                    name: "Rojar",
-                    number: "87548 01550",
+                    name: widget.name,
+                    number: widget.number,
                   ),
                 );
               }

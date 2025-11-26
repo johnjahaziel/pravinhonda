@@ -63,6 +63,7 @@ class _EmicalculatorState extends State<Emicalculator> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig.init(context);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,

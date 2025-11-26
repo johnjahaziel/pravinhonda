@@ -36,6 +36,7 @@ class _AddexchangeState extends State<Addexchange> {
   
   @override
   Widget build(BuildContext context) {
+    SizeConfig.init(context);
     return SafeArea(
       child: Scaffold(
         appBar: appBar(),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pravinhonda/utility/size_config.dart';
 
 class Enquiryedit extends StatefulWidget {
   const Enquiryedit({super.key});
@@ -10,6 +11,7 @@ class Enquiryedit extends StatefulWidget {
 class _EnquiryeditState extends State<Enquiryedit> {
   @override
   Widget build(BuildContext context) {
+    SizeConfig.init(context);
     return const Placeholder();
   }
 }
