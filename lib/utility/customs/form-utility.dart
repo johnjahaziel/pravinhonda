@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
-textfieldy(String title, TextEditingController controller, {bool star = true, bool readonly = false}) => Padding(
+textfieldy(String title, TextEditingController controller, {bool star = true, bool readonly = false, bool numpad = false}) => Padding(
   padding: const EdgeInsets.only(top: 15),
   child: Opacity(
     opacity: readonly ? 0.6 : 1,
@@ -35,6 +35,7 @@ textfieldy(String title, TextEditingController controller, {bool star = true, bo
             child: TextField(
               controller: controller,
               readOnly: readonly == true ? true : false,
+              keyboardType: numpad == true ? TextInputType.number : TextInputType.text,
               maxLines: 1,
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(

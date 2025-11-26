@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/loginscreens/forms/addexchange.dart';
 import 'package:pravinhonda/loginscreens/forms/addfinance.dart';
 import 'package:pravinhonda/loginscreens/forms/createquotation.dart';
@@ -93,19 +95,19 @@ class _CreateenquiryState extends State<Createenquiry> {
   // String? selectedmodelcategoryitems;
 
   List<Map<String, String>> modelnameitems = [
-    {'label': 'hondasp125', 'value': 'hondasp125'},
+    {'label': 'Honda Dio', 'value': 'Honda Dio'},
   ];
 
   String? selectedmodelnameitems;
 
   List<Map<String, String>> modelvariantitems = [
-    {'label': 'Deluxe', 'value': 'Deluxe'},
+    {'label': 'Standard', 'value': 'Standard'},
   ];
 
   String? selectedmodelvariantitems;
 
   List<Map<String, String>> modelcoloritems = [
-    {'label': 'mat marvel blue', 'value': 'mat marvel blue'},
+    {'label': 'Imperial Red Metallic', 'value': 'Imperial Red Metallic'},
   ];
 
   String? selectedmodelcoloritems;
@@ -162,12 +164,16 @@ class _CreateenquiryState extends State<Createenquiry> {
   Future<void> apiconnection() async {
     final url = Uri.parse('https://app.pravinhonda.com/api/enquiries');
 
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+    print('Token: $token');
+
     try {
       final response = await http.post(
         url,
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json'
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
         },
         body: jsonEncode({
           'customer_id': customerid.text,
@@ -373,7 +379,7 @@ class _CreateenquiryState extends State<Createenquiry> {
                   star: false,
                 ),
                 
-                Customdatefield(
+                Dateofbirthfield(
                   title: 'Date of Birth',
                   datecontroller: datecontroller,
                 ),
@@ -498,7 +504,7 @@ class _CreateenquiryState extends State<Createenquiry> {
                 ),
                 if(exchangeflage.isNotEmpty)
                 errormessage(exchangeflage),
-                Customdatefield(
+                Followupdate(
                   title: 'Follow Up Date',
                   datecontroller: followupdatecontroller,
                   star: false,

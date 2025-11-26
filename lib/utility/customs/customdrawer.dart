@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pravinhonda/MenuScreen/emicalculator.dart';
+import 'package:pravinhonda/bloc/auth_cubit.dart';
+import 'package:pravinhonda/loginscreens/login.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Customdrawer extends StatefulWidget {
@@ -19,6 +24,19 @@ class _CustomdrawerState extends State<Customdrawer> {
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('token');
+
+    BlocProvider.of<AuthCubit>(context).cleartoken();
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => Login()),
+      (route) => false,
+    );
   }
 
   @override
@@ -81,7 +99,12 @@ class _CustomdrawerState extends State<Customdrawer> {
                   menuicontitle(
                     Icons.calculate,
                     'EMI Calculator',
-                    () {},
+                    () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Emicalculator())
+                      );
+                    },
                   ),
                   _buildDivider(),
                   menuicontitle(
@@ -128,7 +151,9 @@ class _CustomdrawerState extends State<Customdrawer> {
                         fontSize: 16,
                       ),
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      logout();
+                    },
                   ),
                 ],
               ),

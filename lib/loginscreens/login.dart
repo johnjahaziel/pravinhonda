@@ -1,14 +1,17 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/loginscreens/Navigation.dart';
 import 'package:pravinhonda/utility/custom.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/versiontext.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   Login({super.key});
@@ -37,12 +40,34 @@ class _LoginState extends State<Login> {
       final responseData = json.decode(response.body);
 
       if (response.statusCode == 200) {
+
+        print('Token: ${responseData['token']}');
+
+        final token = responseData['token'];
+
+        final prefstoken = await SharedPreferences.getInstance();
+        await prefstoken.setString('token', token);
+
+        String? storedToken = prefstoken.getString('token');
+
+        if (storedToken != null) {
+
+          final authCubit = BlocProvider.of<AuthCubit>(context);
+          authCubit.setToken(storedToken);
+
+        } else {
+          Fluttertoast.showToast(
+            msg: "Failed to read token",
+            toastLength: Toast.LENGTH_LONG
+          );
+        }
         
-        Navigator.push(
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
             builder: (context) => Navigation(),
           ),
+          ((route) => false)
         );
 
         Fluttertoast.showToast(msg: responseData['message']);

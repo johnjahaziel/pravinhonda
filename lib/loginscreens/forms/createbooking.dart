@@ -126,7 +126,7 @@ class _CreatebookingState extends State<Createbooking> {
                     });
                   },
                 ),
-                Customdatefield(
+                Dateofbirthfield(
                   title: 'Date of Birth',
                   datecontroller: datecontroller
                 ),
