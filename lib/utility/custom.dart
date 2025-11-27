@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
 textfield(String title, TextEditingController controller) => Column(
@@ -72,3 +73,39 @@ password(String title, suffixIcon,bool isPassword,TextEditingController controll
     ),
   ],
 );
+
+Widget search(
+  TextEditingController controller,
+) {
+  return Padding(
+    padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(5)),
+    child: TextField(
+      controller: controller,
+      maxLines: 1,
+      decoration: InputDecoration(
+        hintText: "Search...",
+        suffixIcon: IconButton(
+          onPressed: () {
+            controller.clear();
+          },
+          icon: Icon(
+            Icons.search,
+            color: Color(0xff919EAB)
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(
+            color: Color(0xff919EAB),
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(
+            color: Color(0xff919EAB),
+          ),
+        ),
+      ),
+    ),
+  );
+}

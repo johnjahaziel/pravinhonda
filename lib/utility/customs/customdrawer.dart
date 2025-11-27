@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pravinhonda/MenuScreen/alllostcustomer.dart';
 import 'package:pravinhonda/MenuScreen/emicalculator.dart';
+import 'package:pravinhonda/MenuScreen/searchcustomer.dart';
 import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/loginscreens/login.dart';
 import 'package:pravinhonda/utility/size_config.dart';
@@ -116,7 +118,12 @@ class _CustomdrawerState extends State<Customdrawer> {
                   menuicontitle(
                     Icons.person_search_outlined,
                     'Search Customer',
-                    () {},
+                    () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Searchcustomer())
+                      );
+                    },
                   ),
                   _buildDivider(),
                   menuicontitle(
@@ -128,7 +135,12 @@ class _CustomdrawerState extends State<Customdrawer> {
                   menuicontitle(
                     Icons.sentiment_dissatisfied_outlined,
                     'Lost Customer',
-                    () {},
+                    () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => AllLostcustomer())
+                      );
+                    },
                   ),
                   _buildDivider(),
                   menuicontitle(

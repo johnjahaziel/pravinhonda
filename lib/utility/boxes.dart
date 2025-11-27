@@ -31,7 +31,7 @@ class Hondabox extends StatefulWidget {
     required this.customername,
     required this.contactnumber,
     required this.status,
-    required this.cashfinance,
+    this.cashfinance = 'no',
     this.textride = 'No',
     this.exchange = 'No',
     required this.onTap,
@@ -188,6 +188,7 @@ class _HondaboxState extends State<Hondabox> {
                         SizedBox(width: SizeConfig.w(4)),
                       ],
                     ),
+                    if(widget.cashfinance != 'no')
                     Row(
                       children: [
                         Container(

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/utility/boxes.dart';
+import 'package:pravinhonda/utility/custom.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
@@ -22,6 +23,7 @@ class _BookingState extends State<Booking> {
   bool hasMore = true;
   String? nextPageUrl;
   final ScrollController _sc = ScrollController();
+  final TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -134,23 +136,25 @@ class _BookingState extends State<Booking> {
                   color: kred,
                 ),
               )
-            : Padding(
-                padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(20)),
-                child: Column(
-                  children: [
-                    SizedBox(height: SizeConfig.h(20)),
-                    Center(
-                      child: Text(
-                        'Bookings',
-                        style: customtext(fs18, kred, FontWeight.bold),
+            : RefreshIndicator(
+              color: kred,
+              backgroundColor: kwhite,
+              onRefresh: _refresh,
+              child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(20)),
+                  child: Column(
+                    children: [
+                      SizedBox(height: SizeConfig.h(20)),
+                      Center(
+                        child: Text(
+                          'Bookings',
+                          style: customtext(fs18, kred, FontWeight.bold),
+                        ),
                       ),
-                    ),
-                    SizedBox(height: SizeConfig.h(10)),
-                    Expanded(
-                      child: RefreshIndicator(
-                        color: kred,
-                        backgroundColor: kwhite,
-                        onRefresh: _refresh,
+                      SizedBox(height: SizeConfig.h(20)),
+                      search(searchController),
+                      SizedBox(height: SizeConfig.h(10)),
+                      Expanded(
                         child: alldata.isEmpty
                             ? ListView(
                                 physics: const AlwaysScrollableScrollPhysics(),
@@ -180,7 +184,7 @@ class _BookingState extends State<Booking> {
                                       ),
                                     );
                                   }
-
+                                      
                                   final data = alldata[index];
                                   return Hondabox(
                                     enquiryid: data['enquiry_id'] ?? 0,
@@ -196,10 +200,10 @@ class _BookingState extends State<Booking> {
                                 },
                               ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
+            ),
       ),
     );
   }

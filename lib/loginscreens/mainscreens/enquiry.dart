@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/editpages/movetobooking.dart';
 import 'package:pravinhonda/utility/boxes.dart';
+import 'package:pravinhonda/utility/custom.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
@@ -23,6 +24,7 @@ class _EnquiryState extends State<Enquiry> {
   bool hasMore = true;
   String? nextPageUrl;
   final ScrollController _sc = ScrollController();
+  final TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -135,23 +137,25 @@ class _EnquiryState extends State<Enquiry> {
                   color: kred,
                 ),
               )
-            : Padding(
-                padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(20)),
-                child: Column(
-                  children: [
-                    SizedBox(height: SizeConfig.h(20)),
-                    Center(
-                      child: Text(
-                        'Enquiry',
-                        style: customtext(fs18, kred, FontWeight.bold),
+            : RefreshIndicator(
+              color: kred,
+              backgroundColor: kwhite,
+              onRefresh: _refresh,
+              child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(20)),
+                  child: Column(
+                    children: [
+                      SizedBox(height: SizeConfig.h(20)),
+                      Center(
+                        child: Text(
+                          'Enquiry',
+                          style: customtext(fs18, kred, FontWeight.bold),
+                        ),
                       ),
-                    ),
-                    SizedBox(height: SizeConfig.h(10)),
-                    Expanded(
-                      child: RefreshIndicator(
-                        color: kred,
-                        backgroundColor: kwhite,
-                        onRefresh: _refresh,
+                      SizedBox(height: SizeConfig.h(20)),
+                      search(searchController),
+                      SizedBox(height: SizeConfig.h(10)),
+                      Expanded(
                         child: alldata.isEmpty
                             ? ListView(
                                 physics: const AlwaysScrollableScrollPhysics(),
@@ -181,7 +185,7 @@ class _EnquiryState extends State<Enquiry> {
                                       ),
                                     );
                                   }
-
+                                      
                                   final data = alldata[index];
                                   return Hondabox(
                                     enquiryid: data['enquiry_id'] ?? 0,
@@ -195,7 +199,7 @@ class _EnquiryState extends State<Enquiry> {
                                     onTap: () {
                                       final selected = alldata[index];
                                       print(selected);
-
+                                      
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -210,10 +214,10 @@ class _EnquiryState extends State<Enquiry> {
                                 },
                               ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
+            ),
       ),
     );
   }

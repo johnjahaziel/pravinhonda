@@ -25,158 +25,158 @@ class _HomescreenState extends State<Homescreen> {
     SizeConfig.init(context);
     return SafeArea(
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(20)),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: SizeConfig.h(20)
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(20)),
+          child: Column(
+            children: [
+              SizedBox(
+                height: SizeConfig.h(20)
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: SizeConfig.w(10),
+                  vertical: SizeConfig.h(10),
                 ),
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: SizeConfig.w(10),
-                    vertical: SizeConfig.h(10),
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(SizeConfig.w(10)),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            FittedBox(
-                              fit: BoxFit.scaleDown,
-                              child: Text(
-                                'Welcome XXXXX',
-                                style: customtext(fs14, kred, FontWeight.w600),
-                              ),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(SizeConfig.w(10)),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              'Welcome XXXXX',
+                              style: customtext(fs14, kred, FontWeight.w600),
                             ),
-                            SizedBox(height: SizeConfig.h(5)),
-                            FittedBox(
-                              fit: BoxFit.scaleDown,
-                              child: Text('Monthly Target : 20', style: textmedium12),
-                            ),
-                            SizedBox(height: SizeConfig.h(3)),
-                            FittedBox(
-                              fit: BoxFit.scaleDown,
-                              child: Text('Target Achieved : 12', style: textmedium12),
-                            ),
-                          ],
-                        ),
+                          ),
+                          SizedBox(height: SizeConfig.h(5)),
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text('Monthly Target : 20', style: textmedium12),
+                          ),
+                          SizedBox(height: SizeConfig.h(3)),
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text('Target Achieved : 12', style: textmedium12),
+                          ),
+                        ],
                       ),
-                      Expanded(
-                        flex: 2,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Flexible(
-                              child: Column(
-                                children: [
-                                  AspectRatio(
-                                    aspectRatio: 1,
-                                    child: PieChart(
-                                      PieChartData(
-                                        centerSpaceRadius: SizeConfig.w(20),
-                                        sectionsSpace: 0,
-                                        startDegreeOffset: 270,
-                                        sections: _showingSections(),
-                                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Flexible(
+                            child: Column(
+                              children: [
+                                AspectRatio(
+                                  aspectRatio: 1,
+                                  child: PieChart(
+                                    PieChartData(
+                                      centerSpaceRadius: SizeConfig.w(20),
+                                      sectionsSpace: 0,
+                                      startDegreeOffset: 270,
+                                      sections: _showingSections(),
                                     ),
                                   ),
-                                  SizedBox(height: SizeConfig.h(4)),
-                                  FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Text(
-                                      'Daily Conversion%',
-                                      style: textmedium8
-                                    ),
-                                  )
-                                ],
-                              ),
+                                ),
+                                SizedBox(height: SizeConfig.h(4)),
+                                FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    'Daily Conversion%',
+                                    style: textmedium8
+                                  ),
+                                )
+                              ],
                             ),
-                            SizedBox(
-                              width: SizeConfig.w(10),
-                            ),
-                            Flexible(
-                              child: Column(
-                                children: [
-                                  AspectRatio(
-                                    aspectRatio: 1,
-                                    child: PieChart(
-                                      PieChartData(
-                                        centerSpaceRadius: SizeConfig.w(20),
-                                        sectionsSpace: 0,
-                                        startDegreeOffset: 270,
-                                        sections: _showingSections(),
-                                      ),
+                          ),
+                          SizedBox(
+                            width: SizeConfig.w(10),
+                          ),
+                          Flexible(
+                            child: Column(
+                              children: [
+                                AspectRatio(
+                                  aspectRatio: 1,
+                                  child: PieChart(
+                                    PieChartData(
+                                      centerSpaceRadius: SizeConfig.w(20),
+                                      sectionsSpace: 0,
+                                      startDegreeOffset: 270,
+                                      sections: _showingSections(),
                                     ),
                                   ),
-                                  SizedBox(height: SizeConfig.h(4)),
-                                  FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Text(
-                                      'Monthly Conversion%',
-                                      style: textmedium8
-                                    ),
-                                  )
-                                ],
-                              ),
+                                ),
+                                SizedBox(height: SizeConfig.h(4)),
+                                FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    'Monthly Conversion%',
+                                    style: textmedium8
+                                  ),
+                                )
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                SizedBox(
-                  height: SizeConfig.h(10),
+              ),
+              SizedBox(
+                height: SizeConfig.h(10),
+              ),
+              
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    rowdetails(
+                      '210',
+                      'Total\nEnquiry',
+                      kred
+                    ),
+                    rowdetails(
+                      '20',
+                      'Open\nEnquiry',
+                      kyellow
+                    ),
+                    rowdetails(
+                      '87',
+                      'Booking',
+                      klightgreen
+                    ),
+                    rowdetails(
+                      '34',
+                      'Delivered',
+                      kdarkblue
+                    ),
+                    rowdetails(
+                      '19',
+                      'Lost\nCustomer',
+                      kpurple
+                    )
+                  ],
                 ),
-                
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      rowdetails(
-                        '210',
-                        'Total\nEnquiry',
-                        kred
-                      ),
-                      rowdetails(
-                        '20',
-                        'Open\nEnquiry',
-                        kyellow
-                      ),
-                      rowdetails(
-                        '87',
-                        'Booking',
-                        klightgreen
-                      ),
-                      rowdetails(
-                        '34',
-                        'Delivered',
-                        kdarkblue
-                      ),
-                      rowdetails(
-                        '19',
-                        'Lost\nCustomer',
-                        kpurple
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: SizeConfig.h(10),
-                ),
-
-                Container(
+              ),
+              SizedBox(
+                height: SizeConfig.h(10),
+              ),
+        
+              Expanded(
+                child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
@@ -255,10 +255,11 @@ class _HomescreenState extends State<Homescreen> {
                         SizedBox(
                           height: SizeConfig.h(5)
                         ),
-                        if(recentactivity == true && todolist == false)
-                        Recentactivity(),
-                        if(recentactivity == false && todolist == true)
-                        Todolist(),
+                        Expanded(
+                          child: recentactivity
+                              ? Recentactivity()
+                              : Todolist(),
+                        ),
                         SizedBox(
                           height: SizeConfig.h(5)
                         )
@@ -266,11 +267,11 @@ class _HomescreenState extends State<Homescreen> {
                     ),
                   )
                 ),
-                SizedBox(
-                  height: SizeConfig.h(20)
-                )
-              ],
-            ),
+              ),
+              SizedBox(
+                height: SizeConfig.h(20)
+              )
+            ],
           ),
         ),
       )
@@ -414,9 +415,12 @@ class _RecentactivityState extends State<Recentactivity> {
         )),
       );
     }
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
+    return alldata.isEmpty ? Center(
+      child: Text(
+        'No Recent Activities',
+        style: customtext(fs12, kred, FontWeight.bold),
+      ),
+    ) : ListView.builder(
       itemCount: alldata.length,
       itemBuilder: (context, index) {
         final data = alldata[index];
@@ -503,9 +507,12 @@ class _TodolistState extends State<Todolist> {
         )),
       );
     }
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
+    return alldata.isEmpty ? Center(
+      child: Text(
+        'No To-Do Items for Today',
+        style: customtext(fs12, kred, FontWeight.bold),
+      ),
+    ) : ListView.builder(
       itemCount: alldata.length,
       itemBuilder: (context, index) {
         final data = alldata[index];
