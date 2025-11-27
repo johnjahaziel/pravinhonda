@@ -227,17 +227,17 @@ class _CreateenquiryState extends State<Createenquiry> {
               builder: (context) => Addexchange()
             )
           );
-        }
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Createquotation(
-              enquiryid: responseData['data']['enquiry']['enquiry_id'],
-              apiResponse: responseData,
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Createquotation(
+                enquiryid: responseData['data']['enquiry']['enquiry_id'],
+                apiResponse: responseData,
+              )
             )
-          )
-        );
+          );
+        }
 
         print(responseData['data']['enquiry']['enquiry_id']);
 
