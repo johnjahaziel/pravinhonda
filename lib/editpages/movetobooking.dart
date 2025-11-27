@@ -108,7 +108,7 @@ class _MovetobookingState extends State<Movetobooking> {
   String? selectedmodelnameitems;
 
   List<Map<String, String>> modelvariantitems = [
-    {'label': 'standard', 'value': 'standard'},
+    {'label': 'Standard', 'value': 'Standard'},
   ];
 
   String? selectedmodelvariantitems;
@@ -295,7 +295,7 @@ class _MovetobookingState extends State<Movetobooking> {
           'customer_name': customername.text,
           'gender': selectedgenderitems?.toString(),
           'dob': datecontroller.text,
-          'martial_status': selectedmartialstatusitems?.toString(),
+          'marital_status': selectedmartialstatusitems?.toString(),
           'email_id': emailid.text,
           'address': address.text,
           'enquiry_type': selectedenquirytypeitems?.toString(),
@@ -327,6 +327,8 @@ class _MovetobookingState extends State<Movetobooking> {
             MaterialPageRoute(
               builder: (context) => Addfinance(
                 exchangeflag: selectedexchangeflagitems,
+                enquiryid: widget.enquiryid,
+                apiResponse: widget.apiResponse,
               )
             ),
           );
@@ -334,7 +336,10 @@ class _MovetobookingState extends State<Movetobooking> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Addexchange()
+              builder: (context) => Addexchange(
+                enquiryid: widget.enquiryid,
+                apiResponse: widget.apiResponse,
+              )
             )
           );
         }

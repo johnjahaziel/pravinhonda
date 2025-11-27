@@ -185,7 +185,7 @@ class _CreateenquiryState extends State<Createenquiry> {
           'customer_name': customername.text,
           'gender': selectedgenderitems?.toString(),
           'dob': datecontroller.text,
-          'martial_status': selectedmartialstatusitems?.toString(),
+          'marital_status': selectedmartialstatusitems?.toString(),
           'email_id': emailid.text,
           'address': address.text,
           'enquiry_type': selectedenquirytypeitems?.toString(),
@@ -217,6 +217,8 @@ class _CreateenquiryState extends State<Createenquiry> {
             MaterialPageRoute(
               builder: (context) => Addfinance(
                 exchangeflag: selectedexchangeflagitems,
+                enquiryid: responseData['data']['enquiry']['enquiry_id'],
+                apiResponse: responseData,
               )
             ),
           );
@@ -224,7 +226,10 @@ class _CreateenquiryState extends State<Createenquiry> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Addexchange()
+              builder: (context) => Addexchange(
+                enquiryid: responseData['data']['enquiry']['enquiry_id'],
+                apiResponse: responseData,
+              )
             )
           );
         } else {

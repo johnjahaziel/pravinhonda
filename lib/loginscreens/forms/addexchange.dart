@@ -7,7 +7,13 @@ import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
 class Addexchange extends StatefulWidget {
-  const Addexchange({super.key});
+  final int enquiryid;
+  final Map<String, dynamic> apiResponse;
+  const Addexchange({
+    super.key,
+    required this.enquiryid,
+    required this.apiResponse,
+  });
 
   @override
   State<Addexchange> createState() => _AddexchangeState();
@@ -117,7 +123,10 @@ class _AddexchangeState extends State<Addexchange> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => Createquotation(enquiryid: 1,apiResponse: {})
+                        builder: (context) => Createquotation(
+                          enquiryid: widget.enquiryid,
+                          apiResponse: widget.apiResponse,
+                        )
                       )
                     );
                   }

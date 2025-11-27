@@ -9,9 +9,13 @@ import 'package:pravinhonda/utility/styles.dart';
 
 class Addfinance extends StatefulWidget {
   final String? exchangeflag;
+  final int enquiryid;
+  final Map<String, dynamic> apiResponse;
   const Addfinance({
     super.key,
-    required this.exchangeflag
+    required this.exchangeflag,
+    required this.enquiryid,
+    required this.apiResponse,
   });
 
   @override
@@ -156,7 +160,10 @@ class _AddfinanceState extends State<Addfinance> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => Addexchange()
+                          builder: (context) => Addexchange(
+                            enquiryid: widget.enquiryid,
+                            apiResponse: widget.apiResponse,
+                          )
                         )
                       );
                     } else {
@@ -164,8 +171,8 @@ class _AddfinanceState extends State<Addfinance> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => Createquotation(
-                            enquiryid: 0,
-                            apiResponse: {}
+                            enquiryid: widget.enquiryid,
+                            apiResponse: widget.apiResponse,
                           )
                         )
                       );

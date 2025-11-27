@@ -237,7 +237,7 @@ class _CreatequotationState extends State<Createquotation> {
           'customer_name': customername.text,
           'gender': selectedgenderitems?.toString(),
           'dob': datecontroller.text,
-          'martial_status': selectedmartialstatusitems?.toString(),
+          'marital_status': selectedmartialstatusitems?.toString(),
           'email_id': emailid.text,
           'address': address.text,
           'enquiry_type': selectedenquirytypeitems?.toString(),
@@ -269,6 +269,8 @@ class _CreatequotationState extends State<Createquotation> {
             MaterialPageRoute(
               builder: (context) => Addfinance(
                 exchangeflag: selectedexchangeflagitems,
+                enquiryid: widget.enquiryid,
+                apiResponse: widget.apiResponse,
               )
             ),
           );
@@ -276,7 +278,10 @@ class _CreatequotationState extends State<Createquotation> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Addexchange()
+              builder: (context) => Addexchange(
+                enquiryid: widget.enquiryid,
+                apiResponse: widget.apiResponse,
+              )
             )
           );
         }
