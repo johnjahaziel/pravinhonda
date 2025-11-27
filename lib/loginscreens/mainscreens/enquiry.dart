@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
+import 'package:pravinhonda/editpages/movetobooking.dart';
 import 'package:pravinhonda/utility/boxes.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
@@ -187,7 +188,20 @@ class _EnquiryState extends State<Enquiry> {
                                     cashfinance: data['purchase_type']?.toString() ?? '',
                                     textride: data['test_ride']?.toString() ?? '',
                                     exchange: data['exchange_flag']?.toString() ?? '',
-                                    onTap: () {},
+                                    onTap: () {
+                                      final selected = alldata[index];
+                                      print(selected);
+
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => Movetobooking(
+                                            enquiryid: data['enquiry_id'] ?? 0,
+                                            apiResponse: selected
+                                          )
+                                        ),
+                                      );
+                                    },
                                   );
                                 },
                               ),

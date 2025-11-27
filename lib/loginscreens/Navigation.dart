@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pravinhonda/loginscreens/mainscreens/booking.dart';
 import 'package:pravinhonda/loginscreens/forms/createenquiry.dart';
+import 'package:pravinhonda/loginscreens/mainscreens/booking.dart';
 import 'package:pravinhonda/loginscreens/mainscreens/delivery.dart';
 import 'package:pravinhonda/loginscreens/mainscreens/enquiry.dart';
 import 'package:pravinhonda/loginscreens/mainscreens/homescreen.dart';
@@ -11,7 +11,11 @@ import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
 class Navigation extends StatefulWidget {
-  const Navigation({super.key});
+  final int initialIndex;
+  const Navigation({
+    super.key,
+    this.initialIndex = 0,
+  });
 
   @override
   State<Navigation> createState() => _NavigationState();
@@ -24,6 +28,7 @@ class _NavigationState extends State<Navigation> {
   @override
   void initState() {
     super.initState();
+    currentIndex = widget.initialIndex;
     pageController = PageController(initialPage: currentIndex);
   }
 

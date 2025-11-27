@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
+import 'package:pravinhonda/loginscreens/Navigation.dart';
 import 'package:pravinhonda/loginscreens/forms/addexchange.dart';
 import 'package:pravinhonda/loginscreens/forms/addfinance.dart';
 import 'package:pravinhonda/loginscreens/forms/createquotation.dart';
@@ -107,7 +108,7 @@ class _MovetobookingState extends State<Movetobooking> {
   String? selectedmodelnameitems;
 
   List<Map<String, String>> modelvariantitems = [
-    {'label': 'Standard', 'value': 'Standard'},
+    {'label': 'standard', 'value': 'standard'},
   ];
 
   String? selectedmodelvariantitems;
@@ -139,6 +140,7 @@ class _MovetobookingState extends State<Movetobooking> {
 
   String? selectedtestrideitems;
 
+  late TextEditingController enquiryid;
   late TextEditingController customerid;
   late TextEditingController wingsenquiry;
   late TextEditingController customercontactnumber;
@@ -149,6 +151,72 @@ class _MovetobookingState extends State<Movetobooking> {
   late TextEditingController followupdatecontroller;
   late TextEditingController customerremarks;
 
+  final TextEditingController bookingamount = TextEditingController();
+  final TextEditingController bookingreceiptno = TextEditingController();
+  final TextEditingController vehiclename = TextEditingController();
+  final TextEditingController vehiclecolour = TextEditingController();
+  final TextEditingController chassisno = TextEditingController();
+  final TextEditingController engineno = TextEditingController();
+  final TextEditingController keyno = TextEditingController();
+  final TextEditingController batteryno = TextEditingController();
+  final TextEditingController tyremake = TextEditingController();
+  final TextEditingController rrtyreno = TextEditingController();
+  final TextEditingController fttyreno = TextEditingController();
+  final TextEditingController addapprovedname = TextEditingController();
+  final TextEditingController allotedby = TextEditingController();
+
+  String bookingamounte = '';
+  String bookingreceiptnoe = '';
+  String vehiclenamee = '';
+  String vehiclecoloure = '';
+  String chassisnoe = '';
+  String enginenoe = '';
+  String keynoe = '';
+  String batterynoe = '';
+  String tyremakee = '';
+  String rrtyrenoe = '';
+  String fttyrenoe = '';
+  String addapprovednamee = '';
+  String allotedbye = '';
+
+  Map<String, dynamic> originalEnquiry = {};
+
+  bool onEditpressed = false;
+
+  bool edit() {
+    if(onEditpressed == true) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  bool isEdited() {
+    return
+      customerid.text != (originalEnquiry['customer_id'] ?? '') ||
+      wingsenquiry.text != (originalEnquiry['wings_enquiry_number'] ?? '') ||
+      selectedcustomercategoryitems != originalEnquiry['customer_category'] ||
+      selectedenquirycategoryitems != originalEnquiry['enquiry_category'] ||
+      selectedcustomertypeitems != originalEnquiry['customer_type'] ||
+      selectedgenderitems != originalEnquiry['gender'] ||
+      selectedmartialstatusitems != originalEnquiry['marital_status'] ||
+      selectedenquirytypeitems != originalEnquiry['enquiry_type'] ||
+      selectedenquirysourceitems != originalEnquiry['enquiry_source'] ||
+      selectedmodelnameitems != originalEnquiry['model_name'] ||
+      selectedmodelvariantitems != originalEnquiry['model_variant'] ||
+      selectedmodelcoloritems != originalEnquiry['model_color'] ||
+      selectedpurchasetypeitems != originalEnquiry['purchase_type'] ||
+      selectedexchangeflagitems != originalEnquiry['exchange_flag'] ||
+      selectedtestrideitems != originalEnquiry['test_ride'] ||
+      customername.text != (originalEnquiry['customer_name'] ?? '') ||
+      customercontactnumber.text != (originalEnquiry['customer_contact_number'] ?? '') ||
+      emailid.text != (originalEnquiry['email_id'] ?? '') ||
+      address.text != (originalEnquiry['address'] ?? '') ||
+      datecontroller.text != (originalEnquiry['dob'] ?? '') ||
+      followupdatecontroller.text != (originalEnquiry['follow_up_date'] ?? '') ||
+      customerremarks.text != (originalEnquiry['customers_remarks'] ?? '');
+  }
+
   @override
   void initState() {
     super.initState();
@@ -156,16 +224,18 @@ class _MovetobookingState extends State<Movetobooking> {
   }
 
   void _initControllersFromResponse(Map<String, dynamic> resp) {
-    final customer = resp['data']?['customer'] ?? {};
-    final enquiry = resp['data']?['enquiry'] ?? {};
+    final enquiry = resp;
 
-    customerid = TextEditingController(text: customer['customer_id']?.toString() ?? '');
+    originalEnquiry = Map<String, dynamic>.from(enquiry);
+
+    enquiryid = TextEditingController(text: enquiry['enquiry_id']?.toString() ?? '');
+    customerid = TextEditingController(text: enquiry['customer_id']?.toString() ?? '');
     wingsenquiry = TextEditingController(text: enquiry['wings_enquiry_number'] ?? '');
     selectedcustomercategoryitems = enquiry['customer_category'];
     selectedenquirycategoryitems = enquiry['enquiry_category'];
     selectedcustomertypeitems = enquiry['customer_type'];
-    selectedgenderitems = customer['gender'];
-    selectedmartialstatusitems = customer['martial_status'];
+    selectedgenderitems = enquiry['gender'];
+    selectedmartialstatusitems = enquiry['marital_status'];
     selectedenquirytypeitems = enquiry['enquiry_type'];
     selectedenquirysourceitems = enquiry['enquiry_source'];
     // selectedmodelcategoryitems = enquiry['model_category'];
@@ -175,13 +245,13 @@ class _MovetobookingState extends State<Movetobooking> {
     selectedpurchasetypeitems = enquiry['purchase_type'];
     selectedexchangeflagitems = enquiry['exchange_flag'];
     selectedtestrideitems = enquiry['test_ride'];
-    customername = TextEditingController(text: customer['customer_name'] ?? enquiry['customer_name'] ?? '');
-    customercontactnumber = TextEditingController(text: customer['customer_contact_number'] ?? enquiry['customer_contact_number'] ?? '');
-    emailid = TextEditingController(text: customer['email_id'] ?? enquiry['email_id'] ?? '');
-    address = TextEditingController(text: customer['address'] ?? enquiry['address'] ?? '');
-    datecontroller = TextEditingController(text: customer['dob'] ?? enquiry['dob'] ?? '');
+    customername = TextEditingController(text: enquiry['customer_name'] ?? enquiry['customer_name'] ?? '');
+    customercontactnumber = TextEditingController(text: enquiry['customer_contact_number'] ?? enquiry['customer_contact_number'] ?? '');
+    emailid = TextEditingController(text: enquiry['email_id'] ?? enquiry['email_id'] ?? '');
+    address = TextEditingController(text: enquiry['address'] ?? enquiry['address'] ?? '');
+    datecontroller = TextEditingController(text: enquiry['dob'] ?? enquiry['dob'] ?? '');
     followupdatecontroller = TextEditingController(text: enquiry['follow_up_date'] ?? '');
-    customerremarks = TextEditingController(text: enquiry['customer_remarks'] ?? '');
+    customerremarks = TextEditingController(text: enquiry['customers_remarks'] ?? '');
   }
 
   String customeride = '';
@@ -201,16 +271,6 @@ class _MovetobookingState extends State<Movetobooking> {
   String modelcolore = '';
   String purchasetypee = '';
   String exchangeflage = '';
-
-  bool onEditpressed = false;
-
-  bool edit() {
-    if(onEditpressed == true) {
-      return false;
-    } else {
-      return true;
-    }
-  }
 
   Future<void> apiconnection() async {
     final url = Uri.parse('https://app.pravinhonda.com/api/enquiries/${widget.enquiryid}');
@@ -326,6 +386,97 @@ class _MovetobookingState extends State<Movetobooking> {
       print('Error submitting finance form: $error');
     }
   }
+
+  Future<void> movetobooking() async {
+    final url = Uri.parse('https://app.pravinhonda.com/api/enquiries/${widget.enquiryid}/move-to-booking');
+
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({
+          'booking_amount': bookingamount.text.toString(),
+          'booking_receipt_no': bookingreceiptno.text.toString(),
+          'vehicle_name': vehiclename.text.toString(),
+          'vehicle_colour': vehiclecolour.text.toString(),
+          'chassis_no': chassisno.text.toString(),
+          'engine_no': engineno.text.toString(),
+          'key_no': keyno.text.toString(),
+          'battery_no': batteryno.text.toString(),
+          'tyre_make': tyremake.text.toString(),
+          'RR_tyre_no': rrtyreno.text.toString(),
+          'FT_tyre_no': fttyreno.text.toString(),
+          'add_approved_name': addapprovedname.text.toString(),
+          'alloted_by': allotedby.text.toString(),
+        }),
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 201) {
+        print('response data: $responseData');
+
+        Fluttertoast.showToast(
+          msg: responseData['message'],
+          toastLength: Toast.LENGTH_LONG,
+        );
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Navigation(initialIndex: 1),
+          ),
+        );
+
+      } else if (response.statusCode == 200) {
+
+        Fluttertoast.showToast(
+          msg: responseData['message'],
+          toastLength: Toast.LENGTH_LONG,
+        );
+        
+      } else if (response.statusCode == 422) {
+        // final errors = responseData['errors'] ?? {};
+
+        // setState(() {
+        //   bookingamounte = errors['errors']['booking_amount'] ?? '';
+        //   bookingreceiptnoe = errors['errors']['booking_receipt_no'] ?? '';
+        //   vehiclenamee = errors['errors']['vehicle_name'] ?? '';
+        //   vehiclecoloure = errors['errors']['vehicle_colour'] ?? '';
+        //   chassisnoe = errors['errors']['chassis_no'] ?? '';
+        //   enginenoe = errors['errors']['engine_no'] ?? '';
+        //   keynoe = errors['errors']['key_no'] ?? '';
+        //   batterynoe = errors['errors']['battery_no'] ?? '';
+        //   tyremakee = errors['errors']['tyre_make'] ?? '';
+        //   rrtyrenoe = errors['errors']['rr_tyre_no'] ?? '';
+        //   fttyrenoe = errors['errors']['ft_tyre_no'] ?? '';
+        // });
+
+        Fluttertoast.showToast(
+          msg: responseData['message'],
+          toastLength: Toast.LENGTH_LONG,
+        );
+        print('Status code: ${response.statusCode}');
+        print(response.body);
+      } else {
+        Fluttertoast.showToast(
+          msg: responseData['message'],
+          toastLength: Toast.LENGTH_LONG,
+        );
+        print('Failed to move to booking. Status code: ${response.statusCode}');
+        print(response.body);
+      }
+
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -345,7 +496,7 @@ class _MovetobookingState extends State<Movetobooking> {
                     SizedBox(height: SizeConfig.h(20)),
                     Center(
                       child: Text(
-                        'Quotation',
+                        isEdited() ? 'Update Quotation' : 'Move to Booking',
                         style: customtext(
                           fs18,
                           kred,
@@ -354,6 +505,11 @@ class _MovetobookingState extends State<Movetobooking> {
                       ),
                     ),
                     SizedBox(height: SizeConfig.h(10)),
+                    textfieldy(
+                      'Enquiry Number',
+                      enquiryid,
+                      readonly: true,
+                    ),
                     textfieldy(
                       'Customer ID',
                       customerid,
@@ -595,11 +751,95 @@ class _MovetobookingState extends State<Movetobooking> {
                       customerremarks,
                       readonly: edit()
                     ),
+                    if(isEdited() == false)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        textfieldy(
+                          'Booking Amount',
+                          bookingamount,
+                        ),
+                        if(bookingamounte.isNotEmpty)
+                        errormessage(bookingamounte),
+                        textfieldy(
+                          'Booking Receipt No',
+                          bookingreceiptno,
+                        ),
+                        if(bookingreceiptnoe.isNotEmpty)
+                        errormessage(bookingreceiptnoe),
+                        textfieldy(
+                          'Vehicle Name',
+                          vehiclename,
+                        ),
+                        if(vehiclenamee.isNotEmpty)
+                        errormessage(vehiclenamee),
+                        textfieldy(
+                          'Vehicle Colour',
+                          vehiclecolour,
+                        ),
+                        if(vehiclecoloure.isNotEmpty)
+                        errormessage(vehiclecoloure),
+                        textfieldy(
+                          'Chassis No',
+                          chassisno,
+                        ),
+                        if(chassisnoe.isNotEmpty)
+                        errormessage(chassisnoe),
+                        textfieldy(
+                          'Engine No',
+                          engineno,
+                        ),
+                        if(enginenoe.isNotEmpty)
+                        errormessage(enginenoe),
+                        textfieldy(
+                          'Key No',
+                          keyno,
+                        ),
+                        if(keynoe.isNotEmpty)
+                        errormessage(keynoe),
+                        textfieldy(
+                          'Battery No',
+                          batteryno,
+                        ),
+                        if(batterynoe.isNotEmpty)
+                        errormessage(batterynoe),
+                        textfieldy(
+                          'Tyre Make',
+                          tyremake,
+                        ),
+                        if(tyremakee.isNotEmpty)
+                        errormessage(tyremakee),
+                        textfieldy(
+                          'RR Tyre No',
+                          rrtyreno,
+                        ),
+                        if(rrtyrenoe.isNotEmpty)
+                        errormessage(rrtyrenoe),
+                        textfieldy(
+                          'FT Tyre No',
+                          fttyreno,
+                        ),
+                        if(fttyrenoe.isNotEmpty)
+                        errormessage(fttyrenoe),
+                        textfieldy(
+                          'Add Approved Name',
+                          addapprovedname,
+                        ),
+                        if(addapprovednamee.isNotEmpty)
+                        errormessage(addapprovednamee),
+                        textfieldy(
+                          'Alloted By',
+                          allotedby,
+                        ),
+                        if(allotedbye.isNotEmpty)
+                        errormessage(allotedbye),
+                      ],
+                    ),
                     SizedBox(height: SizeConfig.h(20)),
                     button(
-                      'Confirm Quotation',
+                      isEdited() ? 'Update Quotation' : 'Move to Booking',
                       () {
-                        apiconnection();
+                        isEdited() ? apiconnection() : movetobooking();
                       }
                     ),
                     SizedBox(height: SizeConfig.h(40)),
