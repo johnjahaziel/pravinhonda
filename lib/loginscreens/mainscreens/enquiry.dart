@@ -78,9 +78,13 @@ class _EnquiryState extends State<Enquiry> {
 
         final List<dynamic> dataList = (responseData['data'] as List<dynamic>?) ?? [];
 
+        final List<dynamic> filteredList = dataList
+        .where((item) => item['status']?.toString() == "1")
+        .toList();
+
         setState(() {
           if (url == null) {
-            alldata = dataList;
+            alldata = filteredList;
           } else {
             alldata.addAll(dataList);
           }

@@ -14,7 +14,11 @@ import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
 class LostcustomerReason extends StatefulWidget {
-  const LostcustomerReason({super.key});
+  final int enquiryId;
+  const LostcustomerReason({
+    super.key,
+    required this.enquiryId,
+  });
 
   @override
   State<LostcustomerReason> createState() => _LostcustomerReasonState();
@@ -40,7 +44,7 @@ class _LostcustomerReasonState extends State<LostcustomerReason> {
   TextEditingController otherscomments = TextEditingController();
 
   Future<void> apiconnection() async {
-    final url = Uri.parse('https://app.pravinhonda.com/api/mark-loss-customer/23');
+    final url = Uri.parse('https://app.pravinhonda.com/api/mark-loss-customer/${widget.enquiryId}');
 
     final token = BlocProvider.of<AuthCubit>(context).state.token;
 

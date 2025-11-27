@@ -1,5 +1,11 @@
+import 'dart:convert';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
+import 'package:pravinhonda/bloc/auth_cubit.dart';
+import 'package:pravinhonda/utility/boxes.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
@@ -250,9 +256,9 @@ class _HomescreenState extends State<Homescreen> {
                           height: SizeConfig.h(5)
                         ),
                         if(recentactivity == true && todolist == false)
-                        recentactivitycolumn(),
+                        Recentactivity(),
                         if(recentactivity == false && todolist == true)
-                        recentactivitycolumn(),
+                        Todolist(),
                         SizedBox(
                           height: SizeConfig.h(5)
                         )
@@ -338,11 +344,183 @@ class _HomescreenState extends State<Homescreen> {
       ),
     );
   }
+}
 
-  Widget recentactivitycolumn() {
-    return Column(
-      children: [
-      ],
+class Recentactivity extends StatefulWidget {
+  const Recentactivity({super.key});
+
+  @override
+  State<Recentactivity> createState() => _RecentactivityState();
+}
+
+class _RecentactivityState extends State<Recentactivity> {
+  List<dynamic> alldata = [];
+  bool loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchRecent();
+  }
+
+  Future<void> fetchRecent() async {
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    final url = Uri.parse(
+        "https://app.pravinhonda.com/api/recentactivities");
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+
+        final List<dynamic> dataList = (responseData['data'] as List<dynamic>?) ?? [];
+
+        final List<dynamic> filteredList = dataList
+          .where((item) => item['status']?.toString() == "1")
+          .toList();
+
+        setState(() {
+          alldata = filteredList;
+          loading = false;
+        });
+
+      } else {
+        print("Failed to load data. Status code: ${response.statusCode}");
+        print("Response body: ${response.body}");
+        setState(() => loading = false);
+      }
+    } catch (e) {
+      print("Error: $e");
+      setState(() => loading = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (loading) {
+      return Padding(
+        padding: EdgeInsets.symmetric(vertical: SizeConfig.h(40)),
+        child: Center(
+          child: CircularProgressIndicator(
+            color: kred,
+        )),
+      );
+    }
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: alldata.length,
+      itemBuilder: (context, index) {
+        final data = alldata[index];
+        return Hondabox(
+          enquiryid: data['enquiry_id'] ?? 0,
+          id: data['customer_id']?.toString() ?? '',
+          customername: data['customer_name']?.toString() ?? '',
+          contactnumber: data['customer_contact_number']?.toString() ?? '',
+          status: data['status']?.toString() ?? '',
+          cashfinance: data['purchase_type']?.toString() ?? '',
+          textride: data['test_ride']?.toString() ?? '',
+          exchange: data['exchange_flag']?.toString() ?? '',
+          onTap: () {}
+        );
+      },
+    );
+  }
+}
+
+class Todolist extends StatefulWidget {
+  const Todolist({super.key});
+
+  @override
+  State<Todolist> createState() => _TodolistState();
+}
+
+class _TodolistState extends State<Todolist> {
+  List<dynamic> alldata = [];
+  bool loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchRecent();
+  }
+
+  Future<void> fetchRecent() async {
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    final url = Uri.parse(
+        "https://app.pravinhonda.com/api/followups/today");
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+
+        final List<dynamic> dataList = (responseData['followups'] as List<dynamic>?) ?? [];
+
+        final List<dynamic> filteredList = dataList
+          .where((item) => item['status']?.toString() == "1")
+          .toList();
+
+        setState(() {
+          alldata = filteredList;
+          loading = false;
+        });
+      } else {
+        print("Failed to load data. Status code: ${response.statusCode}");
+        print("Response body: ${response.body}");
+        setState(() => loading = false);
+      }
+    } catch (e) {
+      print("Error: $e");
+      setState(() => loading = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (loading) {
+      return Padding(
+        padding: EdgeInsets.symmetric(vertical: SizeConfig.h(40)),
+        child: Center(
+          child: CircularProgressIndicator(
+            color: kred,
+        )),
+      );
+    }
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: alldata.length,
+      itemBuilder: (context, index) {
+        final data = alldata[index];
+        return Hondabox(
+          enquiryid: data['enquiry_id'] ?? 0,
+          id: data['customer_id']?.toString() ?? '',
+          customername: data['customer_name']?.toString() ?? '',
+          contactnumber: data['customer_contact_number']?.toString() ?? '',
+          status: data['status']?.toString() ?? '',
+          cashfinance: data['purchase_type']?.toString() ?? '',
+          textride: data['test_ride']?.toString() ?? '',
+          exchange: data['exchange_flag']?.toString() ?? '',
+          onTap: () {}
+        );
+      },
     );
   }
 }

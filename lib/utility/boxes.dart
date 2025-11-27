@@ -372,6 +372,7 @@ class _ReviewBoxesState extends State<ReviewBoxes> {
                   builder: (_) => Lostcustomer(
                     name: widget.name,
                     number: widget.number,
+                    enquiryId: widget.enquiryid,
                   ),
                 );
               }
@@ -388,10 +389,12 @@ class _ReviewBoxesState extends State<ReviewBoxes> {
 class Lostcustomer extends StatefulWidget {
   final String name;
   final String number;
+  final int enquiryId;
   const Lostcustomer({
     super.key,
     required this.name,
     required this.number,
+    required this.enquiryId,
   });
 
   @override
@@ -466,7 +469,9 @@ class _LostcustomerState extends State<Lostcustomer> {
             () {
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => LostcustomerReason()),
+                MaterialPageRoute(builder: (context) => LostcustomerReason(
+                  enquiryId: widget.enquiryId,
+                )),
                 ((route) => false)
               );
             },
