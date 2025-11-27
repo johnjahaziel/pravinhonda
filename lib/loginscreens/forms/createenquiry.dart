@@ -315,7 +315,8 @@ class _CreateenquiryState extends State<Createenquiry> {
                 errormessage(customeride),
                 textfieldy(
                   'Wings Enquiry Number',
-                  wingsenquiry
+                  wingsenquiry,
+                  star: false
                 ),
                 if(wingsenquirye.isNotEmpty)
                 errormessage(wingsenquirye),
@@ -382,6 +383,7 @@ class _CreateenquiryState extends State<Createenquiry> {
                 Dateofbirthfield(
                   title: 'Date of Birth',
                   datecontroller: datecontroller,
+                  star: false
                 ),
 
                 CustomDropdown(

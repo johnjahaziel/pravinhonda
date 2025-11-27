@@ -367,6 +367,7 @@ class _CreatequotationState extends State<Createquotation> {
                       'Wings Enquiry Number',
                       wingsenquiry,
                       readonly: edit(),
+                      star: false
                     ),
                     if(wingsenquirye.isNotEmpty)
                     errormessage(wingsenquirye),
