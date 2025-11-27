@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pravinhonda/loginscreens/forms/addexchange.dart';
+import 'package:pravinhonda/loginscreens/forms/createquotation.dart';
 import 'package:pravinhonda/utility/customs/customappBar.dart';
 import 'package:pravinhonda/utility/customs/customdropdown.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
@@ -151,11 +152,21 @@ class _AddfinanceState extends State<Addfinance> {
                 button(
                   'Submit',
                   () {
-                    if(widget.exchangeflag == 'Yes'){
+                    if(widget.exchangeflag == 'yes'){
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => Addexchange()
+                        )
+                      );
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Createquotation(
+                            enquiryid: 0,
+                            apiResponse: {}
+                          )
                         )
                       );
                     }
