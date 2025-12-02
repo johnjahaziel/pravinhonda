@@ -141,7 +141,7 @@ class _MovetobookingState extends State<Movetobooking> {
   String? selectedtestrideitems;
 
   late TextEditingController enquiryid;
-  late TextEditingController customerid;
+  // late TextEditingController customerid;
   late TextEditingController wingsenquiry;
   late TextEditingController customercontactnumber;
   late TextEditingController customername;
@@ -193,7 +193,7 @@ class _MovetobookingState extends State<Movetobooking> {
 
   bool isEdited() {
     return
-      customerid.text != (originalEnquiry['customer_id'] ?? '') ||
+      // customerid.text != (originalEnquiry['customer_id'] ?? '') ||
       wingsenquiry.text != (originalEnquiry['wings_enquiry_number'] ?? '') ||
       selectedcustomercategoryitems != originalEnquiry['customer_category'] ||
       selectedenquirycategoryitems != originalEnquiry['enquiry_category'] ||
@@ -229,7 +229,7 @@ class _MovetobookingState extends State<Movetobooking> {
     originalEnquiry = Map<String, dynamic>.from(enquiry);
 
     enquiryid = TextEditingController(text: enquiry['enquiry_id']?.toString() ?? '');
-    customerid = TextEditingController(text: enquiry['customer_id']?.toString() ?? '');
+    // customerid = TextEditingController(text: enquiry['customer_id']?.toString() ?? '');
     wingsenquiry = TextEditingController(text: enquiry['wings_enquiry_number'] ?? '');
     selectedcustomercategoryitems = enquiry['customer_category'];
     selectedenquirycategoryitems = enquiry['enquiry_category'];
@@ -254,7 +254,7 @@ class _MovetobookingState extends State<Movetobooking> {
     customerremarks = TextEditingController(text: enquiry['customers_remarks'] ?? '');
   }
 
-  String customeride = '';
+  // String customeride = '';
   String wingsenquirye = '';
   String customercategorye = '';
   String enquirycategorye = '';
@@ -286,7 +286,7 @@ class _MovetobookingState extends State<Movetobooking> {
           'Authorization': 'Bearer $token'
         },
         body: jsonEncode({
-          'customer_id': customerid.text,
+          // 'customer_id': customerid.text,
           'wings_enquiry_number': wingsenquiry.text,
           'customer_category': selectedcustomercategoryitems?.toString(),
           'enquiry_category': selectedenquirycategoryitems?.toString(),
@@ -356,7 +356,7 @@ class _MovetobookingState extends State<Movetobooking> {
 
       } else if (response.statusCode == 422) {
           setState(() {
-            customeride = responseData['errors']['customer_id'] ?? '';
+            // customeride = responseData['errors']['customer_id'] ?? '';
             wingsenquirye = responseData['errors']['wings_enquiry_number'] ?? '';
             customercategorye = responseData['errors']['customer_category'] ?? '';
             enquirycategorye = responseData['errors']['enquiry_category'] ?? '';
@@ -376,8 +376,6 @@ class _MovetobookingState extends State<Movetobooking> {
           });
 
           Fluttertoast.showToast(msg: responseData['message']);
-
-          print('errrorrr $customeride');
 
       } else {
         Fluttertoast.showToast(
@@ -515,17 +513,17 @@ class _MovetobookingState extends State<Movetobooking> {
                       enquiryid,
                       readonly: true,
                     ),
-                    textfieldy(
-                      'Customer ID',
-                      customerid,
-                      readonly: edit(),
-                    ),
-                    if(customeride.isNotEmpty)
-                    errormessage(customeride),
+                    // textfieldy(
+                    //   'Customer ID',
+                    //   customerid,
+                    //   readonly: edit(),
+                    // ),
+                    // if(customeride.isNotEmpty)
+                    // errormessage(customeride),
                     textfieldy(
                       'Wings Enquiry Number',
                       wingsenquiry,
-                      readonly: edit(),
+                      readonly: false,
                       star: false
                     ),
                     if(wingsenquirye.isNotEmpty)

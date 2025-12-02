@@ -81,7 +81,7 @@ class _EnquiryState extends State<Enquiry> {
         final List<dynamic> dataList = (responseData['data'] as List<dynamic>?) ?? [];
 
         final List<dynamic> filteredList = dataList
-        .where((item) => item['status']?.toString() == "1")
+        .where((item) => item['status_code']?.toString() == "1")
         .toList();
 
         setState(() {
@@ -189,7 +189,7 @@ class _EnquiryState extends State<Enquiry> {
                                   final data = alldata[index];
                                   return Hondabox(
                                     enquiryid: data['enquiry_id'] ?? 0,
-                                    id: data['customer_id']?.toString() ?? '',
+                                    id: data['enquiry_id']?.toString() ?? '',
                                     customername: data['customer_name']?.toString() ?? '',
                                     contactnumber: data['customer_contact_number']?.toString() ?? '',
                                     status: data['status']?.toString() ?? '',
