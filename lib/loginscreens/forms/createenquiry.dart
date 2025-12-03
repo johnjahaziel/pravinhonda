@@ -8,6 +8,7 @@ import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/loginscreens/forms/addexchange.dart';
 import 'package:pravinhonda/loginscreens/forms/addfinance.dart';
 import 'package:pravinhonda/loginscreens/forms/createquotation.dart';
+import 'package:pravinhonda/namevariantcolor.dart';
 import 'package:pravinhonda/utility/customs/customappBar.dart';
 import 'package:pravinhonda/utility/customs/customdatefield.dart';
 import 'package:pravinhonda/utility/customs/customdrawer.dart';
@@ -85,33 +86,6 @@ class _CreateenquiryState extends State<Createenquiry> {
 
   String? selectedenquirysourceitems;
 
-  // List<Map<String, String>> modelcategoryitems = [
-  //   {'label': 'BW', 'value': 'BW'},
-  //   {'label': 'EV', 'value': 'EV'},
-  //   {'label': 'MC', 'value': 'MC'},
-  //   {'label': 'SC', 'value': 'SC'},
-  // ];
-
-  // String? selectedmodelcategoryitems;
-
-  List<Map<String, String>> modelnameitems = [
-    {'label': 'Honda Dio', 'value': 'Honda Dio'},
-  ];
-
-  String? selectedmodelnameitems;
-
-  List<Map<String, String>> modelvariantitems = [
-    {'label': 'Standard', 'value': 'Standard'},
-  ];
-
-  String? selectedmodelvariantitems;
-
-  List<Map<String, String>> modelcoloritems = [
-    {'label': 'Imperial Red Metallic', 'value': 'Imperial Red Metallic'},
-  ];
-
-  String? selectedmodelcoloritems;
-
   List<Map<String, String>> purchasetypeitems = [
     {'label': 'Cash', 'value': 'cash'},
     {'label': 'Finance', 'value': 'finance'},
@@ -133,7 +107,6 @@ class _CreateenquiryState extends State<Createenquiry> {
 
   String? selectedtestrideitems;
 
-  TextEditingController customerid = TextEditingController();
   TextEditingController wingsenquiry = TextEditingController();
   TextEditingController customercontactnumber = TextEditingController();
   TextEditingController customername = TextEditingController();
@@ -143,7 +116,6 @@ class _CreateenquiryState extends State<Createenquiry> {
   TextEditingController followupdatecontroller = TextEditingController();
   TextEditingController customerremarks = TextEditingController();
 
-  String customeride = '';
   String wingsenquirye = '';
   String customercategorye = '';
   String enquirycategorye = '';
@@ -154,12 +126,15 @@ class _CreateenquiryState extends State<Createenquiry> {
   String addresse = '';
   String enquirytypee = '';
   String enquirysourcee = '';
-// String modelcategorye = '';
   String modelnamee = '';
   String modelvariante = '';
   String modelcolore = '';
   String purchasetypee = '';
   String exchangeflage = '';
+
+  String? selectedmodelnameitems;
+  String? selectedmodelvariantitems;
+  String? selectedmodelcoloritems;
 
   Future<void> apiconnection() async {
     final url = Uri.parse('https://app.pravinhonda.com/api/enquiries');
@@ -176,8 +151,7 @@ class _CreateenquiryState extends State<Createenquiry> {
           'Authorization': 'Bearer $token'
         },
         body: jsonEncode({
-          'customer_id': customerid.text,
-          'wings_enquiry_number': wingsenquiry.text,
+          'high_rise_number': wingsenquiry.text,
           'customer_category': selectedcustomercategoryitems?.toString(),
           'enquiry_category': selectedenquirycategoryitems?.toString(),
           'customer_type': selectedcustomertypeitems?.toString(),
@@ -255,7 +229,6 @@ class _CreateenquiryState extends State<Createenquiry> {
         final errors = responseData['errors'] ?? {};
 
         setState(() {
-          customeride = errors['customer_id']?.toString() ?? '';
           wingsenquirye = errors['wings_enquiry_number']?.toString() ?? '';
           customercategorye = errors['customer_category']?.toString() ?? '';
           enquirycategorye = errors['enquiry_category']?.toString() ?? '';
@@ -312,12 +285,6 @@ class _CreateenquiryState extends State<Createenquiry> {
                   ),
                 ),
                 SizedBox(height: SizeConfig.h(10)),
-                textfieldy(
-                  'Customer ID',
-                  customerid
-                ),
-                if(customeride.isNotEmpty)
-                errormessage(customeride),
                 textfieldy(
                   'Wings Enquiry Number',
                   wingsenquiry,
@@ -439,66 +406,29 @@ class _CreateenquiryState extends State<Createenquiry> {
                 ),
                 if(enquirysourcee.isNotEmpty)
                 errormessage(enquirysourcee),
-                // CustomDropdown(
-                //   title: 'Model Category',
-                //   selectedCustomDropdown: selectedmodelcategoryitems,
-                //   customDropdownItems: modelcategoryitems,
-                //   onChanged: (newValue) {
-                //     setState(() {
-                //       selectedmodelcategoryitems = newValue;
-                //     });
-                //   },
-                // ),
-                // if(modelcategorye.isNotEmpty)
-                // errormessage('$modelcategorye'),
-                CustomDropdown(
-                  title: 'Model Name',
-                  selectedCustomDropdown: selectedmodelnameitems,
-                  customDropdownItems: modelnameitems,
-                  onChanged: (newValue) {
+                Namevariantcolor(
+                  selectedname: selectedmodelnameitems,
+                  selectedvariant: selectedmodelvariantitems,
+                  selectedcolor: selectedmodelcoloritems,
+                  onNameChanged: (value) {
                     setState(() {
-                      selectedmodelnameitems = newValue;
+                      selectedmodelnameitems = value;
+                      selectedmodelvariantitems = null;
+                      selectedmodelcoloritems = null;
+                    });
+                  },
+                  onVariantChanged: (value) {
+                    setState(() {
+                      selectedmodelvariantitems = value;
+                      selectedmodelcoloritems = null;
+                    });
+                  },
+                  onColorChanged: (value) {
+                    setState(() {
+                      selectedmodelcoloritems = value;
                     });
                   },
                 ),
-                if(modelnamee.isNotEmpty)
-                errormessage(modelnamee),
-                CustomDropdown(
-                  title: 'Model Variant',
-                  selectedCustomDropdown: selectedmodelvariantitems,
-                  customDropdownItems: modelvariantitems,
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedmodelvariantitems = newValue;
-                    });
-                  },
-                ),
-                if(modelvariante.isNotEmpty)
-                errormessage(modelvariante),
-                CustomDropdown(
-                  title: 'Model Color',
-                  selectedCustomDropdown: selectedmodelcoloritems,
-                  customDropdownItems: modelcoloritems,
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedmodelcoloritems = newValue;
-                    });
-                  },
-                ),
-                if(modelcolore.isNotEmpty)
-                errormessage(modelcolore),
-                CustomDropdown(
-                  title: 'Purchase Type',
-                  selectedCustomDropdown: selectedpurchasetypeitems,
-                  customDropdownItems: purchasetypeitems,
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedpurchasetypeitems = newValue;
-                    });
-                  },
-                ),
-                if(purchasetypee.isNotEmpty)
-                errormessage(purchasetypee),
                 CustomDropdown(
                   title: 'Exchange Flag',
                   selectedCustomDropdown: selectedexchangeflagitems,
