@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pravinhonda/bloc/auth_cubit.dart';
+import 'package:pravinhonda/bloc/enquiry_id_cubit.dart';
 import 'package:pravinhonda/loginscreens/Navigation.dart';
 import 'package:pravinhonda/loginscreens/login.dart';
 import 'package:pravinhonda/utility/styles.dart';
@@ -19,7 +20,12 @@ void main() async {
     authCubit.setToken(storedToken);
   }
 
-  runApp(MyApp(authCubit: authCubit, hasToken: storedToken != null));
+  runApp(
+    MyApp(
+      authCubit: authCubit,
+      hasToken: storedToken != null
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -34,8 +40,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: authCubit,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: authCubit),
+        BlocProvider(create: (_) => EnquiryCubit()),
+      ],
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.dark.copyWith(
           statusBarColor: Colors.transparent,

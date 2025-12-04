@@ -368,7 +368,7 @@ class _RecentactivityState extends State<Recentactivity> {
     final token = BlocProvider.of<AuthCubit>(context).state.token;
 
     final url = Uri.parse(
-        "https://app.pravinhonda.com/api/recentactivities");
+        "https://app.pravinhonda.com/api/recent-activities");
 
     try {
       final response = await http.get(
@@ -385,8 +385,8 @@ class _RecentactivityState extends State<Recentactivity> {
         final List<dynamic> dataList = (responseData['data'] as List<dynamic>?) ?? [];
 
         final List<dynamic> filteredList = dataList
-          .where((item) => item['status']?.toString() == "1")
-          .toList();
+        .where((item) => item['details']?['status_code']?.toString() == "1")
+        .toList();
 
         setState(() {
           alldata = filteredList;
@@ -424,15 +424,16 @@ class _RecentactivityState extends State<Recentactivity> {
       itemCount: alldata.length,
       itemBuilder: (context, index) {
         final data = alldata[index];
+        final details = data['details'] ?? {};
         return Hondabox(
-          enquiryid: data['enquiry_id'] ?? 0,
-          id: data['customer_id']?.toString() ?? '',
-          customername: data['customer_name']?.toString() ?? '',
-          contactnumber: data['customer_contact_number']?.toString() ?? '',
-          status: data['status']?.toString() ?? '',
-          cashfinance: data['purchase_type']?.toString() ?? '',
-          textride: data['test_ride']?.toString() ?? '',
-          exchange: data['exchange_flag']?.toString() ?? '',
+          enquiryid: details['enquiry_id'] ?? 0,
+          id: details['enquiry_id']?.toString() ?? '',
+          customername: details['customer_name']?.toString() ?? '',
+          contactnumber: details['customer_contact_number']?.toString() ?? '',
+          status: details['status']?.toString() ?? '',
+          cashfinance: details['purchase_type']?.toString() ?? '',
+          textride: details['test_ride']?.toString() ?? '',
+          exchange: details['exchange_flag']?.toString() ?? '',
           onTap: () {}
         );
       },
@@ -461,7 +462,7 @@ class _TodolistState extends State<Todolist> {
     final token = BlocProvider.of<AuthCubit>(context).state.token;
 
     final url = Uri.parse(
-        "https://app.pravinhonda.com/api/followups/today");
+        "https://app.pravinhonda.com/api/todolist");
 
     try {
       final response = await http.get(
@@ -475,10 +476,10 @@ class _TodolistState extends State<Todolist> {
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
 
-        final List<dynamic> dataList = (responseData['followups'] as List<dynamic>?) ?? [];
+        final List<dynamic> dataList = (responseData['data'] as List<dynamic>?) ?? [];
 
         final List<dynamic> filteredList = dataList
-          .where((item) => item['status']?.toString() == "1")
+          .where((item) => item['status_code']?.toString() == "1")
           .toList();
 
         setState(() {
@@ -518,7 +519,7 @@ class _TodolistState extends State<Todolist> {
         final data = alldata[index];
         return Hondabox(
           enquiryid: data['enquiry_id'] ?? 0,
-          id: data['customer_id']?.toString() ?? '',
+          id: data['enquiry_id']?.toString() ?? '',
           customername: data['customer_name']?.toString() ?? '',
           contactnumber: data['customer_contact_number']?.toString() ?? '',
           status: data['status']?.toString() ?? '',

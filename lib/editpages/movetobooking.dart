@@ -6,9 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/loginscreens/Navigation.dart';
-import 'package:pravinhonda/loginscreens/forms/addexchange.dart';
-import 'package:pravinhonda/loginscreens/forms/addfinance.dart';
-import 'package:pravinhonda/loginscreens/forms/createquotation.dart';
+import 'package:pravinhonda/loginscreens/forms/editing/createquotation.dart';
 import 'package:pravinhonda/utility/customs/customappBar.dart';
 import 'package:pravinhonda/utility/customs/customdatefield.dart';
 import 'package:pravinhonda/utility/customs/customdrawer.dart';
@@ -321,28 +319,28 @@ class _MovetobookingState extends State<Movetobooking> {
           toastLength: Toast.LENGTH_LONG,
         );
 
-        if(selectedpurchasetypeitems == 'finance') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Addfinance(
-                exchangeflag: selectedexchangeflagitems,
-                enquiryid: widget.enquiryid,
-                apiResponse: widget.apiResponse,
-              )
-            ),
-          );
-        } else if (selectedpurchasetypeitems != 'finance' && selectedexchangeflagitems == 'yes') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Addexchange(
-                enquiryid: widget.enquiryid,
-                apiResponse: widget.apiResponse,
-              )
-            )
-          );
-        }
+        // if(selectedpurchasetypeitems == 'finance') {
+        //   Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //       builder: (context) => Addfinance(
+        //         exchangeflag: selectedexchangeflagitems,
+        //         enquiryid: widget.enquiryid,
+        //         apiResponse: widget.apiResponse,
+        //       )
+        //     ),
+        //   );
+        // } else if (selectedpurchasetypeitems != 'finance' && selectedexchangeflagitems == 'yes') {
+        //   Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //       builder: (context) => Addexchange(
+        //         enquiryid: widget.enquiryid,
+        //         apiResponse: widget.apiResponse,
+        //       )
+        //     )
+        //   );
+        // }
 
         showDialog(
           context: context,

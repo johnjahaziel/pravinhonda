@@ -73,14 +73,14 @@ description(String title,TextEditingController controller, {bool star = false, b
               color: Color(0xff919EAB)
             ),
           ),
-          // if(star)
-          // Text(
-          //   '*',
-          //   style: TextStyle(
-          //     fontFamily: 'Poppins',
-          //     color: kred
-          //   ),
-          // ),
+          if(star)
+          Text(
+            '*',
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              color: kred
+            ),
+          ),
         ],
       ),
       Padding(

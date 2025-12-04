@@ -14,6 +14,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Namevariantcolor extends StatefulWidget {
   final bool edit;
 
+  final String modelnamee;
+  final String modelvariante;
+  final String modelcolore;
+
   final String? selectedname;
   final String? selectedvariant;
   final String? selectedcolor;
@@ -25,6 +29,9 @@ class Namevariantcolor extends StatefulWidget {
   const Namevariantcolor({
     super.key,
     this.edit = false,
+    required this.modelnamee,
+    required this.modelvariante,
+    required this.modelcolore,
     required this.selectedname,
     required this.selectedvariant,
     required this.selectedcolor,
@@ -38,10 +45,6 @@ class Namevariantcolor extends StatefulWidget {
 }
 
 class _NamevariantcolorState extends State<Namevariantcolor> {
-  String modelnamee = '';
-  String modelvariante = '';
-  String modelcolore = '';
-
   List<Map<String, String>> modelnameitems = [];
   List<Map<String, String>> modelvariantitems = [];
   List<Map<String, String>> modelcoloritems = [];
@@ -53,11 +56,37 @@ class _NamevariantcolorState extends State<Namevariantcolor> {
   @override
   void initState() {
     super.initState();
-    fetchName();
 
     selectedmodelnameitems = widget.selectedname;
     selectedmodelvariantitems = widget.selectedvariant;
     selectedmodelcoloritems = widget.selectedcolor;
+
+    fetchName().then((_) {
+      if (selectedmodelnameitems != null) {
+        final name = modelnameitems.firstWhere(
+          (item) => item['name'] == selectedmodelnameitems,
+          orElse: () => <String, String>{},
+        );
+
+        if (name.isNotEmpty && name['id'] != null) {
+          fetchVariant(name['id']!).then((_) {
+            if (selectedmodelvariantitems != null) {
+              final variant = modelvariantitems.firstWhere(
+                (item) => item['name'] == selectedmodelvariantitems,
+                orElse: () => <String, String>{},
+              );
+
+              if (variant.isNotEmpty && variant['id'] != null) {
+                fetchColor(
+                  name['id']!,
+                  variant['id']!,
+                );
+              }
+            }
+          });
+        }
+      }
+    });
   }
 
   Future<void> fetchName() async {
@@ -143,7 +172,6 @@ class _NamevariantcolorState extends State<Namevariantcolor> {
               'name': item['variant'].toString(),
             };
           }).toList();
-          selectedmodelvariantitems = null;
         });
       } else if(data['message'] == 'Token has expired') {
         final prefs = await SharedPreferences.getInstance();
@@ -226,6 +254,7 @@ class _NamevariantcolorState extends State<Namevariantcolor> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomNVCDropdown(
           title: 'Model Name',
@@ -252,8 +281,8 @@ class _NamevariantcolorState extends State<Namevariantcolor> {
           },
           readOnly: widget.edit,
         ),
-        if(modelnamee.isNotEmpty)
-        errormessage(modelnamee),
+        if(widget.modelnamee.isNotEmpty)
+        errormessage(widget.modelnamee),
         CustomNVCDropdown(
           title: 'Model Variant',
           selectedCustomDropdown: selectedmodelvariantitems,
@@ -284,8 +313,8 @@ class _NamevariantcolorState extends State<Namevariantcolor> {
           },
           readOnly: widget.edit,
         ),
-        if(modelvariante.isNotEmpty)
-        errormessage(modelvariante),
+        if(widget.modelvariante.isNotEmpty)
+        errormessage(widget.modelvariante),
         CustomNVCDropdown(
           title: 'Model Color',
           selectedCustomDropdown: selectedmodelcoloritems,
@@ -298,8 +327,8 @@ class _NamevariantcolorState extends State<Namevariantcolor> {
           },
           readOnly: widget.edit,
         ),
-        if(modelcolore.isNotEmpty)
-        errormessage(modelcolore),
+        if(widget.modelcolore.isNotEmpty)
+        errormessage(widget.modelcolore),
       ],
     );
   }

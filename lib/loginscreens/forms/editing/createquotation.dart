@@ -7,8 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
 import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/loginscreens/Navigation.dart';
-import 'package:pravinhonda/loginscreens/forms/addexchange.dart';
-import 'package:pravinhonda/loginscreens/forms/addfinance.dart';
+import 'package:pravinhonda/namevariantcolor.dart';
 import 'package:pravinhonda/utility/customs/customappBar.dart';
 import 'package:pravinhonda/utility/customs/customdatefield.dart';
 import 'package:pravinhonda/utility/customs/customdrawer.dart';
@@ -59,8 +58,8 @@ class _CreatequotationState extends State<Createquotation> {
   String? selectedcustomertypeitems;
 
   List<Map<String, String>> genderitems = [
-    {'label': 'Male', 'value': 'male'},
-    {'label': 'Female', 'value': 'female'},
+    {'label': 'Male', 'value': 'Male'},
+    {'label': 'Female', 'value': 'Female'},
   ];
 
   String? selectedgenderitems;
@@ -93,31 +92,8 @@ class _CreatequotationState extends State<Createquotation> {
 
   String? selectedenquirysourceitems;
 
-  // List<Map<String, String>> modelcategoryitems = [
-  //   {'label': 'BW', 'value': 'BW'},
-  //   {'label': 'EV', 'value': 'EV'},
-  //   {'label': 'MC', 'value': 'MC'},
-  //   {'label': 'SC', 'value': 'SC'},
-  // ];
-
-  // String? selectedmodelcategoryitems;
-
-  List<Map<String, String>> modelnameitems = [
-    {'label': 'Honda Dio', 'value': 'Honda Dio'},
-  ];
-
   String? selectedmodelnameitems;
-
-  List<Map<String, String>> modelvariantitems = [
-    {'label': 'Standard', 'value': 'Standard'},
-  ];
-
   String? selectedmodelvariantitems;
-
-  List<Map<String, String>> modelcoloritems = [
-    {'label': 'Imperial Red Metallic', 'value': 'Imperial Red Metallic'},
-  ];
-
   String? selectedmodelcoloritems;
 
   List<Map<String, String>> purchasetypeitems = [
@@ -141,9 +117,22 @@ class _CreatequotationState extends State<Createquotation> {
 
   String? selectedtestrideitems;
 
-  late TextEditingController customerid;
+  List<Map<String, String>> districtitems = [
+    {'label': 'Thoothukkudi', 'value': 'Thoothukkudi'},
+  ];
+
+  String? selecteddistrictitems;
+
+  List<Map<String, String>> cityitems = [
+    {'label': 'Kovilpatti', 'value': 'Kovilpatti'},
+  ];
+
+  String? selectedcityitems;
+
   late TextEditingController wingsenquiry;
   late TextEditingController customercontactnumber;
+  late TextEditingController secondarycontactnumber;
+  late TextEditingController pincode;
   late TextEditingController customername;
   late TextEditingController datecontroller;
   late TextEditingController emailid;
@@ -158,51 +147,56 @@ class _CreatequotationState extends State<Createquotation> {
   }
 
   void _initControllersFromResponse(Map<String, dynamic> resp) {
-    final customer = resp['data']?['customer'] ?? {};
-    final enquiry = resp['data']?['enquiry'] ?? {};
+    final enquiry = resp['data'] ?? {};
 
-    customerid = TextEditingController(text: customer['customer_id']?.toString() ?? '');
     wingsenquiry = TextEditingController(text: enquiry['wings_enquiry_number'] ?? '');
     selectedcustomercategoryitems = enquiry['customer_category'];
     selectedenquirycategoryitems = enquiry['enquiry_category'];
     selectedcustomertypeitems = enquiry['customer_type'];
-    selectedgenderitems = customer['gender'];
-    selectedmartialstatusitems = customer['martial_status'];
+    selectedgenderitems = enquiry['gender'];
+    selectedmartialstatusitems = enquiry['martial_status'];
+    selecteddistrictitems = enquiry['district'];
+    selectedcityitems = enquiry['city'];
     selectedenquirytypeitems = enquiry['enquiry_type'];
     selectedenquirysourceitems = enquiry['enquiry_source'];
-    // selectedmodelcategoryitems = enquiry['model_category'];
     selectedmodelnameitems = enquiry['model_name'];
     selectedmodelvariantitems = enquiry['model_variant'];
     selectedmodelcoloritems = enquiry['model_color'];
     selectedpurchasetypeitems = enquiry['purchase_type'];
     selectedexchangeflagitems = enquiry['exchange_flag'];
     selectedtestrideitems = enquiry['test_ride'];
-    customername = TextEditingController(text: customer['customer_name'] ?? enquiry['customer_name'] ?? '');
-    customercontactnumber = TextEditingController(text: customer['customer_contact_number'] ?? enquiry['customer_contact_number'] ?? '');
-    emailid = TextEditingController(text: customer['email_id'] ?? enquiry['email_id'] ?? '');
-    address = TextEditingController(text: customer['address'] ?? enquiry['address'] ?? '');
-    datecontroller = TextEditingController(text: customer['dob'] ?? enquiry['dob'] ?? '');
+    customername = TextEditingController(text: enquiry['customer_name'] ?? '');
+    customercontactnumber = TextEditingController(text: enquiry['customer_contact_number'] ?? '');
+    secondarycontactnumber = TextEditingController(text: enquiry['secondary_contact_number'] ?? '');
+    emailid = TextEditingController(text: enquiry['email_id'] ?? '');
+    address = TextEditingController(text: enquiry['address'] ?? '');
+    pincode = TextEditingController(text: enquiry['pincode'].toString());
+    datecontroller = TextEditingController(text: enquiry['dob'] ?? '');
     followupdatecontroller = TextEditingController(text: enquiry['follow_up_date'] ?? '');
-    customerremarks = TextEditingController(text: enquiry['customer_remarks'] ?? '');
+    customerremarks = TextEditingController(text: enquiry['customers_remarks'] ?? '');
   }
 
-  String customeride = '';
   String wingsenquirye = '';
   String customercategorye = '';
   String enquirycategorye = '';
   String customertypee = '';
   String customernamee = '';
   String customercontactnumbere = '';
+  String secondarycontactnumbere = '';
+  String pincodee = '';
   String emailide = '';
+  String gendere = '';
   String addresse = '';
+  String districte = '';
+  String citye = '';
   String enquirytypee = '';
   String enquirysourcee = '';
-// String modelcategorye = '';
   String modelnamee = '';
   String modelvariante = '';
   String modelcolore = '';
   String purchasetypee = '';
   String exchangeflage = '';
+  String customerremarkse = '';
 
   bool onEditpressed = false;
 
@@ -228,18 +222,21 @@ class _CreatequotationState extends State<Createquotation> {
           'Authorization': 'Bearer $token'
         },
         body: jsonEncode({
-          'customer_id': customerid.text,
-          'wings_enquiry_number': wingsenquiry.text,
+          'high_rise_number': wingsenquiry.text,
           'customer_category': selectedcustomercategoryitems?.toString(),
           'enquiry_category': selectedenquirycategoryitems?.toString(),
           'customer_type': selectedcustomertypeitems?.toString(),
           'customer_contact_number': customercontactnumber.text,
+          'secondary_contact_number': secondarycontactnumber.text,
+          'pincode': pincode.text,
           'customer_name': customername.text,
           'gender': selectedgenderitems?.toString(),
           'dob': datecontroller.text,
           'marital_status': selectedmartialstatusitems?.toString(),
           'email_id': emailid.text,
           'address': address.text,
+          'district' : selecteddistrictitems?.toString(),
+          'city' : selectedcityitems?.toString(),
           'enquiry_type': selectedenquirytypeitems?.toString(),
           'enquiry_source': selectedenquirysourceitems?.toString(),
           'model_name': selectedmodelnameitems?.toString(),
@@ -249,7 +246,7 @@ class _CreatequotationState extends State<Createquotation> {
           'exchange_flag': selectedexchangeflagitems?.toString(),
           'follow_up_date': followupdatecontroller.text,
           'test_ride': selectedtestrideitems?.toString(),
-          'customer_remarks': customerremarks.text,
+          'customers_remarks': customerremarks.text,
         }),
       );
 
@@ -263,63 +260,45 @@ class _CreatequotationState extends State<Createquotation> {
           toastLength: Toast.LENGTH_LONG,
         );
 
-        if(selectedpurchasetypeitems == 'finance') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Addfinance(
-                exchangeflag: selectedexchangeflagitems,
-                enquiryid: widget.enquiryid,
-                apiResponse: widget.apiResponse,
-              )
-            ),
-          );
-        } else if (selectedpurchasetypeitems != 'finance' && selectedexchangeflagitems == 'yes') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Addexchange(
-                enquiryid: widget.enquiryid,
-                apiResponse: widget.apiResponse,
-              )
-            )
-          );
-        }
-
         showDialog(
           context: context,
           barrierDismissible: false,
           builder: (_) => QuotationSuccessPopup(
-            name: '${responseData['data']['enquiry']['customer_name']}',
-            number: '${responseData['data']['enquiry']['customer_contact_number']}',
-            enquiryid: responseData['data']['enquiry']['enquiry_id'],
+            name: '${responseData['data']['customer_name']}',
+            number: '${responseData['data']['customer_contact_number']}',
+            enquiryid: responseData['data']['enquiry_id'],
           ),
         );
 
       } else if (response.statusCode == 422) {
-          setState(() {
-            customeride = responseData['errors']['customer_id'] ?? '';
-            wingsenquirye = responseData['errors']['wings_enquiry_number'] ?? '';
-            customercategorye = responseData['errors']['customer_category'] ?? '';
-            enquirycategorye = responseData['errors']['enquiry_category'] ?? '';
-            customertypee = responseData['errors']['customer_type'] ?? '';
-            customernamee = responseData['errors']['customer_name'] ?? '';
-            customercontactnumbere = responseData['errors']['customer_contact_number'] ?? '';
-            emailide = responseData['errors']['email_id'] ?? '';
-            addresse = responseData['errors']['address'] ?? '';
-            enquirytypee = responseData['errors']['enquiry_type'] ?? '';
-            enquirysourcee = responseData['errors']['enquiry_source'] ?? '';
-            // modelcategorye = responseData['errors']['model_category'] ?? '';
-            modelnamee = responseData['errors']['model_name'] ?? '';
-            modelvariante = responseData['errors']['model_variant'] ?? '';
-            modelcolore = responseData['errors']['model_color'] ?? '';
-            purchasetypee = responseData['errors']['purchase_type'] ?? '';
-            exchangeflage = responseData['errors']['exchange_flag'] ?? '';
-          });
+        final errors = responseData['errors'] ?? {};
 
-          Fluttertoast.showToast(msg: responseData['message']);
+        setState(() {
+          wingsenquirye = errors['wings_enquiry_number']?.toString() ?? '';
+          customercategorye = errors['customer_category']?.toString() ?? '';
+          enquirycategorye = errors['enquiry_category']?.toString() ?? '';
+          customertypee = errors['customer_type']?.toString() ?? '';
+          customernamee = errors['customer_name']?.toString() ?? '';
+          customercontactnumbere = errors['customer_contact_number']?.toString() ?? '';
+          secondarycontactnumbere = errors['secondary_contact_number']?.toString() ?? '';
+          pincodee = errors['pincode']?.toString() ?? '';
+          gendere = errors['gender']?.toString() ?? '';
+          emailide = errors['email_id']?.toString() ?? '';
+          addresse = errors['address']?.toString() ?? '';
+          enquirytypee = errors['enquiry_type']?.toString() ?? '';
+          enquirysourcee = errors['enquiry_source']?.toString() ?? '';
+          modelnamee = errors['model_name']?.toString() ?? '';
+          modelvariante = errors['model_variant']?.toString() ?? '';
+          modelcolore = errors['model_color']?.toString() ?? '';
+          districte = errors['district']?.toString() ?? '';
+          citye = errors['city']?.toString() ?? '';
+          purchasetypee = errors['purchase_type']?.toString() ?? '';
+          exchangeflage = errors['exchange_flag']?.toString() ?? '';
+          customerremarkse = errors['customers_remarks']?.toString() ?? '';
+        });
 
-          print('errrorrr $customeride');
+        Fluttertoast.showToast(msg: responseData['message']);
+        print(response.body);
 
       } else {
         Fluttertoast.showToast(
@@ -362,14 +341,7 @@ class _CreatequotationState extends State<Createquotation> {
                     ),
                     SizedBox(height: SizeConfig.h(10)),
                     textfieldy(
-                      'Customer ID',
-                      customerid,
-                      readonly: edit(),
-                    ),
-                    if(customeride.isNotEmpty)
-                    errormessage(customeride),
-                    textfieldy(
-                      'Wings Enquiry Number',
+                      'High Rise Number',
                       wingsenquiry,
                       readonly: edit(),
                       star: false
@@ -423,6 +395,13 @@ class _CreatequotationState extends State<Createquotation> {
                     if(customercontactnumbere.isNotEmpty)
                     errormessage(customercontactnumbere),
                     textfieldy(
+                      'Secondary Contact Number',
+                      secondarycontactnumber,
+                      readonly: edit(),
+                    ),
+                    if(secondarycontactnumbere.isNotEmpty)
+                    errormessage(secondarycontactnumbere),
+                    textfieldy(
                       'Customer Name',
                       customername,
                       readonly: edit(),
@@ -441,7 +420,8 @@ class _CreatequotationState extends State<Createquotation> {
                       star: false,
                       readOnly: edit(),
                     ),
-                    
+                    if(gendere.isNotEmpty)
+                    errormessage(gendere),
                     Dateofbirthfield(
                       title: 'Date of Birth',
                       datecontroller: datecontroller,
@@ -477,6 +457,39 @@ class _CreatequotationState extends State<Createquotation> {
                     if(addresse.isNotEmpty)
                     errormessage(addresse),
                     CustomDropdown(
+                      title: 'District',
+                      selectedCustomDropdown: selecteddistrictitems,
+                      customDropdownItems:districtitems,
+                      onChanged: (newValue) {
+                        setState(() {
+                          selecteddistrictitems = newValue;
+                        });
+                      },
+                      readOnly: edit(),
+                    ),
+                    if(districte.isNotEmpty)
+                    errormessage(districte),
+                    CustomDropdown(
+                      title: 'City',
+                      selectedCustomDropdown: selectedcityitems,
+                      customDropdownItems: cityitems,
+                      onChanged: (newValue) {
+                        setState(() {
+                          selectedcityitems = newValue;
+                        });
+                      },
+                      readOnly: edit(),
+                    ),
+                    if(citye.isNotEmpty)
+                    errormessage(citye),
+                    textfieldy(
+                      'Pincode',
+                      pincode,
+                      readonly: edit(),
+                    ),
+                    if(pincodee.isNotEmpty)
+                    errormessage(pincodee),
+                    CustomDropdown(
                       title: 'Enquiry Type',
                       selectedCustomDropdown: selectedenquirytypeitems,
                       customDropdownItems: enquirytypeitems,
@@ -502,58 +515,32 @@ class _CreatequotationState extends State<Createquotation> {
                     ),
                     if(enquirysourcee.isNotEmpty)
                     errormessage(enquirysourcee),
-                    // CustomDropdown(
-                    //   title: 'Model Category',
-                    //   selectedCustomDropdown: selectedmodelcategoryitems,
-                    //   customDropdownItems: modelcategoryitems,
-                    //   onChanged: (newValue) {
-                    //     setState(() {
-                    //       selectedmodelcategoryitems = newValue;
-                    //     });
-                    //   },
-                    //   readOnly: edit(),
-                    // ),
-                    // if(modelcategorye.isNotEmpty)
-                    // errormessage('$modelcategorye'),
-                    CustomDropdown(
-                      title: 'Model Name',
-                      selectedCustomDropdown: selectedmodelnameitems,
-                      customDropdownItems: modelnameitems,
-                      onChanged: (newValue) {
+                    Namevariantcolor(
+                      modelnamee: modelnamee,
+                      modelvariante: modelvariante,
+                      modelcolore: modelcolore,
+                      
+                      selectedname: selectedmodelnameitems,
+                      selectedvariant: selectedmodelvariantitems,
+                      selectedcolor: selectedmodelcoloritems,
+                      onNameChanged: (value) {
                         setState(() {
-                          selectedmodelnameitems = newValue;
+                          selectedmodelnameitems = value;
                         });
                       },
-                      readOnly: edit(),
-                    ),
-                    if(modelnamee.isNotEmpty)
-                    errormessage(modelnamee),
-                    CustomDropdown(
-                      title: 'Model Variant',
-                      selectedCustomDropdown: selectedmodelvariantitems,
-                      customDropdownItems: modelvariantitems,
-                      onChanged: (newValue) {
+                      onVariantChanged: (value) {
                         setState(() {
-                          selectedmodelvariantitems = newValue;
+                          selectedmodelvariantitems = value;
+                          selectedmodelcoloritems = null;
                         });
                       },
-                      readOnly: edit(),
-                    ),
-                    if(modelvariante.isNotEmpty)
-                    errormessage(modelvariante),
-                    CustomDropdown(
-                      title: 'Model Color',
-                      selectedCustomDropdown: selectedmodelcoloritems,
-                      customDropdownItems: modelcoloritems,
-                      onChanged: (newValue) {
+                      onColorChanged: (value) {
                         setState(() {
-                          selectedmodelcoloritems = newValue;
+                          selectedmodelcoloritems = value;
                         });
                       },
-                      readOnly: edit(),
+                      edit: edit(),
                     ),
-                    if(modelcolore.isNotEmpty)
-                    errormessage(modelcolore),
                     CustomDropdown(
                       title: 'Purchase Type',
                       selectedCustomDropdown: selectedpurchasetypeitems,
@@ -699,7 +686,7 @@ class _QuotationSuccessPopupState extends State<QuotationSuccessPopup> {
   }
 
   Future<void> generatepdf() async {
-    final url = Uri.parse('https://app.pravinhonda.com/api/enquiries/${widget.enquiryid}/generate-pdf');
+    final url = Uri.parse('https://app.pravinhonda.com/api/pdf/${widget.enquiryid}');
 
     final token = BlocProvider.of<AuthCubit>(context).state.token;
 
