@@ -21,6 +21,9 @@ class _CreateenquiryState extends State<Createenquiry> {
   bool finance = false;
   bool exchange = false;
 
+  bool financetrue = false;
+  bool exchangetrue = false;
+
   String previousTab = 'enquiry';
 
   @override
@@ -101,29 +104,35 @@ class _CreateenquiryState extends State<Createenquiry> {
                       width: SizeConfig.w(10),
                     ),
                     Expanded(
-                      child: RawMaterialButton(
-                        onPressed: () {
-                          setState(() {
-                            createenquiry = false;
-                            finance = true;
-                            exchange = false;
-                          });
-                        },
-                        constraints: BoxConstraints(),
-                        fillColor: finance ? kred : kwhite,
-                        padding: EdgeInsetsGeometry.symmetric(horizontal: SizeConfig.w(15),vertical: SizeConfig.h(8)),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadiusGeometry.circular(10),
-                          side: BorderSide(
-                            color: kgrey
-                          )
-                        ),
-                        child: Text(
-                          'Finance',
-                          style: customtext(
-                            fs14,
-                            finance ? kwhite : kred,
-                            FontWeight.w500
+                      child: Opacity(
+                        opacity: financetrue == true ? 1 : 0.5,
+                        child: IgnorePointer(
+                          ignoring: financetrue == true ? false : true,
+                          child: RawMaterialButton(
+                            onPressed: () {
+                              setState(() {
+                                createenquiry = false;
+                                finance = true;
+                                exchange = false;
+                              });
+                            },
+                            constraints: BoxConstraints(),
+                            fillColor: finance ? kred : kwhite,
+                            padding: EdgeInsetsGeometry.symmetric(horizontal: SizeConfig.w(15),vertical: SizeConfig.h(8)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadiusGeometry.circular(10),
+                              side: BorderSide(
+                                color: kgrey
+                              )
+                            ),
+                            child: Text(
+                              'Finance',
+                              style: customtext(
+                                fs14,
+                                finance ? kwhite : kred,
+                                FontWeight.w500
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -132,29 +141,35 @@ class _CreateenquiryState extends State<Createenquiry> {
                       width: SizeConfig.w(10),
                     ),
                     Expanded(
-                      child: RawMaterialButton(
-                        onPressed: () {
-                          setState(() {
-                            createenquiry = false;
-                            finance = false;
-                            exchange = true;
-                          });
-                        },
-                        constraints: BoxConstraints(),
-                        fillColor: exchange ? kred : kwhite,
-                        padding: EdgeInsetsGeometry.symmetric(horizontal: SizeConfig.w(15),vertical: SizeConfig.h(8)),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadiusGeometry.circular(10),
-                          side: BorderSide(
-                            color: kgrey
-                          )
-                        ),
-                        child: Text(
-                          'Exchange',
-                          style: customtext(
-                            fs14,
-                            exchange ? kwhite : kred,
-                            FontWeight.w500
+                      child: Opacity(
+                        opacity: exchangetrue == true ? 1 : 0.5,
+                        child: IgnorePointer(
+                          ignoring: exchangetrue == true ? false : true,
+                          child: RawMaterialButton(
+                            onPressed: () {
+                              setState(() {
+                                createenquiry = false;
+                                finance = false;
+                                exchange = true;
+                              });
+                            },
+                            constraints: BoxConstraints(),
+                            fillColor: exchange ? kred : kwhite,
+                            padding: EdgeInsetsGeometry.symmetric(horizontal: SizeConfig.w(15),vertical: SizeConfig.h(8)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadiusGeometry.circular(10),
+                              side: BorderSide(
+                                color: kgrey
+                              )
+                            ),
+                            child: Text(
+                              'Exchange',
+                              style: customtext(
+                                fs14,
+                                exchange ? kwhite : kred,
+                                FontWeight.w500
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -168,6 +183,7 @@ class _CreateenquiryState extends State<Createenquiry> {
                 financeselected: () {
                   setState(() {
                     previousTab = 'enquiry';
+                    financetrue = true;
                     createenquiry = false;
                     finance = true;
                     exchange = false;
@@ -176,6 +192,7 @@ class _CreateenquiryState extends State<Createenquiry> {
                 exchangeselected: () {
                   setState(() {
                     previousTab = 'enquiry';
+                    exchangetrue = true;
                     createenquiry = false;
                     finance = false;
                     exchange = true;
@@ -189,6 +206,7 @@ class _CreateenquiryState extends State<Createenquiry> {
                 exchangeselected: () {
                   setState(() {
                     previousTab = 'finance';
+                    exchangetrue = true;
                     createenquiry = false;
                     finance = false;
                     exchange = true;

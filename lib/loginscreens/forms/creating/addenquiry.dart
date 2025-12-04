@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/bloc/enquiry_id_cubit.dart';
+import 'package:pravinhonda/districtcity.dart';
 import 'package:pravinhonda/loginscreens/forms/editing/createquotation.dart';
 import 'package:pravinhonda/namevariantcolor.dart';
 import 'package:pravinhonda/utility/customs/customdatefield.dart';
@@ -109,18 +110,6 @@ class _AddenquiryState extends State<Addenquiry> {
 
   String? selectedtestrideitems;
 
-  List<Map<String, String>> districtitems = [
-    {'label': 'Thoothukkudi', 'value': 'Thoothukkudi'},
-  ];
-
-  String? selecteddistrictitems;
-
-  List<Map<String, String>> cityitems = [
-    {'label': 'Kovilpatti', 'value': 'Kovilpatti'},
-  ];
-
-  String? selectedcityitems;
-
   TextEditingController wingsenquiry = TextEditingController();
   TextEditingController customercontactnumber = TextEditingController();
   TextEditingController secondarycontactnumber = TextEditingController();
@@ -157,6 +146,9 @@ class _AddenquiryState extends State<Addenquiry> {
   String? selectedmodelnameitems;
   String? selectedmodelvariantitems;
   String? selectedmodelcoloritems;
+
+  String? selecteddistrictitems;
+  String? selectedcityitems;
 
   Future<void> apiconnection() async {
     final url = Uri.parse('https://app.pravinhonda.com/api/enquiries');
@@ -429,30 +421,25 @@ class _AddenquiryState extends State<Addenquiry> {
               ),
               if(addresse.isNotEmpty)
               errormessage(addresse),
-              CustomDropdown(
-                title: 'District',
-                selectedCustomDropdown: selecteddistrictitems,
-                customDropdownItems:districtitems,
-                onChanged: (newValue) {
+              Districtcity(
+                districte: districte,
+                citye: citye,
+
+                selecteddistrict: selecteddistrictitems,
+                selectedcity: selectedcityitems,
+
+                ondistrictChanged: (value) {
                   setState(() {
-                    selecteddistrictitems = newValue;
+                    selecteddistrictitems = value;
+                    selectedcityitems = null;
+                  });
+                },
+                oncityChanged: (value) {
+                  setState(() {
+                    selectedcityitems = value;
                   });
                 },
               ),
-              if(districte.isNotEmpty)
-              errormessage(districte),
-              CustomDropdown(
-                title: 'City',
-                selectedCustomDropdown: selectedcityitems,
-                customDropdownItems: cityitems,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedcityitems = newValue;
-                  });
-                },
-              ),
-              if(citye.isNotEmpty)
-              errormessage(citye),
               textfieldy(
                 'Pincode',
                 pincode
