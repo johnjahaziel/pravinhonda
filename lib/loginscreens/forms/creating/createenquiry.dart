@@ -28,7 +28,7 @@ class _CreateenquiryState extends State<Createenquiry> {
 
   @override
   Widget build(BuildContext context) {
-    int enquiryid = BlocProvider.of<EnquiryCubit>(context).state.enquiryid!;
+    int enquiryid = BlocProvider.of<EnquiryCubit>(context).state.enquiryid ?? 0;
     SizeConfig.init(context);
     return SafeArea(
       child: PopScope(
