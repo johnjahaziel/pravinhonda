@@ -29,85 +29,27 @@ class Addenquiry extends StatefulWidget {
 }
 
 class _AddenquiryState extends State<Addenquiry> {
-  List<Map<String, String>> customercategoryitems = [
-    {'label': 'Individual', 'value': 'Individual'},
-    {'label': 'CSD', 'value': 'CSD'},
-    {'label': 'KPKB', 'value': 'KPKB'},
-    {'label': 'Corporate', 'value': 'Corporate'},
-  ];
+
+  final customercategoryitems = customerCategoryItems;
+  final enquirycategoryitems = enquirycategoryTypeItems;
+  final customertypeitems = customerTypeItems;
+  final genderitems = genderTypeItems;
+  final martialstatusitems = martialstatusTypeItems;
+  final enquirytypeitems = enquiryTypeItems;
+  final enquirysourceitems = enquirysourceTypeItems;
+  final purchasetypeitems = purchaseTypeItems;
+  final exchangeflagitems = exchangeflagTypeItems;
+  final testrideitems = testrideTypeItems;
 
   String? selectedcustomercategoryitems;
-
-  List<Map<String, String>> enquirycategoryitems = [
-    {'label': 'Individual', 'value': 'Individual'},
-    {'label': 'Institutional Customer', 'value': 'Institutional Customer'},
-    {'label': 'Exchange with ELV', 'value': 'Exchange with ELV'},
-  ];
-
   String? selectedenquirycategoryitems;
-
-  List<Map<String, String>> customertypeitems = [
-    {'label': 'First Time Buyer', 'value': 'First Time Buyer'},
-    {'label': 'Additional Buyer', 'value': 'Additional Buyer'},
-    {'label': 'Replacement Buyer', 'value': 'Replacement Buyer'},
-  ];
-
   String? selectedcustomertypeitems;
-
-  List<Map<String, String>> genderitems = [
-    {'label': 'Male', 'value': 'Male'},
-    {'label': 'Female', 'value': 'Female'},
-  ];
-
   String? selectedgenderitems;
-
-  List<Map<String, String>> martialstatusitems = [
-    {'label': 'Married', 'value': 'married'},
-    {'label': 'Single', 'value': 'single'},
-  ];
-
   String? selectedmartialstatusitems;
-
-  List<Map<String, String>> enquirytypeitems = [
-    {'label': 'Digital', 'value': 'Digital'},
-    {'label': 'Walk-In', 'value': 'Walk-In'},
-    {'label': 'Telephonic', 'value': 'Telephonic'},
-    {'label': 'Outdoor Activity', 'value': 'Outdoor Activity'},
-  ];
-
   String? selectedenquirytypeitems;
-
-  List<Map<String, String>> enquirysourceitems = [
-    {'label': 'Showroom Walk In', 'value': 'Showroom Walk In'},
-    {'label': 'Railway', 'value': 'Railway'},
-    {'label': 'Auto-Expo 2025', 'value': 'Auto-Expo 2025'},
-    {'label': 'NEWS', 'value': 'NEWS'},
-    {'label': 'Online Booking', 'value': 'Online Booking'},
-    {'label': 'TV', 'value': 'TV'},
-    {'label': 'Facebook', 'value': 'Facebook'},
-  ];
-
   String? selectedenquirysourceitems;
-
-  List<Map<String, String>> purchasetypeitems = [
-    {'label': 'Cash', 'value': 'cash'},
-    {'label': 'Finance', 'value': 'finance'},
-  ];
-
   String? selectedpurchasetypeitems;
-
-  List<Map<String, String>> exchangeflagitems = [
-    {'label': 'Yes', 'value': 'yes'},
-    {'label': 'No', 'value': 'no'},
-  ];
-
   String? selectedexchangeflagitems;
-
-  List<Map<String, String>> testrideitems = [
-    {'label': 'Yes', 'value': 'yes'},
-    {'label': 'No', 'value': 'no'},
-  ];
-
   String? selectedtestrideitems;
 
   TextEditingController wingsenquiry = TextEditingController();
@@ -218,6 +160,8 @@ class _AddenquiryState extends State<Addenquiry> {
           'customers_remarks': "Interested in finance option",
         }),
       );
+
+      print('selected city: $selectedcityitems');
 
       final responseData = jsonDecode(response.body);
 

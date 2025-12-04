@@ -28,16 +28,10 @@ class Addfinance extends StatefulWidget {
 
 class _AddfinanceState extends State<Addfinance> {
 
-  List<Map<String, String>> financeitems = [
-    {'label': 'Personal Loan', 'value': 'Personal Loan'},
-  ];
+  List<Map<String, String>> financeitems = financeTypeItems;
+  List<Map<String, String>> loanperioditems = loanperiodTypeItems;
 
   String? selectedfinanceitems;
-
-  List<Map<String, String>> loanperioditems = [
-    {'label': '12', 'value': '12'},
-  ];
-
   String? selectedloanperioditems;
 
   TextEditingController vehiclecost = TextEditingController();

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
+import 'package:pravinhonda/loginscreens/forms/editing/createquotation.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
@@ -82,6 +83,16 @@ class _AddexchangeState extends State<Addexchange> {
           toastLength: Toast.LENGTH_LONG,
         );
 
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Createquotation(
+              enquiryid: responseData['data']['enquiry_id'],
+              apiResponse: responseData,
+            )
+          )
+        );
+
       } else if (response.statusCode == 422) {
         final errors = responseData['errors'] ?? {};
 
@@ -146,7 +157,7 @@ class _AddexchangeState extends State<Addexchange> {
               errormessage(vehiclemodale),
               textfieldy(
                 'New Vehicle Modal',
-                vehiclemodal
+                newvehiclemodal
               ),
               if(newvehiclemodale.isNotEmpty)
               errormessage(newvehiclemodale),

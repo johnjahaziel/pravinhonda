@@ -215,6 +215,7 @@ class _DistrictcityState extends State<Districtcity> {
             setState(() {
               selectedcityitems = newValue;
             });
+            widget.oncityChanged(newValue);
           },
         ),
         if(widget.citye.isNotEmpty)

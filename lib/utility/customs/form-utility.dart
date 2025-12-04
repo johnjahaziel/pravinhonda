@@ -2,6 +2,75 @@ import 'package:flutter/material.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
+const List<Map<String, String>> customerCategoryItems= [
+  {'label': 'Individual', 'value': 'Individual'},
+  {'label': 'CSD', 'value': 'CSD'},
+  {'label': 'KPKB', 'value': 'KPKB'},
+  {'label': 'Corporate', 'value': 'Corporate'},
+];
+
+const List<Map<String, String>> enquirycategoryTypeItems = [
+  {'label': 'Individual', 'value': 'Individual'},
+  {'label': 'Institutional Customer', 'value': 'Institutional Customer'},
+  {'label': 'Exchange with ELV', 'value': 'Exchange with ELV'},
+];
+
+const List<Map<String, String>> customerTypeItems = [
+  {'label': 'First Time Buyer', 'value': 'First Time Buyer'},
+  {'label': 'Additional Buyer', 'value': 'Additional Buyer'},
+  {'label': 'Replacement Buyer', 'value': 'Replacement Buyer'},
+];
+
+const List<Map<String, String>> genderTypeItems = [
+  {'label': 'Male', 'value': 'Male'},
+  {'label': 'Female', 'value': 'Female'},
+];
+
+const List<Map<String, String>> martialstatusTypeItems = [
+  {'label': 'Married', 'value': 'married'},
+  {'label': 'Single', 'value': 'single'},
+];
+
+const List<Map<String, String>> enquiryTypeItems = [
+  {'label': 'Digital', 'value': 'Digital'},
+  {'label': 'Walk-In', 'value': 'Walk-In'},
+  {'label': 'Telephonic', 'value': 'Telephonic'},
+  {'label': 'Outdoor Activity', 'value': 'Outdoor Activity'},
+];
+
+const List<Map<String, String>> enquirysourceTypeItems = [
+  {'label': 'Showroom Walk In', 'value': 'Showroom Walk In'},
+  {'label': 'Railway', 'value': 'Railway'},
+  {'label': 'Auto-Expo 2025', 'value': 'Auto-Expo 2025'},
+  {'label': 'NEWS', 'value': 'NEWS'},
+  {'label': 'Online Booking', 'value': 'Online Booking'},
+  {'label': 'TV', 'value': 'TV'},
+  {'label': 'Facebook', 'value': 'Facebook'},
+];
+
+const List<Map<String, String>> purchaseTypeItems = [
+  {'label': 'Cash', 'value': 'cash'},
+  {'label': 'Finance', 'value': 'finance'},
+];
+
+const List<Map<String, String>> exchangeflagTypeItems = [
+  {'label': 'Yes', 'value': 'yes'},
+  {'label': 'No', 'value': 'no'},
+];
+
+const List<Map<String, String>> testrideTypeItems = [
+  {'label': 'Yes', 'value': 'yes'},
+  {'label': 'No', 'value': 'no'},
+];
+
+const List<Map<String, String>> financeTypeItems = [
+  {'label': 'Personal Loan', 'value': 'Personal Loan'},
+];
+
+const List<Map<String, String>> loanperiodTypeItems = [
+  {'label': '12', 'value': '12'},
+];
+
 textfieldy(String title, TextEditingController controller, {bool star = true, bool readonly = false, bool numpad = false}) => Padding(
   padding: const EdgeInsets.only(top: 15),
   child: Opacity(
