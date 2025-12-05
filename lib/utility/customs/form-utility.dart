@@ -216,3 +216,48 @@ errormessage(String message) {
     ),
   );
 }
+
+Future<void> showMessagePopup(BuildContext context, String message, VoidCallback onTap) async {
+  return showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) {
+      return AlertDialog(
+        backgroundColor: kwhite,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: fs14
+              ),
+            ),
+            SizedBox(height: 20),
+            SizedBox(
+              width: 80,
+              child: ElevatedButton(
+                onPressed: onTap,
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Text(
+                  "OK",
+                  style: customtext(
+                    fs12,
+                    kred,
+                    FontWeight.w500
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}

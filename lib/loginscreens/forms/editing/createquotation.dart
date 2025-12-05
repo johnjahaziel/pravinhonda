@@ -5,11 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
+import 'package:pravinhonda/bloc/apirespnse_cubit.dart';
 import 'package:pravinhonda/bloc/auth_cubit.dart';
-import 'package:pravinhonda/bloc/enquiry_id_cubit.dart';
 import 'package:pravinhonda/loginscreens/Navigation.dart';
-import 'package:pravinhonda/loginscreens/forms/creating/addexchange.dart';
 import 'package:pravinhonda/loginscreens/forms/editing/editenquiry.dart';
+import 'package:pravinhonda/loginscreens/forms/editing/editexchange.dart';
 import 'package:pravinhonda/loginscreens/forms/editing/editfinance.dart';
 import 'package:pravinhonda/utility/customs/customappBar.dart';
 import 'package:pravinhonda/utility/customs/customdrawer.dart';
@@ -54,7 +54,13 @@ class _CreatequotationState extends State<Createquotation> {
   @override
   void initState() {
     super.initState();
-    _initControllersFromResponse(widget.apiResponse);
+    apiresponseBloc(widget.apiResponse);
+  }
+
+  void apiresponseBloc(Map<String,dynamic> response) {
+    final apiresponse = widget.apiResponse;
+    BlocProvider.of<ApiresponseCubit>(context).setApiresponse(apiresponse);
+    _initControllersFromResponse(apiresponse);
   }
 
   void _initControllersFromResponse(Map<String, dynamic> resp) {
@@ -77,7 +83,7 @@ class _CreatequotationState extends State<Createquotation> {
 
   @override
   Widget build(BuildContext context) {
-    int enquiryid = BlocProvider.of<EnquiryCubit>(context).state.enquiryid!;
+    final apiresponselocal = BlocProvider.of<ApiresponseCubit>(context).state.apiresponse ?? {};
     SizeConfig.init(context);
     return SafeArea(
       child: PopScope(
@@ -250,7 +256,7 @@ class _CreatequotationState extends State<Createquotation> {
                       });
                     },
                     enquiryid: widget.enquiryid,
-                    apiResponse: widget.apiResponse,
+                    apiResponse: apiresponselocal,
                     edit: edit(),
                   ),
                   if(finance == true)
@@ -268,12 +274,14 @@ class _CreatequotationState extends State<Createquotation> {
                         });
                       },
                       edit: edit(),
-                      apiResponse: widget.apiResponse,
+                      apiResponse: apiresponselocal,
                     ),
                   ),
                   if(exchange == true)
-                  Addexchange(
-                    enquiryid: enquiryid,
+                  Editexchange(
+                    enquiryid: widget.enquiryid,
+                    apiResponse: apiresponselocal,
+                    edit: edit(),
                   )
                 ],
               ),

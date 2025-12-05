@@ -94,6 +94,14 @@ class _EditfinanceState extends State<Editfinance> {
           'down_payment': downpayment.text,
           'loan_interest': loaninterest.text,
           'loan_period': selectedloanperioditems?.toString(),
+
+          // "finance": "Personal Loan",
+          // "vehicle_cost": 500000,
+          // "initial_payment": 50000,
+          // "document_charges": 10000,
+          // "down_payment": 100000,
+          // "loan_interest": 12,
+          // "loan_period": 12
         }),
       );
 
@@ -102,29 +110,32 @@ class _EditfinanceState extends State<Editfinance> {
       if (response.statusCode == 200) {
         print('response data: $responseData');
 
-        Fluttertoast.showToast(
-          msg: responseData['message'],
-          toastLength: Toast.LENGTH_LONG,
-        );
-
         final String exchange = responseData['data']["exchange_flag"];
         print('exchange: $exchange');
 
         final int enquiryid = responseData['data']['enquiry_id'];
 
-        if (exchange == 'yes') {
-          widget.exchangeselected();
-        } else {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Createquotation(
-                enquiryid: enquiryid,
-                apiResponse: responseData,
-              )
-            )
-          );
-        }
+        showMessagePopup(
+          context,
+          responseData['message'],
+          () {
+            Navigator.pop(context);
+            if (exchange == 'yes') {
+              widget.exchangeselected();
+            } else {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Createquotation(
+                    enquiryid: enquiryid,
+                    apiResponse: responseData,
+                  )
+                )
+              );
+            }
+          }
+        );
+
       } else if (response.statusCode == 422) {
         final errors = responseData['errors'] ?? {};
 
@@ -141,7 +152,13 @@ class _EditfinanceState extends State<Editfinance> {
         Fluttertoast.showToast(msg: responseData['message']);
         print(response.body);
       } else {
-        Fluttertoast.showToast(msg: responseData['message']);
+        showMessagePopup(
+          context,
+          responseData['message'],
+          () {
+            Navigator.pop(context);
+          }
+        );
         print(response.body);
       }
     } catch (error) {

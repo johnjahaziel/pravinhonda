@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:pravinhonda/bloc/apirespnse_cubit.dart';
 import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/districtcity.dart';
 import 'package:pravinhonda/loginscreens/forms/editing/createquotation.dart';
@@ -186,14 +187,33 @@ class _EditenquiryState extends State<Editenquiry> {
           toastLength: Toast.LENGTH_LONG,
         );
 
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) => QuotationSuccessPopup(
-            name: '${responseData['data']['customer_name']}',
-            number: '${responseData['data']['customer_contact_number']}',
-            enquiryid: responseData['data']['enquiry_id'],
-          ),
+        final apiresponse = responseData;
+        BlocProvider.of<ApiresponseCubit>(context).setApiresponse(apiresponse);
+
+        showMessagePopup(
+          context,
+          responseData['message'],
+          () {
+            Navigator.pop(context);
+            if(selectedpurchasetypeitems == 'finance' && responseData['data']['purchase_type'] != selectedpurchasetypeitems) {
+              widget.financeselected();
+            } else if (
+              selectedpurchasetypeitems != 'finance' && selectedexchangeflagitems == 'yes'
+              && responseData['data']['exchange_flag'] != selectedexchangeflagitems
+            ) {
+              widget.exchangeselected();
+            } else {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (_) => QuotationSuccessPopup(
+                  name: '${responseData['data']['customer_name']}',
+                  number: '${responseData['data']['customer_contact_number']}',
+                  enquiryid: responseData['data']['enquiry_id'],
+                ),
+              );
+            }
+          }
         );
 
       } else if (response.statusCode == 422) {
@@ -227,9 +247,12 @@ class _EditenquiryState extends State<Editenquiry> {
         print(response.body);
 
       } else {
-        Fluttertoast.showToast(
-          msg: responseData['message'],
-          toastLength: Toast.LENGTH_LONG,
+        showMessagePopup(
+          context,
+          responseData['message'],
+          () {
+            Navigator.pop(context);
+          }
         );
         print('Failed to create enquiry. Status code: ${response.statusCode}');
         print(response.body);

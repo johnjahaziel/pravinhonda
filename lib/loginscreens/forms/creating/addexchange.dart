@@ -53,21 +53,21 @@ class _AddexchangeState extends State<Addexchange> {
           'Authorization': 'Bearer $token'
         },
         body: jsonEncode({
-          // 'exchange_name': name.text,
-          // 'exchange_address': address.text,
-          // 'vehicle_model': vehiclemodal.text,
-          // 'new_vehicle_model': newvehiclemodal.text,
-          // 'expected_price': expectedprice.text,
-          // 'finalized_price': finalizedprice.text,
-          // 'assessed_by': assessedby.text,
+          'exchange_name': name.text,
+          'exchange_address': address.text,
+          'vehicle_model': vehiclemodal.text,
+          'new_vehicle_model': newvehiclemodal.text,
+          'expected_price': expectedprice.text,
+          'finalized_price': finalizedprice.text,
+          'assessed_by': assessedby.text,
 
-          "exchange_name": "Maha Kala",
-          "exchange_address": "123, MG Road, Chennai",
-          "vehicle_model": "Honda City 2018",
-          "new_vehicle_model": "September 2025",
-          "expected_price": 50000.00,
-          "finalized_price": 48000.00,
-          "assessed_by": "Athi"
+          // "exchange_name": "Maha Kala",
+          // "exchange_address": "123, MG Road, Chennai",
+          // "vehicle_model": "Honda City 2018",
+          // "new_vehicle_model": "September 2025",
+          // "expected_price": 50000.00,
+          // "finalized_price": 48000.00,
+          // "assessed_by": "Athi"
         }),
       );
 
@@ -76,19 +76,21 @@ class _AddexchangeState extends State<Addexchange> {
       if (response.statusCode == 200) {
         print('response data: $responseData');
 
-        Fluttertoast.showToast(
-          msg: responseData['message'],
-          toastLength: Toast.LENGTH_LONG,
-        );
-
-        Navigator.push(
+        showMessagePopup(
           context,
-          MaterialPageRoute(
-            builder: (context) => Createquotation(
-              enquiryid: responseData['data']['enquiry_id'],
-              apiResponse: responseData,
-            )
-          )
+          responseData['message'],
+          () {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Createquotation(
+                  enquiryid: responseData['data']['enquiry_id'],
+                  apiResponse: responseData,
+                )
+              )
+            );
+          }
         );
 
       } else if (response.statusCode == 422) {
@@ -107,7 +109,13 @@ class _AddexchangeState extends State<Addexchange> {
         Fluttertoast.showToast(msg: responseData['message']);
         print(response.body);
       } else {
-        Fluttertoast.showToast(msg: responseData['message']);
+        showMessagePopup(
+          context,
+          responseData['message'],
+          () {
+            Navigator.pop(context);
+          }
+        );
         print(response.body);
       }
     } catch (error) {
@@ -143,7 +151,8 @@ class _AddexchangeState extends State<Addexchange> {
               errormessage(namee),
               description(
                 'Address',
-                address
+                address,
+                star: true
               ),
               if(addresse.isNotEmpty)
               errormessage(addresse),

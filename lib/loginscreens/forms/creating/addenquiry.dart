@@ -107,49 +107,23 @@ class _AddenquiryState extends State<Addenquiry> {
           'Authorization': 'Bearer $token'
         },
         body: jsonEncode({
-          // 'high_rise_number': wingsenquiry.text,
-          // 'customer_category': selectedcustomercategoryitems?.toString(),
-          // 'enquiry_category': selectedenquirycategoryitems?.toString(),
-          // 'customer_type': selectedcustomertypeitems?.toString(),
-          // 'customer_contact_number': customercontactnumber.text,
-          // 'secondary_contact_number': secondarycontactnumber.text,
-          // 'pincode': pincode.text,
-          // 'customer_name': customername.text,
-          // 'gender': selectedgenderitems?.toString(),
-          // 'dob': datecontroller.text,
-          // 'marital_status': selectedmartialstatusitems?.toString(),
-          // 'email_id': emailid.text,
-          // 'address': address.text,
-          // 'district' : selecteddistrictitems?.toString(),
-          // 'city' : selectedcityitems?.toString(),
-          // 'enquiry_type': selectedenquirytypeitems?.toString(),
-          // 'enquiry_source': selectedenquirysourceitems?.toString(),
-          // 'model_name': selectedmodelnameitems?.toString(),
-          // 'model_variant': selectedmodelvariantitems?.toString(),
-          // 'model_color': selectedmodelcoloritems?.toString(),
-          // 'purchase_type': selectedpurchasetypeitems?.toString(),
-          // 'exchange_flag': selectedexchangeflagitems?.toString(),
-          // 'follow_up_date': followupdatecontroller.text,
-          // 'test_ride': selectedtestrideitems?.toString(),
-          // 'customers_remarks': customerremarks.text,
-
           'high_rise_number': wingsenquiry.text,
-          'customer_category': "Individual",
-          'enquiry_category': "Individual",
-          'customer_type': "Replacement Buyer",
-          'customer_contact_number':  "1226586431",
+          'customer_category': selectedcustomercategoryitems?.toString(),
+          'enquiry_category': selectedenquirycategoryitems?.toString(),
+          'customer_type': selectedcustomertypeitems?.toString(),
+          'customer_contact_number': customercontactnumber.text,
           'secondary_contact_number': secondarycontactnumber.text,
-          'pincode': "555555",
-          'customer_name': "Maha",
-          'gender': "Female",
+          'pincode': pincode.text,
+          'customer_name': customername.text,
+          'gender': selectedgenderitems?.toString(),
           'dob': datecontroller.text,
           'marital_status': selectedmartialstatusitems?.toString(),
-          'email_id': "kalamahabluon@gmail.com",
-          'address': "gandhi nager",
-          'district' : "Thoothukkudi",
-          'city' : "Kovilpatti",
-          'enquiry_type': "Walk-In",
-          'enquiry_source': "Facebook",
+          'email_id': emailid.text,
+          'address': address.text,
+          'district' : selecteddistrictitems?.toString(),
+          'city' : selectedcityitems?.toString(),
+          'enquiry_type': selectedenquirytypeitems?.toString(),
+          'enquiry_source': selectedenquirysourceitems?.toString(),
           'model_name': selectedmodelnameitems?.toString(),
           'model_variant': selectedmodelvariantitems?.toString(),
           'model_color': selectedmodelcoloritems?.toString(),
@@ -157,7 +131,33 @@ class _AddenquiryState extends State<Addenquiry> {
           'exchange_flag': selectedexchangeflagitems?.toString(),
           'follow_up_date': followupdatecontroller.text,
           'test_ride': selectedtestrideitems?.toString(),
-          'customers_remarks': "Interested in finance option",
+          'customers_remarks': customerremarks.text,
+
+          // 'high_rise_number': wingsenquiry.text,
+          // 'customer_category': "Individual",
+          // 'enquiry_category': "Individual",
+          // 'customer_type': "Replacement Buyer",
+          // 'customer_contact_number':  "1226586431",
+          // 'secondary_contact_number': secondarycontactnumber.text,
+          // 'pincode': "555555",
+          // 'customer_name': "Maha",
+          // 'gender': "Female",
+          // 'dob': datecontroller.text,
+          // 'marital_status': selectedmartialstatusitems?.toString(),
+          // 'email_id': "kalamahabluon@gmail.com",
+          // 'address': "gandhi nager",
+          // 'district' : "Thoothukkudi",
+          // 'city' : "Kovilpatti",
+          // 'enquiry_type': "Walk-In",
+          // 'enquiry_source': "Facebook",
+          // 'model_name': selectedmodelnameitems?.toString(),
+          // 'model_variant': selectedmodelvariantitems?.toString(),
+          // 'model_color': selectedmodelcoloritems?.toString(),
+          // 'purchase_type': selectedpurchasetypeitems?.toString(),
+          // 'exchange_flag': selectedexchangeflagitems?.toString(),
+          // 'follow_up_date': followupdatecontroller.text,
+          // 'test_ride': selectedtestrideitems?.toString(),
+          // 'customers_remarks': "Interested in finance option",
         }),
       );
 
@@ -168,35 +168,40 @@ class _AddenquiryState extends State<Addenquiry> {
       if (response.statusCode == 201) {
         print('response data: $responseData');
 
-        Fluttertoast.showToast(
-          msg: responseData['message'],
-          toastLength: Toast.LENGTH_LONG,
+        showMessagePopup(
+          context,
+          responseData['message'],
+          () {
+            Navigator.pop(context);
+            if(selectedpurchasetypeitems == 'finance') {
+              widget.financeselected();
+            } else if (selectedpurchasetypeitems != 'finance' && selectedexchangeflagitems == 'yes') {
+              widget.exchangeselected();
+            } else {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Createquotation(
+                    enquiryid: responseData['data']['enquiry_id'],
+                    apiResponse: responseData,
+                  )
+                )
+              );
+            }
+          }
         );
 
         final enquiryid = responseData['enquiry_id'];
         BlocProvider.of<EnquiryCubit>(context).setEnquiryid(enquiryid);
         print('enquiryid : $enquiryid');
 
-        if(selectedpurchasetypeitems == 'finance') {
-          widget.financeselected();
-        } else if (selectedpurchasetypeitems != 'finance' && selectedexchangeflagitems == 'yes') {
-          widget.exchangeselected();
-        } else {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Createquotation(
-                enquiryid: responseData['data']['enquiry_id'],
-                apiResponse: responseData,
-              )
-            )
-          );
-        }
-
       } else if (response.statusCode == 200) {
-        Fluttertoast.showToast(
-          msg: responseData['message'],
-          toastLength: Toast.LENGTH_LONG,
+        showMessagePopup(
+          context,
+          responseData['message'],
+          () {
+            Navigator.pop(context);
+          }
         );
       } else if (response.statusCode == 422) {
         final errors = responseData['errors'] ?? {};
@@ -228,9 +233,12 @@ class _AddenquiryState extends State<Addenquiry> {
         Fluttertoast.showToast(msg: responseData['message']);
         print(response.body);
       } else {
-        Fluttertoast.showToast(
-          msg: responseData['message'],
-          toastLength: Toast.LENGTH_LONG,
+        showMessagePopup(
+          context,
+          responseData['message'],
+          () {
+            Navigator.pop(context);
+          }
         );
         print('Failed to create enquiry. Status code: ${response.statusCode}');
         print(response.body);
