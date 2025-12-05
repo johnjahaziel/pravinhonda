@@ -12,11 +12,9 @@ import 'package:pravinhonda/utility/styles.dart';
 
 class Addexchange extends StatefulWidget {
   final int enquiryid;
-  final Map<String, dynamic> apiResponse;
   const Addexchange({
     super.key,
     required this.enquiryid,
-    required this.apiResponse,
   });
 
   @override

@@ -216,7 +216,6 @@ class _CreateenquiryState extends State<Createenquiry> {
               if(exchange == true)
               Addexchange(
                 enquiryid: enquiryid,
-                apiResponse: {}
               )
             ],
           ),

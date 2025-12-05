@@ -16,12 +16,16 @@ class Editfinance extends StatefulWidget {
   final int enquiryid;
   final VoidCallback exchangeselected;
   final Map<String, dynamic> apiResponse;
+
+  final bool edit;
   const Editfinance({
     super.key,
     required this.exchangeflag,
     required this.enquiryid,
     required this.exchangeselected,
-    required this.apiResponse
+    required this.apiResponse,
+
+    required this.edit
   });
 
   @override
@@ -35,12 +39,11 @@ class _EditfinanceState extends State<Editfinance> {
   String? selectedfinanceitems;
   String? selectedloanperioditems;
 
-  late TextEditingController vehiclecost;
-  late TextEditingController initialpayment;
-  late TextEditingController documentcharges;
-  late TextEditingController downpayment;
-  late TextEditingController loaninterest;
-  late TextEditingController emi;
+  TextEditingController vehiclecost = TextEditingController();
+  TextEditingController initialpayment = TextEditingController();
+  TextEditingController documentcharges = TextEditingController();
+  TextEditingController downpayment = TextEditingController();
+  TextEditingController loaninterest = TextEditingController();
 
   String financeitemse = '';
   String vehiclecoste = '';
@@ -53,20 +56,21 @@ class _EditfinanceState extends State<Editfinance> {
   @override
   void initState() {
     super.initState();
-    _initControllersFromResponse(widget.apiResponse);
-    print('apiresponse: ${widget.apiResponse}');
+    // print('Api Response: ${widget.apiResponse}');
+    initControllersFromResponse(widget.apiResponse);
   }
 
-  void _initControllersFromResponse(Map<String, dynamic> resp) {
+  void initControllersFromResponse(Map<String, dynamic> resp) {
     final enquiry = resp['data'] ?? {};
 
-    selectedfinanceitems = enquiry['finance'];
-    selectedloanperioditems = enquiry['loan_period'];
-    vehiclecost = TextEditingController(text: enquiry['vehicle_cost'] ?? '');
-    documentcharges = TextEditingController(text: enquiry['document_charges'] ?? '');
-    downpayment = TextEditingController(text: enquiry['down_payment'] ?? '');
-    loaninterest = TextEditingController(text: enquiry['loan_interest'] ?? '');
-    initialpayment = TextEditingController(text: enquiry['initial_payment'].toString());
+    selectedfinanceitems    = enquiry['finance']?.toString();
+    selectedloanperioditems = enquiry['loan_period']?.toString();
+
+    vehiclecost = TextEditingController(text: (enquiry['vehicle_cost'] ?? '').toString());
+    documentcharges = TextEditingController(text: (enquiry['document_charges'] ?? '').toString());
+    downpayment = TextEditingController(text: (enquiry['down_payment'] ?? '').toString());
+    loaninterest = TextEditingController(text: (enquiry['loan_interest'] ?? '').toString());
+    initialpayment = TextEditingController(text: (enquiry['initial_payment'] ?? '').toString());
   }
 
   Future<void> financeform() async {
@@ -147,7 +151,6 @@ class _EditfinanceState extends State<Editfinance> {
   
   @override
   Widget build(BuildContext context) {
-    SizeConfig.init(context);
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(20)),
@@ -174,42 +177,42 @@ class _EditfinanceState extends State<Editfinance> {
                   selectedfinanceitems = newValue;
                 });
               },
-              // readOnly: widget.edit,
+              readOnly: widget.edit,
             ),
             if(financeitemse.isNotEmpty)
             errormessage(financeitemse),
             textfieldy(
               'Vehicle Cost',
               vehiclecost,
-              // readonly: widget.edit,
+              readonly: widget.edit,
             ),
             if(vehiclecoste.isNotEmpty)
             errormessage(vehiclecoste),
             textfieldy(
               'Initial Payment',
               initialpayment,
-              // readonly: widget.edit,
+              readonly: widget.edit,
             ),
             if(initialpaymente.isNotEmpty)
             errormessage(initialpaymente),
             textfieldy(
               'Document Charges',
               documentcharges,
-              // readonly: widget.edit,
+              readonly: widget.edit,
             ),
             if(documentchargese.isNotEmpty)
             errormessage(documentchargese),
             textfieldy(
               'Down Payment',
               downpayment,
-              // readonly: widget.edit,
+              readonly: widget.edit,
             ),
             if(downpaymente.isNotEmpty)
             errormessage(downpaymente),
             textfieldy(
               'Loan Interest',
               loaninterest,
-              // readonly: widget.edit,
+              readonly: widget.edit,
             ),
             if(loanintereste.isNotEmpty)
             errormessage(loanintereste),
@@ -222,7 +225,7 @@ class _EditfinanceState extends State<Editfinance> {
                   selectedloanperioditems = newValue;
                 });
               },
-              // readOnly: widget.edit,
+              readOnly: widget.edit,
             ),
             if(loanperioditemse.isNotEmpty)
             errormessage(loanperioditemse),
@@ -231,11 +234,12 @@ class _EditfinanceState extends State<Editfinance> {
               'Calculate',
               () {}
             ),
-            textfieldy(
-              'EMI',
-              emi,
-              readonly: true
-            ),
+            // textfieldy(
+            //   'EMI',
+            //   TextEditingController(),
+            //   // emi,
+            //   readonly: true
+            // ),
             SizedBox(height: SizeConfig.h(25)),
             button(
               'Submit',

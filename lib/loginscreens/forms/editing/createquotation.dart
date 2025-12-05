@@ -53,33 +53,25 @@ class _CreatequotationState extends State<Createquotation> {
   
   @override
   void initState() {
-    _initControllersFromResponse(widget.apiResponse);
     super.initState();
+    _initControllersFromResponse(widget.apiResponse);
   }
 
   void _initControllersFromResponse(Map<String, dynamic> resp) {
     final enquiry = resp['data'] ?? {};
 
     if(enquiry['purchase_type'] == 'finance' && enquiry['exchange_flag'] == 'yes') {
-      setState(() {
         financetrue = true;
         exchangetrue = true;
-      });
     } else if(enquiry['purchase_type'] != 'finance' && enquiry['exchange_flag'] == 'yes') {
-      setState(() {
         financetrue = false;
         exchangetrue = true;
-      });
     } else if(enquiry['purchase_type'] == 'finance' && enquiry['exchange_flag'] != 'yes') {
-      setState(() {
         financetrue = true;
         exchangetrue = false;
-      });
     } else {
-      setState(() {
         financetrue = false;
         exchangetrue = false;
-      });
     }
   }
 
@@ -262,23 +254,26 @@ class _CreatequotationState extends State<Createquotation> {
                     edit: edit(),
                   ),
                   if(finance == true)
-                  Editfinance(
-                    exchangeflag: 'Yes',
-                    enquiryid: enquiryid,
-                    exchangeselected: () {
-                      setState(() {
-                        previousTab = 'finance';
-                        exchangetrue = true;
-                        createenquiry = false;
-                        finance = false;
-                        exchange = true;
-                      });
-                    },
+                  Expanded(
+                    child: Editfinance(
+                      exchangeflag: 'Yes',
+                      enquiryid: widget.enquiryid,
+                      exchangeselected: () {
+                        setState(() {
+                          previousTab = 'finance';
+                          exchangetrue = true;
+                          createenquiry = false;
+                          finance = false;
+                          exchange = true;
+                        });
+                      },
+                      edit: edit(),
+                      apiResponse: widget.apiResponse,
+                    ),
                   ),
                   if(exchange == true)
                   Addexchange(
                     enquiryid: enquiryid,
-                    apiResponse: {}
                   )
                 ],
               ),
