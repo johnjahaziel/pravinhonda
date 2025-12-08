@@ -115,8 +115,6 @@ class _EditfinanceState extends State<Editfinance> {
         final String exchange = responseData['data']["exchange_flag"];
         print('exchange: $exchange');
 
-        final int enquiryid = responseData['data']['enquiry_id'];
-
         if (exchange == 'yes') {
           nextpagelocal = 'Exchange Form';
         } else {
@@ -131,14 +129,14 @@ class _EditfinanceState extends State<Editfinance> {
             if (exchange == 'yes') {
               widget.exchangeselected();
             } else {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Createquotation(
-                    enquiryid: enquiryid,
-                    apiResponse: responseData,
-                  )
-                )
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (_) => QuotationSuccessPopup(
+                  name: '${responseData['data']['customer_name']}',
+                  number: '${responseData['data']['customer_contact_number']}',
+                  enquiryid: responseData['data']['enquiry_id'],
+                ),
               );
             }
           },

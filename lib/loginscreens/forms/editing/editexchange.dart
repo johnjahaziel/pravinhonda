@@ -104,15 +104,15 @@ class _EditexchangeState extends State<Editexchange> {
           responseData['message'],
           () {
             Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Createquotation(
+            showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (_) => QuotationSuccessPopup(
+                  name: '${responseData['data']['customer_name']}',
+                  number: '${responseData['data']['customer_contact_number']}',
                   enquiryid: responseData['data']['enquiry_id'],
-                  apiResponse: responseData,
-                )
-              )
-            );
+                ),
+              );
           },
           nextpage: 'Quotation'
         );
