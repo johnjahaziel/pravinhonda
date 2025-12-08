@@ -90,7 +90,8 @@ class _AddexchangeState extends State<Addexchange> {
                 )
               )
             );
-          }
+          },
+          nextpage: 'Quotation'
         );
 
       } else if (response.statusCode == 422) {
@@ -131,6 +132,7 @@ class _AddexchangeState extends State<Addexchange> {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(20)),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
                 child: Text(

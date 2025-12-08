@@ -49,6 +49,8 @@ class _AddfinanceState extends State<Addfinance> {
   String downpaymente = '';
   String loanintereste = '';
 
+  String nextpagelocal = '';
+
   Future<void> financeform() async {
     final url = Uri.parse('https://app.pravinhonda.com/api/finance/${widget.enquiryid}');
 
@@ -91,6 +93,12 @@ class _AddfinanceState extends State<Addfinance> {
 
         final int enquiryid = responseData['data']['enquiry_id'];
 
+        if (exchange == 'yes') {
+          nextpagelocal = 'Exchange Form';
+        } else {
+          nextpagelocal = 'Quotation';
+        }
+
         showMessagePopup(
           context,
           responseData['message'],
@@ -109,7 +117,8 @@ class _AddfinanceState extends State<Addfinance> {
                 )
               );
             }
-          }
+          },
+          nextpage: nextpagelocal
         );
 
       } else if (response.statusCode == 422) {

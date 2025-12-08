@@ -135,6 +135,8 @@ class _EditenquiryState extends State<Editenquiry> {
   String exchangeflage = '';
   String customerremarkse = '';
 
+  String nextpagelocal = '';
+
   Future<void> apiconnection() async {
     final url = Uri.parse('https://app.pravinhonda.com/api/enquiries/${widget.enquiryid}');
 
@@ -190,6 +192,16 @@ class _EditenquiryState extends State<Editenquiry> {
         final apiresponse = responseData;
         BlocProvider.of<ApiresponseCubit>(context).setApiresponse(apiresponse);
 
+        if (selectedpurchasetypeitems == 'finance' && responseData['data']['purchase_type'] != selectedpurchasetypeitems) {
+          nextpagelocal = 'Finance Form';
+        } else if (selectedpurchasetypeitems != 'finance' && selectedexchangeflagitems == 'yes'
+              && responseData['data']['exchange_flag'] != selectedexchangeflagitems
+        ) {
+          nextpagelocal = 'Exchange Form';
+        } else {
+          nextpagelocal = 'Print';
+        }
+
         showMessagePopup(
           context,
           responseData['message'],
@@ -213,7 +225,8 @@ class _EditenquiryState extends State<Editenquiry> {
                 ),
               );
             }
-          }
+          },
+          nextpage: nextpagelocal
         );
 
       } else if (response.statusCode == 422) {
@@ -529,7 +542,7 @@ class _EditenquiryState extends State<Editenquiry> {
               ),
               SizedBox(height: SizeConfig.h(20)),
               button(
-                'Confirm Quotation',
+                'Create Quotation',
                 () {
                   apiconnection();
                 }

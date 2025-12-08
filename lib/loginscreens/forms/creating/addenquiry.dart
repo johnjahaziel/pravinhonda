@@ -92,6 +92,8 @@ class _AddenquiryState extends State<Addenquiry> {
   String? selecteddistrictitems;
   String? selectedcityitems;
 
+  String nextpagelocal = '';
+
   Future<void> apiconnection() async {
     final url = Uri.parse('https://app.pravinhonda.com/api/enquiries');
 
@@ -168,6 +170,14 @@ class _AddenquiryState extends State<Addenquiry> {
       if (response.statusCode == 201) {
         print('response data: $responseData');
 
+        if (selectedpurchasetypeitems == 'finance') {
+          nextpagelocal = 'Finance Form';
+        } else if (selectedpurchasetypeitems != 'finance' && selectedexchangeflagitems == 'yes') {
+          nextpagelocal = 'Exchange Form';
+        } else {
+          nextpagelocal = 'Quotation';
+        }
+
         showMessagePopup(
           context,
           responseData['message'],
@@ -175,8 +185,10 @@ class _AddenquiryState extends State<Addenquiry> {
             Navigator.pop(context);
             if(selectedpurchasetypeitems == 'finance') {
               widget.financeselected();
+              nextpagelocal = 'Finance Form';
             } else if (selectedpurchasetypeitems != 'finance' && selectedexchangeflagitems == 'yes') {
               widget.exchangeselected();
+              nextpagelocal = 'Exchange Form';
             } else {
               Navigator.push(
                 context,
@@ -187,8 +199,10 @@ class _AddenquiryState extends State<Addenquiry> {
                   )
                 )
               );
+              nextpagelocal = 'Quotation';
             }
-          }
+          },
+          nextpage: nextpagelocal.toString()
         );
 
         final enquiryid = responseData['enquiry_id'];
@@ -201,7 +215,7 @@ class _AddenquiryState extends State<Addenquiry> {
           responseData['message'],
           () {
             Navigator.pop(context);
-          }
+          },
         );
       } else if (response.statusCode == 422) {
         final errors = responseData['errors'] ?? {};

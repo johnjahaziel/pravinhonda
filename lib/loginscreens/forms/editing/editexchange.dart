@@ -113,7 +113,8 @@ class _EditexchangeState extends State<Editexchange> {
                 )
               )
             );
-          }
+          },
+          nextpage: 'Quotation'
         );
 
       } else if (response.statusCode == 422) {

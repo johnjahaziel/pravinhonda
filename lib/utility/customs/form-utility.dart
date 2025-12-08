@@ -217,7 +217,7 @@ errormessage(String message) {
   );
 }
 
-Future<void> showMessagePopup(BuildContext context, String message, VoidCallback onTap) async {
+Future<void> showMessagePopup(BuildContext context, String message, VoidCallback onTap,{String nextpage = ''}) async {
   return showDialog(
     context: context,
     barrierDismissible: false,
@@ -235,9 +235,9 @@ Future<void> showMessagePopup(BuildContext context, String message, VoidCallback
                 fontSize: fs14
               ),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: SizeConfig.h(20)),
             SizedBox(
-              width: 80,
+              width: SizeConfig.w(80),
               child: ElevatedButton(
                 onPressed: onTap,
                 style: ElevatedButton.styleFrom(
@@ -254,6 +254,29 @@ Future<void> showMessagePopup(BuildContext context, String message, VoidCallback
                   ),
                 ),
               ),
+            ),
+            SizedBox(height: SizeConfig.h(20)),
+            if(nextpage != '')
+            Row(
+              children: [
+                Text(
+                  'Next Page: ',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: fs12
+                  ),
+                ),
+                SizedBox(height: SizeConfig.w(2)),
+                Text(
+                  nextpage,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: fs14,
+                    fontWeight: FontWeight.bold,
+                    color: kred
+                  ),
+                ),
+              ],
             ),
           ],
         ),

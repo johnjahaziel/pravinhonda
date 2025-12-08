@@ -53,6 +53,8 @@ class _EditfinanceState extends State<Editfinance> {
   String downpaymente = '';
   String loanintereste = '';
 
+  String nextpagelocal = '';
+
   @override
   void initState() {
     super.initState();
@@ -115,6 +117,12 @@ class _EditfinanceState extends State<Editfinance> {
 
         final int enquiryid = responseData['data']['enquiry_id'];
 
+        if (exchange == 'yes') {
+          nextpagelocal = 'Exchange Form';
+        } else {
+          nextpagelocal = 'Quotation';
+        }
+
         showMessagePopup(
           context,
           responseData['message'],
@@ -133,7 +141,8 @@ class _EditfinanceState extends State<Editfinance> {
                 )
               );
             }
-          }
+          },
+          nextpage: nextpagelocal
         );
 
       } else if (response.statusCode == 422) {
