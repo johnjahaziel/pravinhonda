@@ -63,7 +63,7 @@ class _EditexchangeState extends State<Editexchange> {
   }
 
   Future<void> exchangeform() async {
-    final url = Uri.parse('https://app.pravinhonda.com/api/exchange/${widget.enquiryid}');
+    final url = Uri.parse('https://app.pravinhonda.com/api/enquiries/${widget.enquiryid}');
 
     final token = BlocProvider.of<AuthCubit>(context).state.token;
 
@@ -218,7 +218,7 @@ class _EditexchangeState extends State<Editexchange> {
               errormessage(assessedbye),
               SizedBox(height: SizeConfig.h(25)),
               button(
-                'Submit',
+                'Create Quotation',
                 () {
                   exchangeform();
                 }

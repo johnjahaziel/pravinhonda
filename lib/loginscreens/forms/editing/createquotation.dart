@@ -274,6 +274,7 @@ class _CreatequotationState extends State<Createquotation> {
                         });
                       },
                       edit: edit(),
+                      oldapiResponse: widget.apiResponse,
                       apiResponse: apiresponselocal,
                     ),
                   ),

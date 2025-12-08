@@ -15,6 +15,7 @@ class Editfinance extends StatefulWidget {
   final String? exchangeflag;
   final int enquiryid;
   final VoidCallback exchangeselected;
+  final Map<String, dynamic> oldapiResponse;
   final Map<String, dynamic> apiResponse;
 
   final bool edit;
@@ -24,6 +25,7 @@ class Editfinance extends StatefulWidget {
     required this.enquiryid,
     required this.exchangeselected,
     required this.apiResponse,
+    required this.oldapiResponse,
 
     required this.edit
   });
@@ -55,11 +57,20 @@ class _EditfinanceState extends State<Editfinance> {
 
   String nextpagelocal = '';
 
+  String? oldexchange;
+
   @override
   void initState() {
     super.initState();
-    // print('Api Response: ${widget.apiResponse}');
+    print('old api response: ${widget.oldapiResponse}');
+    oldapiexchange(widget.oldapiResponse);
+    print('api response: ${widget.apiResponse}');
     initControllersFromResponse(widget.apiResponse);
+  }
+
+  void oldapiexchange(Map<String, dynamic> resp) {
+    final enquiry = resp['data'] ?? {};
+    oldexchange = enquiry['exchange_flag'];
   }
 
   void initControllersFromResponse(Map<String, dynamic> resp) {
@@ -76,7 +87,7 @@ class _EditfinanceState extends State<Editfinance> {
   }
 
   Future<void> financeform() async {
-    final url = Uri.parse('https://app.pravinhonda.com/api/finance/${widget.enquiryid}');
+    final url = Uri.parse('https://app.pravinhonda.com/api/enquiries/${widget.enquiryid}');
 
     final token = BlocProvider.of<AuthCubit>(context).state.token;
 
@@ -115,7 +126,7 @@ class _EditfinanceState extends State<Editfinance> {
         final String exchange = responseData['data']["exchange_flag"];
         print('exchange: $exchange');
 
-        if (exchange == 'yes') {
+        if (exchange == 'yes'  && oldexchange == 'no') {
           nextpagelocal = 'Exchange Form';
         } else {
           nextpagelocal = 'Quotation';
@@ -126,7 +137,7 @@ class _EditfinanceState extends State<Editfinance> {
           responseData['message'],
           () {
             Navigator.pop(context);
-            if (exchange == 'yes') {
+            if (exchange == 'yes' && oldexchange == 'no') {
               widget.exchangeselected();
             } else {
               showDialog(
@@ -266,7 +277,7 @@ class _EditfinanceState extends State<Editfinance> {
             // ),
             SizedBox(height: SizeConfig.h(25)),
             button(
-              'Submit',
+              'Create Quotation',
               () {
                 financeform();
               }
