@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
-import 'package:pravinhonda/editpages/movetobooking.dart';
+import 'package:pravinhonda/loginscreens/forms/movetobooking/movetobooking.dart';
 import 'package:pravinhonda/utility/boxes.dart';
 import 'package:pravinhonda/utility/custom.dart';
 import 'package:pravinhonda/utility/size_config.dart';
@@ -47,6 +47,16 @@ class _EnquiryState extends State<Enquiry> {
     final currentScroll = _sc.position.pixels;
     if (maxScroll - currentScroll <= thresholdPixels) {
       _fetchPage(url: nextPageUrl);
+    }
+  }
+
+  bool onEditpressed = false;
+
+  bool edit() {
+    if(onEditpressed == true) {
+      return false;
+    } else {
+      return true;
     }
   }
 
@@ -205,7 +215,26 @@ class _EnquiryState extends State<Enquiry> {
                                         MaterialPageRoute(
                                           builder: (context) => Movetobooking(
                                             enquiryid: data['enquiry_id'] ?? 0,
-                                            apiResponse: selected
+                                            apiResponse: selected,
+                                            financeselected: () {
+                                              // setState(() {
+                                              //   previousTab = 'enquiry';
+                                              //   financetrue = true;
+                                              //   createenquiry = false;
+                                              //   finance = true;
+                                              //   exchange = false;
+                                              // });
+                                            },
+                                            exchangeselected: () {
+                                              // setState(() {
+                                              //   previousTab = 'enquiry';
+                                              //   exchangetrue = true;
+                                              //   createenquiry = false;
+                                              //   finance = false;
+                                              //   exchange = true;
+                                              // });
+                                            },
+                                            edit: edit(),
                                           )
                                         ),
                                       );

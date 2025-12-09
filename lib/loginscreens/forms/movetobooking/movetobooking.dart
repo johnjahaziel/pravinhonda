@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:pravinhonda/bloc/apirespnse_cubit.dart';
 import 'package:pravinhonda/bloc/auth_cubit.dart';
+import 'package:pravinhonda/districtcity.dart';
 import 'package:pravinhonda/loginscreens/Navigation.dart';
 import 'package:pravinhonda/loginscreens/forms/editing/createquotation.dart';
+import 'package:pravinhonda/namevariantcolor.dart';
 import 'package:pravinhonda/utility/customs/customappBar.dart';
 import 'package:pravinhonda/utility/customs/customdatefield.dart';
 import 'package:pravinhonda/utility/customs/customdrawer.dart';
@@ -18,10 +21,17 @@ import 'package:pravinhonda/utility/styles.dart';
 class Movetobooking extends StatefulWidget {
   final int enquiryid;
   final Map<String, dynamic> apiResponse;
+  final bool edit;
+
+  final VoidCallback financeselected;
+  final VoidCallback exchangeselected;
   const Movetobooking({
     super.key,
     required this.enquiryid,
     required this.apiResponse,
+    required this.financeselected,
+    required this.exchangeselected,
+    required this.edit
   });
 
   @override
@@ -30,118 +40,39 @@ class Movetobooking extends StatefulWidget {
 
 class _MovetobookingState extends State<Movetobooking> {
 
-  List<Map<String, String>> customercategoryitems = [
-    {'label': 'Individual', 'value': 'Individual'},
-    {'label': 'CSD', 'value': 'CSD'},
-    {'label': 'KPKB', 'value': 'KPKB'},
-    {'label': 'Corporate', 'value': 'Corporate'},
-  ];
+  final customercategoryitems = customerCategoryItems;
+  final enquirycategoryitems = enquirycategoryTypeItems;
+  final customertypeitems = customerTypeItems;
+  final genderitems = genderTypeItems;
+  final martialstatusitems = martialstatusTypeItems;
+  final enquirytypeitems = enquiryTypeItems;
+  final enquirysourceitems = enquirysourceTypeItems;
+  final purchasetypeitems = purchaseTypeItems;
+  final exchangeflagitems = exchangeflagTypeItems;
+  final testrideitems = testrideTypeItems;
 
   String? selectedcustomercategoryitems;
-
-  List<Map<String, String>> enquirycategoryitems = [
-    {'label': 'Individual', 'value': 'Individual'},
-    {'label': 'Institutional Customer', 'value': 'Institutional Customer'},
-    {'label': 'Exchange with ELV', 'value': 'Exchange with ELV'},
-  ];
-
   String? selectedenquirycategoryitems;
-
-  List<Map<String, String>> customertypeitems = [
-    {'label': 'First Time Buyer', 'value': 'First Time Buyer'},
-    {'label': 'Additional Buyer', 'value': 'Additional Buyer'},
-    {'label': 'Replacement Buyer', 'value': 'Replacement Buyer'},
-  ];
-
   String? selectedcustomertypeitems;
-
-  List<Map<String, String>> genderitems = [
-    {'label': 'Male', 'value': 'male'},
-    {'label': 'Female', 'value': 'female'},
-  ];
-
   String? selectedgenderitems;
-
-  List<Map<String, String>> martialstatusitems = [
-    {'label': 'Married', 'value': 'married'},
-    {'label': 'Single', 'value': 'single'},
-  ];
-
   String? selectedmartialstatusitems;
-
-  List<Map<String, String>> enquirytypeitems = [
-    {'label': 'Digital', 'value': 'Digital'},
-    {'label': 'Walk-In', 'value': 'Walk-In'},
-    {'label': 'Telephonic', 'value': 'Telephonic'},
-    {'label': 'Outdoor Activity', 'value': 'Outdoor Activity'},
-  ];
-
   String? selectedenquirytypeitems;
-
-  List<Map<String, String>> enquirysourceitems = [
-    {'label': 'Showroom Walk In', 'value': 'Showroom Walk In'},
-    {'label': 'Railway', 'value': 'Railway'},
-    {'label': 'Auto-Expo 2025', 'value': 'Auto-Expo 2025'},
-    {'label': 'NEWS', 'value': 'NEWS'},
-    {'label': 'Online Booking', 'value': 'Online Booking'},
-    {'label': 'TV', 'value': 'TV'},
-    {'label': 'Facebook', 'value': 'Facebook'},
-  ];
-
   String? selectedenquirysourceitems;
-
-  // List<Map<String, String>> modelcategoryitems = [
-  //   {'label': 'BW', 'value': 'BW'},
-  //   {'label': 'EV', 'value': 'EV'},
-  //   {'label': 'MC', 'value': 'MC'},
-  //   {'label': 'SC', 'value': 'SC'},
-  // ];
-
-  // String? selectedmodelcategoryitems;
-
-  List<Map<String, String>> modelnameitems = [
-    {'label': 'Honda Dio', 'value': 'Honda Dio'},
-  ];
-
-  String? selectedmodelnameitems;
-
-  List<Map<String, String>> modelvariantitems = [
-    {'label': 'Standard', 'value': 'Standard'},
-  ];
-
-  String? selectedmodelvariantitems;
-
-  List<Map<String, String>> modelcoloritems = [
-    {'label': 'Imperial Red Metallic', 'value': 'Imperial Red Metallic'},
-  ];
-
-  String? selectedmodelcoloritems;
-
-  List<Map<String, String>> purchasetypeitems = [
-    {'label': 'Cash', 'value': 'cash'},
-    {'label': 'Finance', 'value': 'finance'},
-  ];
-
   String? selectedpurchasetypeitems;
-
-  List<Map<String, String>> exchangeflagitems = [
-    {'label': 'Yes', 'value': 'yes'},
-    {'label': 'No', 'value': 'no'},
-  ];
-
   String? selectedexchangeflagitems;
-
-  List<Map<String, String>> testrideitems = [
-    {'label': 'Yes', 'value': 'yes'},
-    {'label': 'No', 'value': 'no'},
-  ];
-
   String? selectedtestrideitems;
 
-  late TextEditingController enquiryid;
-  // late TextEditingController customerid;
+  String? selectedmodelnameitems;
+  String? selectedmodelvariantitems;
+  String? selectedmodelcoloritems;
+
+  String? selecteddistrictitems;
+  String? selectedcityitems;
+
   late TextEditingController wingsenquiry;
   late TextEditingController customercontactnumber;
+  late TextEditingController secondarycontactnumber;
+  late TextEditingController pincode;
   late TextEditingController customername;
   late TextEditingController datecontroller;
   late TextEditingController emailid;
@@ -191,8 +122,7 @@ class _MovetobookingState extends State<Movetobooking> {
 
   bool isEdited() {
     return
-      // customerid.text != (originalEnquiry['customer_id'] ?? '') ||
-      wingsenquiry.text != (originalEnquiry['wings_enquiry_number'] ?? '') ||
+      wingsenquiry.text != (originalEnquiry['high_enquiry_number'] ?? '') ||
       selectedcustomercategoryitems != originalEnquiry['customer_category'] ||
       selectedenquirycategoryitems != originalEnquiry['enquiry_category'] ||
       selectedcustomertypeitems != originalEnquiry['customer_type'] ||
@@ -222,53 +152,58 @@ class _MovetobookingState extends State<Movetobooking> {
   }
 
   void _initControllersFromResponse(Map<String, dynamic> resp) {
-    final enquiry = resp;
+    final enquiry = resp['data'] ?? {};
 
-    originalEnquiry = Map<String, dynamic>.from(enquiry);
-
-    enquiryid = TextEditingController(text: enquiry['enquiry_id']?.toString() ?? '');
-    // customerid = TextEditingController(text: enquiry['customer_id']?.toString() ?? '');
     wingsenquiry = TextEditingController(text: enquiry['wings_enquiry_number'] ?? '');
     selectedcustomercategoryitems = enquiry['customer_category'];
     selectedenquirycategoryitems = enquiry['enquiry_category'];
     selectedcustomertypeitems = enquiry['customer_type'];
     selectedgenderitems = enquiry['gender'];
-    selectedmartialstatusitems = enquiry['marital_status'];
+    selectedmartialstatusitems = enquiry['martial_status'];
+    selecteddistrictitems = enquiry['district'];
+    selectedcityitems = enquiry['city'];
     selectedenquirytypeitems = enquiry['enquiry_type'];
     selectedenquirysourceitems = enquiry['enquiry_source'];
-    // selectedmodelcategoryitems = enquiry['model_category'];
     selectedmodelnameitems = enquiry['model_name'];
     selectedmodelvariantitems = enquiry['model_variant'];
     selectedmodelcoloritems = enquiry['model_color'];
     selectedpurchasetypeitems = enquiry['purchase_type'];
     selectedexchangeflagitems = enquiry['exchange_flag'];
     selectedtestrideitems = enquiry['test_ride'];
-    customername = TextEditingController(text: enquiry['customer_name'] ?? enquiry['customer_name'] ?? '');
-    customercontactnumber = TextEditingController(text: enquiry['customer_contact_number'] ?? enquiry['customer_contact_number'] ?? '');
-    emailid = TextEditingController(text: enquiry['email_id'] ?? enquiry['email_id'] ?? '');
-    address = TextEditingController(text: enquiry['address'] ?? enquiry['address'] ?? '');
-    datecontroller = TextEditingController(text: enquiry['dob'] ?? enquiry['dob'] ?? '');
+    customername = TextEditingController(text: enquiry['customer_name'] ?? '');
+    customercontactnumber = TextEditingController(text: enquiry['customer_contact_number'] ?? '');
+    secondarycontactnumber = TextEditingController(text: enquiry['secondary_contact_number'] ?? '');
+    emailid = TextEditingController(text: enquiry['email_id'] ?? '');
+    address = TextEditingController(text: enquiry['address'] ?? '');
+    pincode = TextEditingController(text: enquiry['pincode'].toString());
+    datecontroller = TextEditingController(text: enquiry['dob'] ?? '');
     followupdatecontroller = TextEditingController(text: enquiry['follow_up_date'] ?? '');
     customerremarks = TextEditingController(text: enquiry['customers_remarks'] ?? '');
   }
 
-  // String customeride = '';
   String wingsenquirye = '';
   String customercategorye = '';
   String enquirycategorye = '';
   String customertypee = '';
   String customernamee = '';
   String customercontactnumbere = '';
+  String secondarycontactnumbere = '';
+  String pincodee = '';
   String emailide = '';
+  String gendere = '';
   String addresse = '';
+  String districte = '';
+  String citye = '';
   String enquirytypee = '';
   String enquirysourcee = '';
-// String modelcategorye = '';
   String modelnamee = '';
   String modelvariante = '';
   String modelcolore = '';
   String purchasetypee = '';
   String exchangeflage = '';
+  String customerremarkse = '';
+
+  String nextpagelocal = '';
 
   Future<void> apiconnection() async {
     final url = Uri.parse('https://app.pravinhonda.com/api/enquiries/${widget.enquiryid}');
@@ -284,18 +219,21 @@ class _MovetobookingState extends State<Movetobooking> {
           'Authorization': 'Bearer $token'
         },
         body: jsonEncode({
-          // 'customer_id': customerid.text,
-          'wings_enquiry_number': wingsenquiry.text,
+          'high_rise_number': wingsenquiry.text,
           'customer_category': selectedcustomercategoryitems?.toString(),
           'enquiry_category': selectedenquirycategoryitems?.toString(),
           'customer_type': selectedcustomertypeitems?.toString(),
           'customer_contact_number': customercontactnumber.text,
+          'secondary_contact_number': secondarycontactnumber.text,
+          'pincode': pincode.text,
           'customer_name': customername.text,
           'gender': selectedgenderitems?.toString(),
           'dob': datecontroller.text,
           'marital_status': selectedmartialstatusitems?.toString(),
           'email_id': emailid.text,
           'address': address.text,
+          'district' : selecteddistrictitems?.toString(),
+          'city' : selectedcityitems?.toString(),
           'enquiry_type': selectedenquirytypeitems?.toString(),
           'enquiry_source': selectedenquirysourceitems?.toString(),
           'model_name': selectedmodelnameitems?.toString(),
@@ -305,7 +243,7 @@ class _MovetobookingState extends State<Movetobooking> {
           'exchange_flag': selectedexchangeflagitems?.toString(),
           'follow_up_date': followupdatecontroller.text,
           'test_ride': selectedtestrideitems?.toString(),
-          'customer_remarks': customerremarks.text,
+          'customers_remarks': customerremarks.text,
         }),
       );
 
@@ -319,66 +257,83 @@ class _MovetobookingState extends State<Movetobooking> {
           toastLength: Toast.LENGTH_LONG,
         );
 
-        // if(selectedpurchasetypeitems == 'finance') {
-        //   Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //       builder: (context) => Addfinance(
-        //         exchangeflag: selectedexchangeflagitems,
-        //         enquiryid: widget.enquiryid,
-        //         apiResponse: widget.apiResponse,
-        //       )
-        //     ),
-        //   );
-        // } else if (selectedpurchasetypeitems != 'finance' && selectedexchangeflagitems == 'yes') {
-        //   Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //       builder: (context) => Addexchange(
-        //         enquiryid: widget.enquiryid,
-        //         apiResponse: widget.apiResponse,
-        //       )
-        //     )
-        //   );
-        // }
+        final apiresponse = responseData;
+        BlocProvider.of<ApiresponseCubit>(context).setApiresponse(apiresponse);
 
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) => QuotationSuccessPopup(
-            name: '${responseData['data']['enquiry']['customer_name']}',
-            number: '${responseData['data']['enquiry']['customer_contact_number']}',
-            enquiryid: responseData['data']['enquiry']['enquiry_id'],
-          ),
+        if (selectedpurchasetypeitems == 'finance' && responseData['data']['purchase_type'] != selectedpurchasetypeitems) {
+          nextpagelocal = 'Finance Form';
+        } else if (selectedpurchasetypeitems != 'finance' && selectedexchangeflagitems == 'yes'
+              && responseData['data']['exchange_flag'] != selectedexchangeflagitems
+        ) {
+          nextpagelocal = 'Exchange Form';
+        } else {
+          nextpagelocal = 'Print';
+        }
+
+        showMessagePopup(
+          context,
+          responseData['message'],
+          () {
+            Navigator.pop(context);
+            if(selectedpurchasetypeitems == 'finance' && responseData['data']['purchase_type'] != selectedpurchasetypeitems) {
+              widget.financeselected();
+            } else if (
+              selectedpurchasetypeitems != 'finance' && selectedexchangeflagitems == 'yes'
+              && responseData['data']['exchange_flag'] != selectedexchangeflagitems
+            ) {
+              widget.exchangeselected();
+            } else {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (_) => QuotationSuccessPopup(
+                  name: '${responseData['data']['customer_name']}',
+                  number: '${responseData['data']['customer_contact_number']}',
+                  enquiryid: responseData['data']['enquiry_id'],
+                ),
+              );
+            }
+          },
+          nextpage: nextpagelocal
         );
 
       } else if (response.statusCode == 422) {
-          setState(() {
-            // customeride = responseData['errors']['customer_id'] ?? '';
-            wingsenquirye = responseData['errors']['wings_enquiry_number'] ?? '';
-            customercategorye = responseData['errors']['customer_category'] ?? '';
-            enquirycategorye = responseData['errors']['enquiry_category'] ?? '';
-            customertypee = responseData['errors']['customer_type'] ?? '';
-            customernamee = responseData['errors']['customer_name'] ?? '';
-            customercontactnumbere = responseData['errors']['customer_contact_number'] ?? '';
-            emailide = responseData['errors']['email_id'] ?? '';
-            addresse = responseData['errors']['address'] ?? '';
-            enquirytypee = responseData['errors']['enquiry_type'] ?? '';
-            enquirysourcee = responseData['errors']['enquiry_source'] ?? '';
-            // modelcategorye = responseData['errors']['model_category'] ?? '';
-            modelnamee = responseData['errors']['model_name'] ?? '';
-            modelvariante = responseData['errors']['model_variant'] ?? '';
-            modelcolore = responseData['errors']['model_color'] ?? '';
-            purchasetypee = responseData['errors']['purchase_type'] ?? '';
-            exchangeflage = responseData['errors']['exchange_flag'] ?? '';
-          });
+        final errors = responseData['errors'] ?? {};
 
-          Fluttertoast.showToast(msg: responseData['message']);
+        setState(() {
+          wingsenquirye = errors['wings_enquiry_number']?.toString() ?? '';
+          customercategorye = errors['customer_category']?.toString() ?? '';
+          enquirycategorye = errors['enquiry_category']?.toString() ?? '';
+          customertypee = errors['customer_type']?.toString() ?? '';
+          customernamee = errors['customer_name']?.toString() ?? '';
+          customercontactnumbere = errors['customer_contact_number']?.toString() ?? '';
+          secondarycontactnumbere = errors['secondary_contact_number']?.toString() ?? '';
+          pincodee = errors['pincode']?.toString() ?? '';
+          gendere = errors['gender']?.toString() ?? '';
+          emailide = errors['email_id']?.toString() ?? '';
+          addresse = errors['address']?.toString() ?? '';
+          enquirytypee = errors['enquiry_type']?.toString() ?? '';
+          enquirysourcee = errors['enquiry_source']?.toString() ?? '';
+          modelnamee = errors['model_name']?.toString() ?? '';
+          modelvariante = errors['model_variant']?.toString() ?? '';
+          modelcolore = errors['model_color']?.toString() ?? '';
+          districte = errors['district']?.toString() ?? '';
+          citye = errors['city']?.toString() ?? '';
+          purchasetypee = errors['purchase_type']?.toString() ?? '';
+          exchangeflage = errors['exchange_flag']?.toString() ?? '';
+          customerremarkse = errors['customers_remarks']?.toString() ?? '';
+        });
+
+        Fluttertoast.showToast(msg: responseData['message']);
+        print(response.body);
 
       } else {
-        Fluttertoast.showToast(
-          msg: responseData['message'],
-          toastLength: Toast.LENGTH_LONG,
+        showMessagePopup(
+          context,
+          responseData['message'],
+          () {
+            Navigator.pop(context);
+          }
         );
         print('Failed to create enquiry. Status code: ${response.statusCode}');
         print(response.body);
@@ -507,21 +462,14 @@ class _MovetobookingState extends State<Movetobooking> {
                     ),
                     SizedBox(height: SizeConfig.h(10)),
                     textfieldy(
-                      'Enquiry Number',
-                      enquiryid,
-                      readonly: true,
+                      'Enquiry ID',
+                      TextEditingController(),
+                      readonly: true
                     ),
-                    // textfieldy(
-                    //   'Customer ID',
-                    //   customerid,
-                    //   readonly: edit(),
-                    // ),
-                    // if(customeride.isNotEmpty)
-                    // errormessage(customeride),
                     textfieldy(
-                      'Wings Enquiry Number',
+                      'High Rise Number',
                       wingsenquiry,
-                      readonly: false,
+                      readonly: widget.edit,
                       star: false
                     ),
                     if(wingsenquirye.isNotEmpty)
@@ -535,7 +483,7 @@ class _MovetobookingState extends State<Movetobooking> {
                           selectedcustomercategoryitems = newValue;
                         });
                       },
-                      readOnly: edit(),
+                      readOnly: widget.edit,
                     ),
                     if(customercategorye.isNotEmpty)
                     errormessage(customercategorye),
@@ -548,7 +496,7 @@ class _MovetobookingState extends State<Movetobooking> {
                           selectedenquirycategoryitems = newValue;
                         });
                       },
-                      readOnly: edit(),
+                      readOnly: widget.edit,
                     ),
                     if(enquirycategorye.isNotEmpty)
                     errormessage(enquirycategorye),
@@ -561,21 +509,28 @@ class _MovetobookingState extends State<Movetobooking> {
                           selectedcustomertypeitems = newValue;
                         });
                       },
-                      readOnly: edit(),
+                      readOnly: widget.edit,
                     ),
                     if(customertypee.isNotEmpty)
                     errormessage(customertypee),
                     textfieldy(
                       'Customer Contact Number',
                       customercontactnumber,
-                      readonly: edit(),
+                      readonly: widget.edit,
                     ),
                     if(customercontactnumbere.isNotEmpty)
                     errormessage(customercontactnumbere),
                     textfieldy(
+                      'Secondary Contact Number',
+                      secondarycontactnumber,
+                      readonly: widget.edit,
+                    ),
+                    if(secondarycontactnumbere.isNotEmpty)
+                    errormessage(secondarycontactnumbere),
+                    textfieldy(
                       'Customer Name',
                       customername,
-                      readonly: edit(),
+                      readonly: widget.edit,
                     ),
                     if(customernamee.isNotEmpty)
                     errormessage(customernamee),
@@ -589,14 +544,15 @@ class _MovetobookingState extends State<Movetobooking> {
                         });
                       },
                       star: false,
-                      readOnly: edit(),
+                      readOnly: widget.edit,
                     ),
-                    
+                    if(gendere.isNotEmpty)
+                    errormessage(gendere),
                     Dateofbirthfield(
                       title: 'Date of Birth',
                       datecontroller: datecontroller,
                       star: false,
-                      readOnly: edit(),
+                      readOnly: widget.edit,
                     ),
 
                     CustomDropdown(
@@ -609,23 +565,51 @@ class _MovetobookingState extends State<Movetobooking> {
                         });
                       },
                       star: false,
-                      readOnly: edit(),
+                      readOnly: widget.edit,
                     ),
                     
                     textfieldy(
                       "Email ID",
                       emailid,
-                      readonly: edit(),
+                      readonly: widget.edit,
                     ),
                     if(emailide.isNotEmpty)
                     errormessage(emailide),
                     textfieldy(
                       "Address",
                       address,
-                      readonly: edit(),
+                      readonly: widget.edit,
                     ),
                     if(addresse.isNotEmpty)
                     errormessage(addresse),
+                    Districtcity(
+                      districte: districte,
+                      citye: citye,
+
+                      selecteddistrict: selecteddistrictitems,
+                      selectedcity: selectedcityitems,
+
+                      ondistrictChanged: (value) {
+                        setState(() {
+                          selecteddistrictitems = value;
+                          selectedcityitems = null;
+                        });
+                      },
+                      oncityChanged: (value) {
+                        setState(() {
+                          selectedcityitems = value;
+                        });
+                      },
+
+                      edit: widget.edit,
+                    ),
+                    textfieldy(
+                      'Pincode',
+                      pincode,
+                      readonly: widget.edit,
+                    ),
+                    if(pincodee.isNotEmpty)
+                    errormessage(pincodee),
                     CustomDropdown(
                       title: 'Enquiry Type',
                       selectedCustomDropdown: selectedenquirytypeitems,
@@ -635,7 +619,7 @@ class _MovetobookingState extends State<Movetobooking> {
                           selectedenquirytypeitems = newValue;
                         });
                       },
-                      readOnly: edit(),
+                      readOnly: widget.edit,
                     ),
                     if(enquirytypee.isNotEmpty)
                     errormessage(enquirytypee),
@@ -648,62 +632,36 @@ class _MovetobookingState extends State<Movetobooking> {
                           selectedenquirysourceitems = newValue;
                         });
                       },
-                      readOnly: edit(),
+                      readOnly: widget.edit,
                     ),
                     if(enquirysourcee.isNotEmpty)
                     errormessage(enquirysourcee),
-                    // CustomDropdown(
-                    //   title: 'Model Category',
-                    //   selectedCustomDropdown: selectedmodelcategoryitems,
-                    //   customDropdownItems: modelcategoryitems,
-                    //   onChanged: (newValue) {
-                    //     setState(() {
-                    //       selectedmodelcategoryitems = newValue;
-                    //     });
-                    //   },
-                    //   readOnly: edit(),
-                    // ),
-                    // if(modelcategorye.isNotEmpty)
-                    // errormessage('$modelcategorye'),
-                    CustomDropdown(
-                      title: 'Model Name',
-                      selectedCustomDropdown: selectedmodelnameitems,
-                      customDropdownItems: modelnameitems,
-                      onChanged: (newValue) {
+                    Namevariantcolor(
+                      modelnamee: modelnamee,
+                      modelvariante: modelvariante,
+                      modelcolore: modelcolore,
+                      
+                      selectedname: selectedmodelnameitems,
+                      selectedvariant: selectedmodelvariantitems,
+                      selectedcolor: selectedmodelcoloritems,
+                      onNameChanged: (value) {
                         setState(() {
-                          selectedmodelnameitems = newValue;
+                          selectedmodelnameitems = value;
                         });
                       },
-                      readOnly: edit(),
-                    ),
-                    if(modelnamee.isNotEmpty)
-                    errormessage(modelnamee),
-                    CustomDropdown(
-                      title: 'Model Variant',
-                      selectedCustomDropdown: selectedmodelvariantitems,
-                      customDropdownItems: modelvariantitems,
-                      onChanged: (newValue) {
+                      onVariantChanged: (value) {
                         setState(() {
-                          selectedmodelvariantitems = newValue;
+                          selectedmodelvariantitems = value;
+                          selectedmodelcoloritems = null;
                         });
                       },
-                      readOnly: edit(),
-                    ),
-                    if(modelvariante.isNotEmpty)
-                    errormessage(modelvariante),
-                    CustomDropdown(
-                      title: 'Model Color',
-                      selectedCustomDropdown: selectedmodelcoloritems,
-                      customDropdownItems: modelcoloritems,
-                      onChanged: (newValue) {
+                      onColorChanged: (value) {
                         setState(() {
-                          selectedmodelcoloritems = newValue;
+                          selectedmodelcoloritems = value;
                         });
                       },
-                      readOnly: edit(),
+                      edit: widget.edit,
                     ),
-                    if(modelcolore.isNotEmpty)
-                    errormessage(modelcolore),
                     CustomDropdown(
                       title: 'Purchase Type',
                       selectedCustomDropdown: selectedpurchasetypeitems,
@@ -713,7 +671,7 @@ class _MovetobookingState extends State<Movetobooking> {
                           selectedpurchasetypeitems = newValue;
                         });
                       },
-                      readOnly: edit(),
+                      readOnly: widget.edit,
                     ),
                     if(purchasetypee.isNotEmpty)
                     errormessage(purchasetypee),
@@ -726,7 +684,7 @@ class _MovetobookingState extends State<Movetobooking> {
                           selectedexchangeflagitems = newValue;
                         });
                       },
-                      readOnly: edit(),
+                      readOnly: widget.edit,
                     ),
                     if(exchangeflage.isNotEmpty)
                     errormessage(exchangeflage),
@@ -734,7 +692,7 @@ class _MovetobookingState extends State<Movetobooking> {
                       title: 'Follow Up Date',
                       datecontroller: followupdatecontroller,
                       star: false,
-                      readOnly: edit(),
+                      readOnly: widget.edit,
                     ),
                     CustomDropdown(
                       title: 'Test Ride',
@@ -746,12 +704,12 @@ class _MovetobookingState extends State<Movetobooking> {
                         });
                       },
                       star: false,
-                      readOnly: edit(),
+                      readOnly: widget.edit,
                     ),
                     description(
                       'Customer Remarks',
                       customerremarks,
-                      readonly: edit()
+                      readonly: widget.edit
                     ),
                     if(isEdited() == false)
                     Column(
