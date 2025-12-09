@@ -221,7 +221,7 @@ class _AddenquiryState extends State<Addenquiry> {
         final errors = responseData['errors'] ?? {};
 
         setState(() {
-          wingsenquirye = errors['wings_enquiry_number']?.toString() ?? '';
+          wingsenquirye = errors['high_rise_number']?.toString() ?? '';
           customercategorye = errors['customer_category']?.toString() ?? '';
           enquirycategorye = errors['enquiry_category']?.toString() ?? '';
           customertypee = errors['customer_type']?.toString() ?? '';

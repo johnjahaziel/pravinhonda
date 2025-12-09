@@ -50,16 +50,6 @@ class _EnquiryState extends State<Enquiry> {
     }
   }
 
-  bool onEditpressed = false;
-
-  bool edit() {
-    if(onEditpressed == true) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
   Future<void> _fetchPage({String? url}) async {
     try {
       final Uri uri = Uri.parse(url ?? 'https://app.pravinhonda.com/api/enquiries');
@@ -215,26 +205,7 @@ class _EnquiryState extends State<Enquiry> {
                                         MaterialPageRoute(
                                           builder: (context) => Movetobooking(
                                             enquiryid: data['enquiry_id'] ?? 0,
-                                            apiResponse: selected,
-                                            financeselected: () {
-                                              // setState(() {
-                                              //   previousTab = 'enquiry';
-                                              //   financetrue = true;
-                                              //   createenquiry = false;
-                                              //   finance = true;
-                                              //   exchange = false;
-                                              // });
-                                            },
-                                            exchangeselected: () {
-                                              // setState(() {
-                                              //   previousTab = 'enquiry';
-                                              //   exchangetrue = true;
-                                              //   createenquiry = false;
-                                              //   finance = false;
-                                              //   exchange = true;
-                                              // });
-                                            },
-                                            edit: edit(),
+                                            apiResponse: selected
                                           )
                                         ),
                                       );

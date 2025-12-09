@@ -27,8 +27,8 @@ const List<Map<String, String>> genderTypeItems = [
 ];
 
 const List<Map<String, String>> martialstatusTypeItems = [
-  {'label': 'Married', 'value': 'married'},
-  {'label': 'Single', 'value': 'single'},
+  {'label': 'Married', 'value': 'Married'},
+  {'label': 'Single', 'value': 'Single'},
 ];
 
 const List<Map<String, String>> enquiryTypeItems = [
@@ -130,53 +130,56 @@ textfieldy(String title, TextEditingController controller, {bool star = true, bo
 
 description(String title,TextEditingController controller, {bool star = false, bool padding = false, bool readonly = false}) => Padding(
   padding: padding == true ? EdgeInsets.symmetric(horizontal: SizeConfig.w(20)) : EdgeInsets.only(top: 15),
-  child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Row(
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              color: Color(0xff919EAB)
-            ),
-          ),
-          if(star)
-          Text(
-            '*',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              color: kred
-            ),
-          ),
-        ],
-      ),
-      Padding(
-        padding: const EdgeInsets.only(top: 5),
-        child: SizedBox(
-          height: 150,
-          child: TextField(
-            expands: true,
-            maxLines: null,
-            minLines: null,
-            readOnly: readonly == true ? true : false,
-            controller: controller,
-            textAlignVertical: TextAlignVertical.top,
-            decoration: InputDecoration(
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: Color(0xff919EAB)),
+  child: Opacity(
+    opacity: readonly ? 0.6 : 1,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                color: Color(0xff919EAB)
               ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: Color(0xff919EAB)),
+            ),
+            if(star)
+            Text(
+              '*',
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                color: kred
+              ),
+            ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 5),
+          child: SizedBox(
+            height: 150,
+            child: TextField(
+              expands: true,
+              maxLines: null,
+              minLines: null,
+              readOnly: readonly == true ? true : false,
+              controller: controller,
+              textAlignVertical: TextAlignVertical.top,
+              decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Color(0xff919EAB)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Color(0xff919EAB)),
+                ),
               ),
             ),
           ),
         ),
-      ),
-    ],
+      ],
+    ),
   ),
 );
 
