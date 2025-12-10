@@ -1,6 +1,9 @@
-import 'dart:math';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
+import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/utility/customs/customappBar.dart';
 import 'package:pravinhonda/utility/customs/customdrawer.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
@@ -22,6 +25,13 @@ class _EmicalculatorState extends State<Emicalculator> {
   double interestValue = 4.0;
   int loanTermValue = 1;
 
+  bool _isLoading = false;
+  Map<String, dynamic>? _emiResult;
+  String? _errorMessage;
+
+  final String _baseUrl = 'https://app.pravinhonda.com';
+  String get _emiUrl => '$_baseUrl/api/emi/calculate';
+
   @override
   void initState() {
     super.initState();
@@ -35,13 +45,11 @@ class _EmicalculatorState extends State<Emicalculator> {
 
   void _updateState() {
     setState(() {
-      // Parse and update interestValue
       final parsedInterest = double.tryParse(interestrate.text);
       if (parsedInterest != null && parsedInterest >= 4 && parsedInterest <= 20) {
         interestValue = parsedInterest;
       }
 
-      // Parse and update loanTermValue
       final parsedLoanTerm = int.tryParse(loanterm.text);
       if (parsedLoanTerm != null && parsedLoanTerm >= 1 && parsedLoanTerm <= 1000) {
         loanTermValue = parsedLoanTerm;
@@ -61,6 +69,89 @@ class _EmicalculatorState extends State<Emicalculator> {
     super.dispose();
   }
 
+  Future<void> _calculateEmi() async {
+    final loanAmountText = loanamount.text.trim();
+    final interestText = interestrate.text.trim();
+    final monthsText = loanterm.text.trim();
+
+    if (loanAmountText.isEmpty || interestText.isEmpty || monthsText.isEmpty) {
+      setState(() {
+        _errorMessage = 'Please fill all fields to calculate EMI';
+        _emiResult = null;
+      });
+      return;
+    }
+
+    final double? loanAmountValue = double.tryParse(loanAmountText);
+    final double? rateValue = double.tryParse(interestText);
+    final int? monthsValue = int.tryParse(monthsText);
+
+    if (loanAmountValue == null || rateValue == null || monthsValue == null) {
+      setState(() {
+        _errorMessage = 'Please enter valid numeric values';
+        _emiResult = null;
+      });
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    try {
+      final response = await http.post(
+        Uri.parse(_emiUrl),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          "loan_amount": loanAmountValue,
+          "rate": rateValue,
+          "months": monthsValue,
+        }),
+      );
+
+      if (!mounted) return;
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final Map<String, dynamic> resBody = jsonDecode(response.body);
+
+        if (resBody['status'] == true && resBody['data'] != null) {
+          setState(() {
+            _emiResult = resBody['data'] as Map<String, dynamic>;
+            _errorMessage = null;
+          });
+        } else {
+          setState(() {
+            _emiResult = null;
+            _errorMessage = resBody['message']?.toString() ?? 'Failed to calculate EMI';
+          });
+        }
+      } else {
+        setState(() {
+          _emiResult = null;
+          _errorMessage = 'Server error: ${response.statusCode}';
+        });
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _emiResult = null;
+        _errorMessage = 'Error calculating EMI: $e';
+      });
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
@@ -77,71 +168,26 @@ class _EmicalculatorState extends State<Emicalculator> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 20),
-                // EMI Results Section
+
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Column(
-                    children: () {
-                      double principal = double.tryParse(loanamount.text) ?? 0;
-                      double annualRate = double.tryParse(interestrate.text) ?? 0;
-                      int term = int.tryParse(loanterm.text) ?? 0;
-            
-                      if (principal == 0 || annualRate == 0 || term == 0) {
-                        return [
-                          Center(
-                            child: Text("Enter Amount to calculate EMI",
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16,
-                                color: Colors.black
-                              )
-                            ),
-                          ),
-                        ];
-                      }
-            
-                      double monthlyRate = annualRate / 12 / 100;
-                      double emi = (principal * monthlyRate * pow(1 + monthlyRate, term)) /
-                          (pow(1 + monthlyRate, term) - 1);
-            
-                      double totalPayment = emi * term;
-                      double totalInterest = totalPayment - principal;
-                      double interestPercentage = (totalInterest / principal) * 100;
-            
-                      return [
-                        Row(
-                          children: [
-                            _buildBox("Monthly EMI", "₹${emi.toStringAsFixed(2)}", Colors.green),
-                            _buildBox("Total Interest", "₹${totalInterest.toStringAsFixed(2)}", Colors.orange),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          children: [
-                            _buildBox("Payable Amount", "₹${totalPayment.toStringAsFixed(2)}", Colors.lightBlue),
-                            _buildBox("Interest Percentage", "${interestPercentage.toStringAsFixed(2)} %", Colors.cyan),
-                          ],
-                        ),
-                      ];
-                    }(),
-                  ),
+                  child: _buildResultSection(),
                 ),
-            
+
                 const SizedBox(height: 15),
-                Divider(),
+                const Divider(),
                 const SizedBox(height: 20),
-            
+
                 Center(
                   child: Text(
                     'EMI Calculator',
                     style: customtext(fs18, kred, FontWeight.bold),
                   ),
                 ),
-            
+
                 // Loan Amount
                 textfieldy('Loan Amount', loanamount, numpad: true),
-            
+
                 // Interest Rate
                 textfieldy('Interest Rate (%)', interestrate, numpad: true),
                 Padding(
@@ -161,7 +207,7 @@ class _EmicalculatorState extends State<Emicalculator> {
                     },
                   ),
                 ),
-            
+
                 // Loan Term
                 textfieldy('Loan Term (in months)', loanterm, numpad: true),
                 Padding(
@@ -181,13 +227,123 @@ class _EmicalculatorState extends State<Emicalculator> {
                     },
                   ),
                 ),
-            
+
+                const SizedBox(height: 10),
+
+                // Calculate Button
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _isLoading ? null : _calculateEmi,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: kred,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: _isLoading
+                        ? SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2,color: kred,),
+                          )
+                        : const Text(
+                            'Calculate EMI',
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                  ),
+                ),
+
                 const SizedBox(height: 30),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  /// Builds the top EMI result section based on API response / errors / empty state
+  Widget _buildResultSection() {
+    if (_isLoading && _emiResult == null) {
+      return Center(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: CircularProgressIndicator(
+            color: kred,
+          ),
+        ),
+      );
+    }
+
+    if (_errorMessage != null && _errorMessage!.isNotEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Text(
+            _errorMessage!,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w500,
+              fontSize: 16,
+              color: Colors.red,
+            ),
+          ),
+        ),
+      );
+    }
+
+    if (_emiResult == null) {
+      return const Center(
+        child: Text(
+          "Enter details and tap 'Calculate EMI'",
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w500,
+            fontSize: 16,
+            color: Colors.black,
+          ),
+        ),
+      );
+    }
+
+    // Safe extraction from API data
+    final String loanAmount = _emiResult?['loan_amount']?.toString() ?? '0.00';
+    final String totalInterest = _emiResult?['total_interest_amount']?.toString() ?? '0.00';
+    final String totalPayable = _emiResult?['total_payable_amount']?.toString() ?? '0.00';
+    final String emi = _emiResult?['calculated_emi']?.toString() ?? '0.00';
+    final String interestPercentage = _emiResult?['rate_of_interest']?.toString() ?? '0.00';
+    final int months = _emiResult?['loan_period_months'] ?? 0;
+
+    return Column(
+      children: [
+        Row(
+          children: [
+            _buildBox("Monthly EMI", "₹$emi", Colors.green),
+            _buildBox("Total Interest", "₹$totalInterest", Colors.orange),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            _buildBox("Payable Amount", "₹$totalPayable", Colors.lightBlue),
+            _buildBox("Interest Rate", "$interestPercentage %", Colors.cyan),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Text(
+          "Loan Amount: ₹$loanAmount   |   Tenure: $months months",
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 14,
+            color: Colors.black54,
+          ),
+        ),
+      ],
     );
   }
 
@@ -204,10 +360,11 @@ class _EmicalculatorState extends State<Emicalculator> {
           children: [
             Text(
               title,
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                  fontSize: 16),
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+                fontSize: 16,
+              ),
             ),
             const SizedBox(height: 8),
             Container(
@@ -218,10 +375,12 @@ class _EmicalculatorState extends State<Emicalculator> {
               ),
               child: Text(
                 value,
-                style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ],
