@@ -13,7 +13,6 @@ import 'package:pravinhonda/utility/customs/customdatefield.dart';
 import 'package:pravinhonda/utility/customs/customdropdown.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
-import 'package:pravinhonda/utility/styles.dart';
 
 class Editenquiry extends StatefulWidget {
   final int enquiryid;
@@ -284,17 +283,6 @@ class _EditenquiryState extends State<Editenquiry> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
-                child: Text(
-                  'Quotation',
-                  style: customtext(
-                    fs20,
-                    kred,
-                    FontWeight.bold
-                  ),
-                ),
-              ),
-              SizedBox(height: SizeConfig.h(5)),
               textfieldy(
                 'High Rise Number',
                 wingsenquiry,

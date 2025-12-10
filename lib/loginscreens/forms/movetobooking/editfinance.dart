@@ -9,7 +9,6 @@ import 'package:pravinhonda/loginscreens/forms/editing/createquotation.dart';
 import 'package:pravinhonda/utility/customs/customdropdown.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
-import 'package:pravinhonda/utility/styles.dart';
 
 class EditfinanceMB extends StatefulWidget {
   final String? exchangeflag;
@@ -76,6 +75,8 @@ class _EditfinanceMBState extends State<EditfinanceMB> {
   void initControllersFromResponse(Map<String, dynamic> resp) {
     final enquiry = resp;
 
+    originalEnquiry = Map<String, dynamic>.from(enquiry);
+
     selectedfinanceitems    = enquiry['finance']?.toString();
     selectedloanperioditems = enquiry['loan_period']?.toString();
 
@@ -84,6 +85,19 @@ class _EditfinanceMBState extends State<EditfinanceMB> {
     downpayment = TextEditingController(text: (enquiry['down_payment'] ?? '').toString());
     loaninterest = TextEditingController(text: (enquiry['loan_interest'] ?? '').toString());
     initialpayment = TextEditingController(text: (enquiry['initial_payment'] ?? '').toString());
+  }
+
+  Map<String, dynamic> originalEnquiry = {};
+
+  bool isEdited() {
+    return 
+      selectedfinanceitems != originalEnquiry['finance'] ||
+      selectedloanperioditems != originalEnquiry['loan_period'].toString() ||
+      vehiclecost.text != (originalEnquiry['vehicle_cost']?.toString() ?? '') ||
+      documentcharges.text != (originalEnquiry['document_charges']?.toString() ?? '') ||
+      downpayment.text != (originalEnquiry['down_payment']?.toString() ?? '') ||
+      loaninterest.text != (originalEnquiry['loan_interest']?.toString() ?? '') ||
+      initialpayment.text != (originalEnquiry['initial_payment']?.toString() ?? '');
   }
 
   Future<void> financeform() async {
@@ -192,17 +206,6 @@ class _EditfinanceMBState extends State<EditfinanceMB> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
-              child: Text(
-                'Finance',
-                style: customtext(
-                  fs20,
-                  kred,
-                  FontWeight.bold
-                ),
-              ),
-            ),
-            SizedBox(height: SizeConfig.h(5)),
             CustomDropdown(
               title: 'Finance',
               selectedCustomDropdown: selectedfinanceitems,
@@ -264,20 +267,22 @@ class _EditfinanceMBState extends State<EditfinanceMB> {
             ),
             if(loanperioditemse.isNotEmpty)
             errormessage(loanperioditemse),
-            SizedBox(height: SizeConfig.h(20)),
-            button(
-              'Calculate',
-              () {}
-            ),
+            // SizedBox(height: SizeConfig.h(20)),
+            // button(
+            //   'Calculate',
+            //   () {}
+            // ),
             // textfieldy(
             //   'EMI',
             //   TextEditingController(),
             //   // emi,
             //   readonly: true
             // ),
+            if(isEdited() == true)
             SizedBox(height: SizeConfig.h(25)),
+            if(isEdited() == true)
             button(
-              'Create Quotation',
+              'Update Quotation',
               () {
                 financeform();
               }

@@ -125,6 +125,18 @@ class _CreatequotationState extends State<Createquotation> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(height: SizeConfig.h(10)),
+                  Center(
+                    child: Text(
+                      'Create Quotation',
+                      style: customtext(
+                        fs20,
+                        kred,
+                        FontWeight.bold
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: SizeConfig.h(15)),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(20)),
                     child: Row(

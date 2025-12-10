@@ -9,7 +9,6 @@ import 'package:pravinhonda/loginscreens/forms/editing/createquotation.dart';
 import 'package:pravinhonda/utility/customs/customdropdown.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
-import 'package:pravinhonda/utility/styles.dart';
 
 class Editfinance extends StatefulWidget {
   final String? exchangeflag;
@@ -192,17 +191,6 @@ class _EditfinanceState extends State<Editfinance> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
-              child: Text(
-                'Finance',
-                style: customtext(
-                  fs20,
-                  kred,
-                  FontWeight.bold
-                ),
-              ),
-            ),
-            SizedBox(height: SizeConfig.h(5)),
             CustomDropdown(
               title: 'Finance',
               selectedCustomDropdown: selectedfinanceitems,

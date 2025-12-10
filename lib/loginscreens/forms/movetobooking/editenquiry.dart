@@ -15,7 +15,6 @@ import 'package:pravinhonda/utility/customs/customdropdown.dart';
 import 'package:pravinhonda/utility/customs/customtimefield.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
-import 'package:pravinhonda/utility/styles.dart';
 
 class EditenquiryMB extends StatefulWidget {
   final int enquiryid;
@@ -24,6 +23,7 @@ class EditenquiryMB extends StatefulWidget {
 
   final VoidCallback financeselected;
   final VoidCallback exchangeselected;
+  
   const EditenquiryMB({
     super.key,
     required this.enquiryid,
@@ -449,17 +449,6 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
-                child: Text(
-                  isEdited() ? 'Update Quotation' : 'Move to Booking',
-                  style: customtext(
-                    fs18,
-                    kred,
-                    FontWeight.bold
-                  ),
-                ),
-              ),
-              SizedBox(height: SizeConfig.h(5)),
               textfieldy(
                 'Enquiry Number',
                 enquiryid,

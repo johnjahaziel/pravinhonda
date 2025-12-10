@@ -43,6 +43,8 @@ class _EditexchangeMBState extends State<EditexchangeMB> {
   String finalizedpricee = '';
   String assessedbye = '';
 
+  Map<String, dynamic> originalEnquiry = {};
+
   @override
   void initState() {
     super.initState();
@@ -53,6 +55,8 @@ class _EditexchangeMBState extends State<EditexchangeMB> {
   void initControllersFromResponse(Map<String, dynamic> resp) {
     final enquiry = resp;
 
+    originalEnquiry = Map<String, dynamic>.from(enquiry);
+
     name = TextEditingController(text: (enquiry['exchange_name'] ?? '').toString());
     address = TextEditingController(text: (enquiry['exchange_address'] ?? '').toString());
     vehiclemodal = TextEditingController(text: (enquiry['vehicle_model'] ?? '').toString());
@@ -60,6 +64,17 @@ class _EditexchangeMBState extends State<EditexchangeMB> {
     expectedprice = TextEditingController(text: (enquiry['expected_price'] ?? '').toString());
     finalizedprice = TextEditingController(text: (enquiry['finalized_price'] ?? '').toString());
     assessedby = TextEditingController(text: (enquiry['assessed_by'] ?? '').toString());
+  }
+
+  bool isEdited() {
+    return
+      name.text != (originalEnquiry['exchange_name'] ?? '') ||
+      address.text != (originalEnquiry['exchange_address'] ?? '') ||
+      vehiclemodal.text != (originalEnquiry['vehicle_model'] ?? '') ||
+      newvehiclemodal.text != (originalEnquiry['new_vehicle_model'] ?? '') ||
+      expectedprice.text != (originalEnquiry['expected_price'] ?? '') ||
+      finalizedprice.text != (originalEnquiry['finalized_price'] ?? '') ||
+      assessedby.text != (originalEnquiry['assessed_by'] ?? '');
   }
 
   Future<void> exchangeform() async {
@@ -216,9 +231,11 @@ class _EditexchangeMBState extends State<EditexchangeMB> {
               ),
               if(assessedbye.isNotEmpty)
               errormessage(assessedbye),
+              if(isEdited() == true)
               SizedBox(height: SizeConfig.h(25)),
+              if(isEdited() == true)
               button(
-                'Create Quotation',
+                'Update Quotation',
                 () {
                   exchangeform();
                 }
