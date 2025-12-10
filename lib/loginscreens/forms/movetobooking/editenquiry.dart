@@ -385,7 +385,7 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
         showMessagePopup(
           context,
           // responseData['message'],
-          'Initiated for Booking\nWaiting for Accounts Approval.',
+          'Initiated for Booking\n\nWaiting for Accounts Approval.',
           () {
             Navigator.pop(context);
             Navigator.push(
@@ -397,7 +397,7 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
           }
         );
 
-      } else if (response.statusCode == 400) {
+      } else if (response.statusCode == 422) {
         final errors = responseData['errors'] ?? {};
 
         setState(() {
