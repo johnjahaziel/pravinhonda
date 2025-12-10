@@ -33,7 +33,7 @@ class _AllLostcustomerState extends State<AllLostcustomer> {
     final token = BlocProvider.of<AuthCubit>(context).state.token;
 
     final url = Uri.parse(
-        "https://app.pravinhonda.com/api/loss-customers");
+        "https://app.pravinhonda.com/api/lost-customers");
 
     try {
       final response = await http.get(
@@ -94,7 +94,7 @@ class _AllLostcustomerState extends State<AllLostcustomer> {
                       enquiryid: 0,
                       id: data['enquiry_id']?.toString() ?? '',
                       customername: data['customer_name']?.toString() ?? '',
-                      contactnumber: data['customer_contact_number']?.toString() ?? '',
+                      contactnumber: data['phone_number']?.toString() ?? '',
                       status: data['status']?.toString() ?? '',
                       onTap: () {}
                     );
