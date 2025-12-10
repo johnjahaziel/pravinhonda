@@ -284,6 +284,102 @@ class _EditenquiryState extends State<Editenquiry> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               textfieldy(
+                'Customer Name',
+                customername,
+                readonly: widget.edit,
+              ),
+              if(customernamee.isNotEmpty)
+              errormessage(customernamee),
+              textfieldy(
+                'Customer Contact Number',
+                customercontactnumber,
+                readonly: widget.edit,
+              ),
+              if(customercontactnumbere.isNotEmpty)
+              errormessage(customercontactnumbere),
+              textfieldy(
+                'Secondary Contact Number',
+                secondarycontactnumber,
+                readonly: widget.edit,
+              ),
+              if(secondarycontactnumbere.isNotEmpty)
+              errormessage(secondarycontactnumbere),
+              textfieldy(
+                "Address",
+                address,
+                readonly: widget.edit,
+              ),
+              if(addresse.isNotEmpty)
+              errormessage(addresse),
+              Districtcity(
+                districte: districte,
+                citye: citye,
+
+                selecteddistrict: selecteddistrictitems,
+                selectedcity: selectedcityitems,
+
+                ondistrictChanged: (value) {
+                  setState(() {
+                    selecteddistrictitems = value;
+                    selectedcityitems = null;
+                  });
+                },
+                oncityChanged: (value) {
+                  setState(() {
+                    selectedcityitems = value;
+                  });
+                },
+
+                edit: widget.edit,
+              ),
+              textfieldy(
+                'Pincode',
+                pincode,
+                readonly: widget.edit,
+              ),
+              if(pincodee.isNotEmpty)
+              errormessage(pincodee),
+              CustomDropdown(
+                title: 'Gender',
+                selectedCustomDropdown: selectedgenderitems,
+                customDropdownItems: genderitems,
+                onChanged: (newValue) {
+                  setState(() {
+                    selectedgenderitems = newValue;
+                  });
+                },
+                star: false,
+                readOnly: widget.edit,
+              ),
+              if(gendere.isNotEmpty)
+              errormessage(gendere),
+              Dateofbirthfield(
+                title: 'Date of Birth',
+                datecontroller: datecontroller,
+                star: false,
+                readOnly: widget.edit,
+              ),
+
+              CustomDropdown(
+                title: 'Martial Status',
+                selectedCustomDropdown: selectedmartialstatusitems,
+                customDropdownItems: martialstatusitems,
+                onChanged: (newValue) {
+                  setState(() {
+                    selectedmartialstatusitems = newValue;
+                  });
+                },
+                star: false,
+                readOnly: widget.edit,
+              ),
+              textfieldy(
+                "Email ID",
+                emailid,
+                readonly: widget.edit,
+              ),
+              if(emailide.isNotEmpty)
+              errormessage(emailide),
+              textfieldy(
                 'High Rise Number',
                 wingsenquiry,
                 readonly: widget.edit,
@@ -330,103 +426,6 @@ class _EditenquiryState extends State<Editenquiry> {
               ),
               if(customertypee.isNotEmpty)
               errormessage(customertypee),
-              textfieldy(
-                'Customer Contact Number',
-                customercontactnumber,
-                readonly: widget.edit,
-              ),
-              if(customercontactnumbere.isNotEmpty)
-              errormessage(customercontactnumbere),
-              textfieldy(
-                'Secondary Contact Number',
-                secondarycontactnumber,
-                readonly: widget.edit,
-              ),
-              if(secondarycontactnumbere.isNotEmpty)
-              errormessage(secondarycontactnumbere),
-              textfieldy(
-                'Customer Name',
-                customername,
-                readonly: widget.edit,
-              ),
-              if(customernamee.isNotEmpty)
-              errormessage(customernamee),
-              CustomDropdown(
-                title: 'Gender',
-                selectedCustomDropdown: selectedgenderitems,
-                customDropdownItems: genderitems,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedgenderitems = newValue;
-                  });
-                },
-                star: false,
-                readOnly: widget.edit,
-              ),
-              if(gendere.isNotEmpty)
-              errormessage(gendere),
-              Dateofbirthfield(
-                title: 'Date of Birth',
-                datecontroller: datecontroller,
-                star: false,
-                readOnly: widget.edit,
-              ),
-
-              CustomDropdown(
-                title: 'Martial Status',
-                selectedCustomDropdown: selectedmartialstatusitems,
-                customDropdownItems: martialstatusitems,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedmartialstatusitems = newValue;
-                  });
-                },
-                star: false,
-                readOnly: widget.edit,
-              ),
-              
-              textfieldy(
-                "Email ID",
-                emailid,
-                readonly: widget.edit,
-              ),
-              if(emailide.isNotEmpty)
-              errormessage(emailide),
-              textfieldy(
-                "Address",
-                address,
-                readonly: widget.edit,
-              ),
-              if(addresse.isNotEmpty)
-              errormessage(addresse),
-              Districtcity(
-                districte: districte,
-                citye: citye,
-
-                selecteddistrict: selecteddistrictitems,
-                selectedcity: selectedcityitems,
-
-                ondistrictChanged: (value) {
-                  setState(() {
-                    selecteddistrictitems = value;
-                    selectedcityitems = null;
-                  });
-                },
-                oncityChanged: (value) {
-                  setState(() {
-                    selectedcityitems = value;
-                  });
-                },
-
-                edit: widget.edit,
-              ),
-              textfieldy(
-                'Pincode',
-                pincode,
-                readonly: widget.edit,
-              ),
-              if(pincodee.isNotEmpty)
-              errormessage(pincodee),
               CustomDropdown(
                 title: 'Enquiry Type',
                 selectedCustomDropdown: selectedenquirytypeitems,

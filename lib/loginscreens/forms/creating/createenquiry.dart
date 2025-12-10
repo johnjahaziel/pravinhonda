@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pravinhonda/bloc/enquiry_id_cubit.dart';
+import 'package:pravinhonda/loginscreens/Navigation.dart';
 import 'package:pravinhonda/loginscreens/forms/creating/addenquiry.dart';
 import 'package:pravinhonda/loginscreens/forms/creating/addexchange.dart';
 import 'package:pravinhonda/loginscreens/forms/creating/addfinance.dart';
 import 'package:pravinhonda/utility/customs/customappBar.dart';
 import 'package:pravinhonda/utility/customs/customdrawer.dart';
+import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
@@ -69,6 +71,7 @@ class _CreateenquiryState extends State<Createenquiry> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: SizeConfig.h(10)),
+              back(context, Navigation(initialIndex: 0)),
               Center(
                 child: Text(
                   'Create Enquiry',

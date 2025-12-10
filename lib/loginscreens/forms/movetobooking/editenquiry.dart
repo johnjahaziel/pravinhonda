@@ -384,7 +384,8 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
 
         showMessagePopup(
           context,
-          responseData['message'],
+          // responseData['message'],
+          'Initiated for Booking\nWaiting for Accounts Approval.',
           () {
             Navigator.pop(context);
             Navigator.push(
@@ -396,25 +397,25 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
           }
         );
 
-      } else if (response.statusCode == 422) {
+      } else if (response.statusCode == 400) {
         final errors = responseData['errors'] ?? {};
 
         setState(() {
-          bookingamounte = errors['errors']['booking_amount'] ?? '';
-          bookingreceiptnoe = errors['errors']['booking_receipt_no'] ?? '';
-          vehiclenamee = errors['errors']['vehicle_name'] ?? '';
-          vehiclecoloure = errors['errors']['vehicle_colour'] ?? '';
-          chassisnoe = errors['errors']['chassis_no'] ?? '';
-          enginenoe = errors['errors']['engine_no'] ?? '';
-          keynoe = errors['errors']['key_no'] ?? '';
-          batterynoe = errors['errors']['battery_no'] ?? '';
-          tyremakee = errors['errors']['tyre_make'] ?? '';
-          rrtyrenoe = errors['errors']['RR_tyre_no'] ?? '';
-          fttyrenoe = errors['errors']['FT_tyre_no'] ?? '';
-          addapprovednamee = errors['errors']['add_approved_name'] ?? '';
-          allotedbye = errors['errors']['alloted_by'] ?? '';
-          deliverydatee = errors['errors']['delivery_date'] ?? '';
-          deliverytimee = errors['errors']['delivery_time'] ?? '';
+          bookingamounte = errors['booking_amount']?.toString() ?? '';
+          bookingreceiptnoe = errors['booking_receipt_no']?.toString() ?? '';
+          vehiclenamee = errors['vehicle_name']?.toString() ?? '';
+          vehiclecoloure = errors['vehicle_colour']?.toString() ?? '';
+          chassisnoe = errors['chassis_no']?.toString() ?? '';
+          enginenoe = errors['engine_no']?.toString() ?? '';
+          keynoe = errors['key_no']?.toString() ?? '';
+          batterynoe = errors['battery_no']?.toString() ?? '';
+          tyremakee = errors['tyre_make']?.toString() ?? '';
+          rrtyrenoe = errors['RR_tyre_no']?.toString() ?? '';
+          fttyrenoe = errors['FT_tyre_no']?.toString() ?? '';
+          addapprovednamee = errors['add_approved_name']?.toString() ?? '';
+          allotedbye = errors['alloted_by']?.toString() ?? '';
+          deliverydatee = errors['delivery_date']?.toString() ?? '';
+          deliverytimee = errors['delivery_time']?.toString() ?? '';
         });
 
         Fluttertoast.showToast(
@@ -454,6 +455,102 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
                 enquiryid,
                 readonly: true,
               ),
+              textfieldy(
+                'Customer Name',
+                customername,
+                readonly: widget.edit,
+              ),
+              if(customernamee.isNotEmpty)
+              errormessage(customernamee),
+              textfieldy(
+                'Customer Contact Number',
+                customercontactnumber,
+                readonly: widget.edit,
+              ),
+              if(customercontactnumbere.isNotEmpty)
+              errormessage(customercontactnumbere),
+              textfieldy(
+                'Secondary Contact Number',
+                secondarycontactnumber,
+                readonly: widget.edit,
+              ),
+              if(secondarycontactnumbere.isNotEmpty)
+              errormessage(secondarycontactnumbere),
+              textfieldy(
+                "Address",
+                address,
+                readonly: widget.edit,
+              ),
+              if(addresse.isNotEmpty)
+              errormessage(addresse),
+              Districtcity(
+                districte: districte,
+                citye: citye,
+
+                selecteddistrict: selecteddistrictitems,
+                selectedcity: selectedcityitems,
+
+                ondistrictChanged: (value) {
+                  setState(() {
+                    selecteddistrictitems = value;
+                    selectedcityitems = null;
+                  });
+                },
+                oncityChanged: (value) {
+                  setState(() {
+                    selectedcityitems = value;
+                  });
+                },
+
+                edit: widget.edit,
+              ),
+              textfieldy(
+                'Pincode',
+                pincode,
+                readonly: widget.edit,
+              ),
+              if(pincodee.isNotEmpty)
+              errormessage(pincodee),
+              CustomDropdown(
+                title: 'Gender',
+                selectedCustomDropdown: selectedgenderitems,
+                customDropdownItems: genderitems,
+                onChanged: (newValue) {
+                  setState(() {
+                    selectedgenderitems = newValue;
+                  });
+                },
+                star: false,
+                readOnly: widget.edit,
+              ),
+              if(gendere.isNotEmpty)
+              errormessage(gendere),
+              Dateofbirthfield(
+                title: 'Date of Birth',
+                datecontroller: datecontroller,
+                star: false,
+                readOnly: widget.edit,
+              ),
+
+              CustomDropdown(
+                title: 'Martial Status',
+                selectedCustomDropdown: selectedmartialstatusitems,
+                customDropdownItems: martialstatusitems,
+                onChanged: (newValue) {
+                  setState(() {
+                    selectedmartialstatusitems = newValue;
+                  });
+                },
+                star: false,
+                readOnly: widget.edit,
+              ),
+              textfieldy(
+                "Email ID",
+                emailid,
+                readonly: widget.edit,
+              ),
+              if(emailide.isNotEmpty)
+              errormessage(emailide),
               textfieldy(
                 'High Rise Number',
                 wingsenquiry,
@@ -501,103 +598,6 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
               ),
               if(customertypee.isNotEmpty)
               errormessage(customertypee),
-              textfieldy(
-                'Customer Contact Number',
-                customercontactnumber,
-                readonly: widget.edit,
-              ),
-              if(customercontactnumbere.isNotEmpty)
-              errormessage(customercontactnumbere),
-              textfieldy(
-                'Secondary Contact Number',
-                secondarycontactnumber,
-                readonly: widget.edit,
-              ),
-              if(secondarycontactnumbere.isNotEmpty)
-              errormessage(secondarycontactnumbere),
-              textfieldy(
-                'Customer Name',
-                customername,
-                readonly: widget.edit,
-              ),
-              if(customernamee.isNotEmpty)
-              errormessage(customernamee),
-              CustomDropdown(
-                title: 'Gender',
-                selectedCustomDropdown: selectedgenderitems,
-                customDropdownItems: genderitems,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedgenderitems = newValue;
-                  });
-                },
-                star: false,
-                readOnly: widget.edit,
-              ),
-              if(gendere.isNotEmpty)
-              errormessage(gendere),
-              Dateofbirthfield(
-                title: 'Date of Birth',
-                datecontroller: datecontroller,
-                star: false,
-                readOnly: widget.edit,
-              ),
-
-              CustomDropdown(
-                title: 'Martial Status',
-                selectedCustomDropdown: selectedmartialstatusitems,
-                customDropdownItems: martialstatusitems,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedmartialstatusitems = newValue;
-                  });
-                },
-                star: false,
-                readOnly: widget.edit,
-              ),
-              
-              textfieldy(
-                "Email ID",
-                emailid,
-                readonly: widget.edit,
-              ),
-              if(emailide.isNotEmpty)
-              errormessage(emailide),
-              textfieldy(
-                "Address",
-                address,
-                readonly: widget.edit,
-              ),
-              if(addresse.isNotEmpty)
-              errormessage(addresse),
-              Districtcity(
-                districte: districte,
-                citye: citye,
-
-                selecteddistrict: selecteddistrictitems,
-                selectedcity: selectedcityitems,
-
-                ondistrictChanged: (value) {
-                  setState(() {
-                    selecteddistrictitems = value;
-                    selectedcityitems = null;
-                  });
-                },
-                oncityChanged: (value) {
-                  setState(() {
-                    selectedcityitems = value;
-                  });
-                },
-
-                edit: widget.edit,
-              ),
-              textfieldy(
-                'Pincode',
-                pincode,
-                readonly: widget.edit,
-              ),
-              if(pincodee.isNotEmpty)
-              errormessage(pincodee),
               CustomDropdown(
                 title: 'Enquiry Type',
                 selectedCustomDropdown: selectedenquirytypeitems,

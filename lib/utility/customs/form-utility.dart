@@ -287,3 +287,37 @@ Future<void> showMessagePopup(BuildContext context, String message, VoidCallback
     },
   );
 }
+
+back(BuildContext context, Widget backscreen) => RawMaterialButton(
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => backscreen)
+    );
+  },
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(10)
+  ),
+  child: Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 10),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(
+          Icons.arrow_back_rounded,
+          size: 20,
+        ),
+        SizedBox(
+          width: 5,
+        ),
+        Text(
+          'Back',
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 16
+          ),
+        ),
+      ],
+    ),
+  ),
+);

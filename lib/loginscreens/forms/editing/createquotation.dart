@@ -8,6 +8,7 @@ import 'package:lottie/lottie.dart';
 import 'package:pravinhonda/bloc/apirespnse_cubit.dart';
 import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/loginscreens/Navigation.dart';
+import 'package:pravinhonda/loginscreens/forms/creating/createenquiry.dart';
 import 'package:pravinhonda/loginscreens/forms/editing/editenquiry.dart';
 import 'package:pravinhonda/loginscreens/forms/editing/editexchange.dart';
 import 'package:pravinhonda/loginscreens/forms/editing/editfinance.dart';
@@ -126,6 +127,7 @@ class _CreatequotationState extends State<Createquotation> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: SizeConfig.h(10)),
+                  back(context, Createenquiry()),
                   Center(
                     child: Text(
                       'Create Quotation',
@@ -300,7 +302,7 @@ class _CreatequotationState extends State<Createquotation> {
               ),
               Positioned(
                 right: 10,
-                top: 55,
+                top: 20,
                 child: ElevatedButton(
                   onPressed: () {
                     setState(() {

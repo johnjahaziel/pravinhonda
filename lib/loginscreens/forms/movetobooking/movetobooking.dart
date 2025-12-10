@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:pravinhonda/loginscreens/Navigation.dart';
 import 'package:pravinhonda/loginscreens/forms/movetobooking/editenquiry.dart';
 import 'package:pravinhonda/loginscreens/forms/movetobooking/editexchange.dart';
 import 'package:pravinhonda/loginscreens/forms/movetobooking/editfinance.dart';
 import 'package:pravinhonda/utility/customs/customappBar.dart';
 import 'package:pravinhonda/utility/customs/customdrawer.dart';
+import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
@@ -108,6 +110,7 @@ class _MovetobookingState extends State<Movetobooking> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: SizeConfig.h(10)),
+                  back(context, Navigation(initialIndex: 1)),
                   Center(
                     child: Text(
                       'Move to Booking',
@@ -282,7 +285,7 @@ class _MovetobookingState extends State<Movetobooking> {
               ),
               Positioned(
                 right: 10,
-                top: 55,
+                top: 20,
                 child: ElevatedButton(
                   onPressed: () {
                     setState(() {

@@ -271,6 +271,91 @@ class _AddenquiryState extends State<Addenquiry> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               textfieldy(
+                'Customer Name',
+                customername
+              ),
+              if(customernamee.isNotEmpty)
+              errormessage(customernamee),
+              textfieldy(
+                'Customer Contact Number',
+                customercontactnumber
+              ),
+              if(customercontactnumbere.isNotEmpty)
+              errormessage(customercontactnumbere),
+              textfieldy(
+                'Secondary Contact Number',
+                secondarycontactnumber,
+                star: false
+              ),
+              if(secondarycontactnumbere.isNotEmpty)
+              errormessage(secondarycontactnumbere),
+              textfieldy(
+                "Address",
+                address
+              ),
+              if(addresse.isNotEmpty)
+              errormessage(addresse),
+              Districtcity(
+                districte: districte,
+                citye: citye,
+
+                selecteddistrict: selecteddistrictitems,
+                selectedcity: selectedcityitems,
+
+                ondistrictChanged: (value) {
+                  setState(() {
+                    selecteddistrictitems = value;
+                    selectedcityitems = null;
+                  });
+                },
+                oncityChanged: (value) {
+                  setState(() {
+                    selectedcityitems = value;
+                  });
+                },
+              ),
+              textfieldy(
+                'Pincode',
+                pincode
+              ),
+              if(pincodee.isNotEmpty)
+              errormessage(pincodee),
+              CustomDropdown(
+                title: 'Gender',
+                selectedCustomDropdown: selectedgenderitems,
+                customDropdownItems: genderitems,
+                onChanged: (newValue) {
+                  setState(() {
+                    selectedgenderitems = newValue;
+                  });
+                },
+                star: true,
+              ),
+              if(gendere.isNotEmpty)
+              errormessage(gendere),
+              Dateofbirthfield(
+                title: 'Date of Birth',
+                datecontroller: datecontroller,
+                star: false
+              ),
+              CustomDropdown(
+                title: 'Martial Status',
+                selectedCustomDropdown: selectedmartialstatusitems,
+                customDropdownItems: martialstatusitems,
+                onChanged: (newValue) {
+                  setState(() {
+                    selectedmartialstatusitems = newValue;
+                  });
+                },
+                star: false,
+              ),
+              textfieldy(
+                "Email ID",
+                emailid
+              ),
+              if(emailide.isNotEmpty)
+              errormessage(emailide),
+              textfieldy(
                 'High Rise Number',
                 wingsenquiry,
                 star: false
@@ -313,93 +398,6 @@ class _AddenquiryState extends State<Addenquiry> {
               ),
               if(customertypee.isNotEmpty)
               errormessage(customertypee),
-              textfieldy(
-                'Customer Contact Number',
-                customercontactnumber
-              ),
-              if(customercontactnumbere.isNotEmpty)
-              errormessage(customercontactnumbere),
-              textfieldy(
-                'Secondary Contact Number',
-                secondarycontactnumber,
-                star: false
-              ),
-              if(secondarycontactnumbere.isNotEmpty)
-              errormessage(secondarycontactnumbere),
-              textfieldy(
-                'Customer Name',
-                customername
-              ),
-              if(customernamee.isNotEmpty)
-              errormessage(customernamee),
-              CustomDropdown(
-                title: 'Gender',
-                selectedCustomDropdown: selectedgenderitems,
-                customDropdownItems: genderitems,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedgenderitems = newValue;
-                  });
-                },
-                star: true,
-              ),
-              if(gendere.isNotEmpty)
-              errormessage(gendere),
-              Dateofbirthfield(
-                title: 'Date of Birth',
-                datecontroller: datecontroller,
-                star: false
-              ),
-                      
-              CustomDropdown(
-                title: 'Martial Status',
-                selectedCustomDropdown: selectedmartialstatusitems,
-                customDropdownItems: martialstatusitems,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedmartialstatusitems = newValue;
-                  });
-                },
-                star: false,
-              ),
-              
-              textfieldy(
-                "Email ID",
-                emailid
-              ),
-              if(emailide.isNotEmpty)
-              errormessage(emailide),
-              textfieldy(
-                "Address",
-                address
-              ),
-              if(addresse.isNotEmpty)
-              errormessage(addresse),
-              Districtcity(
-                districte: districte,
-                citye: citye,
-
-                selecteddistrict: selecteddistrictitems,
-                selectedcity: selectedcityitems,
-
-                ondistrictChanged: (value) {
-                  setState(() {
-                    selecteddistrictitems = value;
-                    selectedcityitems = null;
-                  });
-                },
-                oncityChanged: (value) {
-                  setState(() {
-                    selectedcityitems = value;
-                  });
-                },
-              ),
-              textfieldy(
-                'Pincode',
-                pincode
-              ),
-              if(pincodee.isNotEmpty)
-              errormessage(pincodee),
               CustomDropdown(
                 title: 'Enquiry Type',
                 selectedCustomDropdown: selectedenquirytypeitems,
