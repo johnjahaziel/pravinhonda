@@ -251,7 +251,7 @@ class _ReviewBoxesState extends State<ReviewBoxes> {
   bool isChecked = false;
 
   Future<void> apiconnection() async {
-    final url = Uri.parse('https://app.pravinhonda.com/api/enquiry/${widget.enquiryid}/followup');
+    final url = Uri.parse('https://app.pravinhonda.com/api/${widget.enquiryid}/followup');
 
     final token = BlocProvider.of<AuthCubit>(context).state.token;
 
@@ -365,7 +365,6 @@ class _ReviewBoxesState extends State<ReviewBoxes> {
           button(
             'Update',
             () {
-              apiconnection();
               if(isChecked == true) {
                 showDialog(
                   context: context,
@@ -376,6 +375,8 @@ class _ReviewBoxesState extends State<ReviewBoxes> {
                     enquiryId: widget.enquiryid,
                   ),
                 );
+              } else {
+                apiconnection();
               }
             },
             padding: true

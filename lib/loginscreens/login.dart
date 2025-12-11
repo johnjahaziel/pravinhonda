@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
+import 'package:pravinhonda/bloc/username_cubit.dart';
 import 'package:pravinhonda/loginscreens/Navigation.dart';
 import 'package:pravinhonda/utility/custom.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
@@ -61,6 +62,10 @@ class _LoginState extends State<Login> {
             toastLength: Toast.LENGTH_LONG
           );
         }
+
+        String username = responseData['user']['username'];
+
+        BlocProvider.of<UsernameCubit>(context).setusername(username);
         
         Navigator.pushAndRemoveUntil(
           context,

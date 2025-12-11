@@ -4,6 +4,7 @@ import 'package:pravinhonda/MenuScreen/alllostcustomer.dart';
 import 'package:pravinhonda/MenuScreen/emicalculator.dart';
 import 'package:pravinhonda/MenuScreen/searchcustomer.dart';
 import 'package:pravinhonda/bloc/auth_cubit.dart';
+import 'package:pravinhonda/loginscreens/Navigation.dart';
 import 'package:pravinhonda/loginscreens/login.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
@@ -83,7 +84,14 @@ class _CustomdrawerState extends State<Customdrawer> {
                   menuicontitle(
                     Icons.home_outlined,
                     "Home",
-                    () {},
+                    () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Navigation(initialIndex: 0,)
+                        )
+                      );
+                    },
                   ),
                   _buildDivider(),
                   menuicontitle(

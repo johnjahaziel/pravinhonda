@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
+import 'package:pravinhonda/bloc/username_cubit.dart';
 import 'package:pravinhonda/utility/boxes.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
@@ -22,6 +23,7 @@ class _HomescreenState extends State<Homescreen> {
 
   @override
   Widget build(BuildContext context) {
+    final blocusername = BlocProvider.of<UsernameCubit>(context).state.username;
     SizeConfig.init(context);
     return SafeArea(
       child: Scaffold(
@@ -54,19 +56,19 @@ class _HomescreenState extends State<Homescreen> {
                           FittedBox(
                             fit: BoxFit.scaleDown,
                             child: Text(
-                              'Welcome XXXXX',
-                              style: customtext(fs14, kred, FontWeight.w600),
+                              'Welcome $blocusername',
+                              style: customtext(fs12, kred, FontWeight.w600),
                             ),
                           ),
                           SizedBox(height: SizeConfig.h(5)),
                           FittedBox(
                             fit: BoxFit.scaleDown,
-                            child: Text('Monthly Target : 20', style: textmedium12),
+                            child: Text('Monthly Target : 20', style: textmedium10),
                           ),
                           SizedBox(height: SizeConfig.h(3)),
                           FittedBox(
                             fit: BoxFit.scaleDown,
-                            child: Text('Target Achieved : 12', style: textmedium12),
+                            child: Text('Target Achieved : 12', style: textmedium10),
                           ),
                         ],
                       ),

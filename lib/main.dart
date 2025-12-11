@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pravinhonda/bloc/apirespnse_cubit.dart';
 import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/bloc/enquiry_id_cubit.dart';
+import 'package:pravinhonda/bloc/username_cubit.dart';
 import 'package:pravinhonda/loginscreens/Navigation.dart';
 import 'package:pravinhonda/loginscreens/login.dart';
 import 'package:pravinhonda/utility/styles.dart';
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
         BlocProvider.value(value: authCubit),
         BlocProvider(create: (_) => EnquiryCubit()),
         BlocProvider(create: (_) => ApiresponseCubit()),
+        BlocProvider(create: (_) => UsernameCubit())
       ],
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.dark.copyWith(

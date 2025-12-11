@@ -44,7 +44,7 @@ class _LostcustomerReasonState extends State<LostcustomerReason> {
   TextEditingController otherscomments = TextEditingController();
 
   Future<void> apiconnection() async {
-    final url = Uri.parse('https://app.pravinhonda.com/api/mark-loss-customer/${widget.enquiryId}');
+    final url = Uri.parse('https://app.pravinhonda.com/api/lost_customer/${widget.enquiryId}');
 
     final token = BlocProvider.of<AuthCubit>(context).state.token;
 
