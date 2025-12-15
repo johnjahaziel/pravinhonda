@@ -70,7 +70,7 @@ class CustomDropdown extends StatelessWidget {
                   ),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
-                      value: selectedCustomDropdown,
+                      value: customDropdownItems.any((item) => item['value'] == selectedCustomDropdown) ? selectedCustomDropdown : null,
                       hint: Padding(
                         padding: EdgeInsets.only(top: 5),
                         child: Text(
@@ -93,7 +93,7 @@ class CustomDropdown extends StatelessWidget {
                         return DropdownMenuItem<String>(
                           value: item['value'],
                           child: Text(
-                            item['label']!,
+                            item['label'] ?? '',
                             style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14,

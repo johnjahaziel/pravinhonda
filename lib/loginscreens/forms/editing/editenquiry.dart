@@ -188,6 +188,7 @@ class _EditenquiryState extends State<Editenquiry> {
           toastLength: Toast.LENGTH_LONG,
         );
 
+        BlocProvider.of<ApiresponseCubit>(context).clearApiresponse();
         final apiresponse = responseData;
         BlocProvider.of<ApiresponseCubit>(context).setApiresponse(apiresponse);
 

@@ -59,6 +59,7 @@ class _CreatequotationState extends State<Createquotation> {
   }
 
   void apiresponseBloc(Map<String,dynamic> response) {
+    BlocProvider.of<ApiresponseCubit>(context).clearApiresponse();
     final apiresponse = widget.apiResponse;
     BlocProvider.of<ApiresponseCubit>(context).setApiresponse(apiresponse);
     _initControllersFromResponse(apiresponse);
@@ -85,6 +86,7 @@ class _CreatequotationState extends State<Createquotation> {
   @override
   Widget build(BuildContext context) {
     final apiresponselocal = BlocProvider.of<ApiresponseCubit>(context).state.apiresponse ?? {};
+    print(apiresponselocal);
     SizeConfig.init(context);
     return SafeArea(
       child: PopScope(

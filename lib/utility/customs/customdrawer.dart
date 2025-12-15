@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pravinhonda/MenuScreen/alllostcustomer.dart';
 import 'package:pravinhonda/MenuScreen/emicalculator.dart';
 import 'package:pravinhonda/MenuScreen/searchcustomer.dart';
+import 'package:pravinhonda/bloc/apirespnse_cubit.dart';
 import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/loginscreens/Navigation.dart';
 import 'package:pravinhonda/loginscreens/login.dart';
@@ -34,6 +35,7 @@ class _CustomdrawerState extends State<Customdrawer> {
     prefs.remove('token');
 
     BlocProvider.of<AuthCubit>(context).cleartoken();
+    BlocProvider.of<ApiresponseCubit>(context).clearApiresponse();
 
     Navigator.pushAndRemoveUntil(
       context,

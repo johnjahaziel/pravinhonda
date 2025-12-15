@@ -259,6 +259,7 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
           toastLength: Toast.LENGTH_LONG,
         );
 
+        BlocProvider.of<ApiresponseCubit>(context).clearApiresponse();
         final apiresponse = responseData;
         BlocProvider.of<ApiresponseCubit>(context).setApiresponse(apiresponse);
 
@@ -533,7 +534,7 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
               ),
 
               CustomDropdown(
-                title: 'Martial Status',
+                title: 'Marital Status',
                 selectedCustomDropdown: selectedmartialstatusitems,
                 customDropdownItems: martialstatusitems,
                 onChanged: (newValue) {

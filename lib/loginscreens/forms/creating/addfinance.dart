@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/apirespnse_cubit.dart';
 import 'package:pravinhonda/bloc/auth_cubit.dart';
+import 'package:pravinhonda/loginscreens/forms/editing/createquotation.dart';
 import 'package:pravinhonda/namevariantcolor.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
@@ -34,6 +35,7 @@ class _AddfinanceState extends State<Addfinance> {
   String? selectedloanperioditems;
 
   bool financepreviewfields = false;
+  bool financesaved = false;
 
   TextEditingController modalname = TextEditingController();
   TextEditingController modalvariant = TextEditingController();
@@ -52,6 +54,8 @@ class _AddfinanceState extends State<Addfinance> {
   String loanperioditemse = '';
 
   String nextpagelocal = '';
+
+  Map<String, dynamic>? _financeResponse;
 
   @override
   void initState() {
@@ -186,6 +190,11 @@ class _AddfinanceState extends State<Addfinance> {
         setState(() {
           emi = TextEditingController(text: responseData['data']['emi'].toString());
           loaninterest = TextEditingController(text: responseData['data']['loan_interest'].toString());
+
+          getoneenquiry();
+
+          financesaved = true;
+          _financeResponse = responseData;
         });
         print(responseData);
 
@@ -201,6 +210,79 @@ class _AddfinanceState extends State<Addfinance> {
     } catch (e) {
       print('Error: $e');
     }
+  }
+
+  Future<void> getoneenquiry() async {
+    final url = Uri.parse('https://app.pravinhonda.com/api/enquiries/${widget.enquiryid}');
+
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        }
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if(response.statusCode == 200) {
+        BlocProvider.of<ApiresponseCubit>(context).clearApiresponse();
+        BlocProvider.of<ApiresponseCubit>(context).setApiresponse(responseData);
+
+        print('Get One Enquiry: $responseData');
+
+
+      } else {
+        Fluttertoast.showToast(msg: responseData['message']);
+      }
+
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  void submit() {
+    if (_financeResponse == null) {
+      Fluttertoast.showToast(msg: 'Please save finance details first.');
+      return;
+    }
+
+    final responseData = _financeResponse!;
+    final Map<String, dynamic> api = BlocProvider.of<ApiresponseCubit>(context).state.apiresponse ?? {};
+    final resp = api['data'] ?? {};
+    final exchange = resp['exchange_flag'] ?? '';
+
+    if (exchange == 'yes') {
+      nextpagelocal = 'Exchange Form';
+    } else {
+      nextpagelocal = 'Quotation';
+    }
+
+    showMessagePopup(
+      context,
+      responseData['message'],
+      () {
+        Navigator.pop(context);
+        if (exchange == 'yes') {
+          widget.exchangeselected();
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Createquotation(
+                enquiryid: resp['enquiry_id'],
+                apiResponse: api,
+              )
+            )
+          );
+        }
+      },
+      nextpage: nextpagelocal,
+    );
   }
 
   @override
@@ -239,7 +321,7 @@ class _AddfinanceState extends State<Addfinance> {
                   });
                 },
               ),
-              if(financepreviewfields = true)
+              if(financepreviewfields == true)
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -298,9 +380,12 @@ class _AddfinanceState extends State<Addfinance> {
                 readonly: true
               ),
               SizedBox(height: SizeConfig.h(25)),
+              if(financesaved == true)
               button(
                 'Submit',
-                () {}
+                () {
+                  submit();
+                }
               ),
               SizedBox(height: SizeConfig.h(30)),
             ],

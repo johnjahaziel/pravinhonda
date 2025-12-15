@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:pravinhonda/bloc/apirespnse_cubit.dart';
 import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/loginscreens/forms/editing/createquotation.dart';
-import 'package:pravinhonda/utility/customs/customdropdown.dart';
+import 'package:pravinhonda/namevariantcolor.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 
@@ -34,41 +35,58 @@ class EditfinanceMB extends StatefulWidget {
 }
 
 class _EditfinanceMBState extends State<EditfinanceMB> {
-  List<Map<String, String>> financeitems = financeTypeItems;
-  List<Map<String, String>> loanperioditems = loanperiodTypeItems;
+  List<Map<String, String>> financeitems = [];
+  List<Map<String, String>> loanperioditems = [];
 
   String? selectedfinanceitems;
   String? selectedloanperioditems;
 
-  TextEditingController vehiclecost = TextEditingController();
-  TextEditingController initialpayment = TextEditingController();
-  TextEditingController documentcharges = TextEditingController();
-  TextEditingController downpayment = TextEditingController();
-  TextEditingController loaninterest = TextEditingController();
+  TextEditingController modalname = TextEditingController();
+  TextEditingController modalvariant = TextEditingController();
+  TextEditingController modalcolor = TextEditingController();
 
-  String financeitemse = '';
-  String vehiclecoste = '';
+  TextEditingController maxloanpercentage= TextEditingController();
+  TextEditingController maxloanamount= TextEditingController();
+
+  TextEditingController loanamount= TextEditingController();
+
+  TextEditingController vehiclecost = TextEditingController();
+  TextEditingController loaninterest = TextEditingController();
+  TextEditingController emi = TextEditingController();
+
+  String loanamounte = '';
   String loanperioditemse = '';
-  String initialpaymente = '';
-  String documentchargese = '';
-  String downpaymente = '';
-  String loanintereste = '';
 
   String nextpagelocal = '';
+
+  Map<String, dynamic>? _financeResponse;
 
   String? oldexchange;
 
   @override
   void initState() {
     super.initState();
+    fetchfinance();
     print('old api response: ${widget.oldapiResponse}');
     oldapiexchange(widget.oldapiResponse);
     print('api response: ${widget.apiResponse}');
     initControllersFromResponse(widget.apiResponse);
   }
 
+  Map<String, dynamic> originalEnquiry = {};
+
+  bool isEdited() {
+    return
+      selectedfinanceitems != originalEnquiry['finance'] ||
+      selectedloanperioditems != originalEnquiry['loan_period'].toString() ||
+      vehiclecost.text != (originalEnquiry['vehicle_cost']?.toString() ?? '') ||
+      loanamount.text != (originalEnquiry['loan_amount']?.toString() ?? '') ||
+      emi.text != (originalEnquiry['emi']?.toString() ?? '') ||
+      loaninterest.text != (originalEnquiry['loan_interest']?.toString() ?? '');
+  }
+
   void oldapiexchange(Map<String, dynamic> resp) {
-    final enquiry = resp['data'] ?? {};
+    final enquiry = resp;
     oldexchange = enquiry['exchange_flag'];
   }
 
@@ -77,35 +95,66 @@ class _EditfinanceMBState extends State<EditfinanceMB> {
 
     originalEnquiry = Map<String, dynamic>.from(enquiry);
 
-    selectedfinanceitems    = enquiry['finance']?.toString();
+    selectedfinanceitems  = enquiry['finance']?.toString();
+    financepreview(selectedfinanceitems ?? '');
+
     selectedloanperioditems = enquiry['loan_period']?.toString();
 
     vehiclecost = TextEditingController(text: (enquiry['vehicle_cost'] ?? '').toString());
-    documentcharges = TextEditingController(text: (enquiry['document_charges'] ?? '').toString());
-    downpayment = TextEditingController(text: (enquiry['down_payment'] ?? '').toString());
     loaninterest = TextEditingController(text: (enquiry['loan_interest'] ?? '').toString());
-    initialpayment = TextEditingController(text: (enquiry['initial_payment'] ?? '').toString());
+    loanamount = TextEditingController(text: (enquiry['loan_amount'] ?? '').toString());
+    emi = TextEditingController(text: (enquiry['emi'] ?? '').toString());
+
+    modalname = TextEditingController(text: enquiry['model_name']);
+    modalvariant = TextEditingController(text: enquiry['model_variant']);
+    modalcolor = TextEditingController(text: enquiry['model_color']);
   }
 
-  Map<String, dynamic> originalEnquiry = {};
-
-  bool isEdited() {
-    return 
-      selectedfinanceitems != originalEnquiry['finance'] ||
-      selectedloanperioditems != originalEnquiry['loan_period'].toString() ||
-      vehiclecost.text != (originalEnquiry['vehicle_cost']?.toString() ?? '') ||
-      documentcharges.text != (originalEnquiry['document_charges']?.toString() ?? '') ||
-      downpayment.text != (originalEnquiry['down_payment']?.toString() ?? '') ||
-      loaninterest.text != (originalEnquiry['loan_interest']?.toString() ?? '') ||
-      initialpayment.text != (originalEnquiry['initial_payment']?.toString() ?? '');
-  }
-
-  Future<void> financeform() async {
-    final url = Uri.parse('https://app.pravinhonda.com/api/enquiries/${widget.enquiryid}');
+  Future<void> fetchfinance() async {
+    final financeUrl = Uri.parse('https://app.pravinhonda.com/api/finance/schemes');
 
     final token = BlocProvider.of<AuthCubit>(context).state.token;
 
-    try{
+    try {
+      final response = await http.get(
+        financeUrl,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+      );
+
+      final Map<String, dynamic> data = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> finances = data['data'];
+
+        setState(() {
+          financeitems = finances.map((item) {
+            return {
+              'name': item['name'].toString(),
+            };
+          }).toList();
+        });
+      } else if(response.statusCode == 404) {
+
+        Fluttertoast.showToast(msg: data['message']);
+
+      } else {
+        print("Failed to load citys. Status code: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("City fetch error: $e");
+    }
+  }
+
+  Future<void> financepreview(String selectedfinace) async {
+    final url = Uri.parse('https://app.pravinhonda.com/api/finance/preview/${widget.enquiryid}');
+
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    try {
       final response = await http.post(
         url,
         headers: {
@@ -114,88 +163,169 @@ class _EditfinanceMBState extends State<EditfinanceMB> {
           'Authorization': 'Bearer $token'
         },
         body: jsonEncode({
-          'finance': selectedfinanceitems?.toString(),
-          'vehicle_cost': vehiclecost.text,
-          'initial_payment': initialpayment.text,
-          'document_charges': documentcharges.text,
-          'down_payment': downpayment.text,
-          'loan_interest': loaninterest.text,
-          'loan_period': selectedloanperioditems?.toString(),
-
-          // "finance": "Personal Loan",
-          // "vehicle_cost": 500000,
-          // "initial_payment": 50000,
-          // "document_charges": 10000,
-          // "down_payment": 100000,
-          // "loan_interest": 12,
-          // "loan_period": 12
-        }),
+          'finance': selectedfinace
+        })
       );
 
       final responseData = jsonDecode(response.body);
 
-      if (response.statusCode == 200) {
-        print('response data: $responseData');
-
-        final String exchange = responseData['data']["exchange_flag"];
-        print('exchange: $exchange');
-
-        if (exchange == 'yes'  && oldexchange == 'no') {
-          nextpagelocal = 'Exchange Form';
-        } else {
-          nextpagelocal = 'Quotation';
-        }
-
-        showMessagePopup(
-          context,
-          responseData['message'],
-          () {
-            Navigator.pop(context);
-            if (exchange == 'yes' && oldexchange == 'no') {
-              widget.exchangeselected();
-            } else {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (_) => QuotationSuccessPopup(
-                  name: '${responseData['data']['customer_name']}',
-                  number: '${responseData['data']['customer_contact_number']}',
-                  enquiryid: responseData['data']['enquiry_id'],
-                ),
-              );
-            }
-          },
-          nextpage: nextpagelocal
-        );
-
-      } else if (response.statusCode == 422) {
-        final errors = responseData['errors'] ?? {};
+      if(response.statusCode == 200) {
 
         setState(() {
-          financeitemse = errors['finance']?.toString() ?? '';
-          vehiclecoste = errors['vehicle_cost']?.toString() ?? '';
-          loanperioditemse = errors['loan_period']?.toString() ?? '';
-          initialpaymente = errors['initial_payment']?.toString() ?? '';
-          documentchargese = errors['document_charges']?.toString() ?? '';
-          downpaymente = errors['down_payment']?.toString() ?? '';
-          loanintereste = errors['loan_interest']?.toString() ?? '';
-        });
+          vehiclecost = TextEditingController(text: responseData['data']['finance_rule']['vehicle_price'].toString());
+          maxloanpercentage = TextEditingController(text: responseData['data']['finance_rule']['max_loan_percentage'].toString());
+          maxloanamount = TextEditingController(text: responseData['data']['loan_amount'].toString());
 
-        Fluttertoast.showToast(msg: responseData['message']);
-        print(response.body);
+          List<dynamic> rates = responseData['data']['rates'];
+
+          loanperioditems = rates.map((item) {
+            return {
+              "id": item['months'].toString(),
+              "name": "${item['months']}",
+            };
+          }).toList();
+
+          final resp = widget.apiResponse;
+
+          final enquiryLoanPeriod = resp['loan_period']?.toString();
+
+          selectedloanperioditems = enquiryLoanPeriod;
+        });
+        print(responseData);
+        finance();
+
       } else {
-        showMessagePopup(
-          context,
-          responseData['message'],
-          () {
-            Navigator.pop(context);
-          }
-        );
-        print(response.body);
+        Fluttertoast.showToast(msg: responseData['message']);
+        print(responseData);
       }
     } catch (error) {
       print('Error submitting finance form: $error');
     }
+  }
+
+  Future<void> finance() async{
+    final url = Uri.parse('https://app.pravinhonda.com/api/finance/save/${widget.enquiryid}');
+
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({
+          'finance': selectedfinanceitems,
+          'loan_amount' : loanamount.text,
+          'loan_period' : selectedloanperioditems
+        })
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if(response.statusCode == 200) {
+
+        setState(() {
+          emi = TextEditingController(text: responseData['data']['emi'].toString());
+          loaninterest = TextEditingController(text: responseData['data']['loan_interest'].toString());
+
+          getoneenquiry();
+
+          _financeResponse = responseData;
+        });
+        print(responseData);
+
+      } else if (response.statusCode == 422) {
+        final error = responseData['errors'] ?? '';
+
+        loanamounte = error['loan_amount'].toString();
+        loanperioditemse = error['loan_period'].toString();
+      } else {
+        Fluttertoast.showToast(msg: responseData['message']);
+        print(responseData);
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  Future<void> getoneenquiry() async {
+    final url = Uri.parse('https://app.pravinhonda.com/api/enquiries/${widget.enquiryid}');
+
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        }
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if(response.statusCode == 200) {
+        BlocProvider.of<ApiresponseCubit>(context).clearApiresponse();
+        BlocProvider.of<ApiresponseCubit>(context).setApiresponse(responseData);
+
+        print('Get One Enquiry: $responseData');
+
+
+      } else {
+        Fluttertoast.showToast(msg: responseData['message']);
+      }
+
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  void submit() {
+    if (_financeResponse == null) {
+      Fluttertoast.showToast(msg: 'Please save finance details first.');
+      return;
+    }
+
+    final responseData = _financeResponse!;
+    final Map<String, dynamic> api = BlocProvider.of<ApiresponseCubit>(context).state.apiresponse ?? {};
+
+    final resp = widget.apiResponse;
+    print(resp);
+
+    final String exchange = resp["exchange_flag"];
+    print('exchange: $exchange');
+
+    if (exchange == 'yes'  && oldexchange == 'no') {
+      nextpagelocal = 'Exchange Form';
+    } else {
+      nextpagelocal = 'Quotation';
+    }
+
+    showMessagePopup(
+      context,
+      responseData['message'],
+      () {
+        Navigator.pop(context);
+        if (exchange == 'yes' && oldexchange == 'no') {
+          widget.exchangeselected();
+        } else {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) => QuotationSuccessPopup(
+              name: '${api['data']['customer_name']}',
+              number: '${api['data']['customer_contact_number']}',
+              enquiryid: api['data']['enquiry_id'],
+            ),
+          );
+        }
+      },
+      nextpage: nextpagelocal
+    );
   }
   
   @override
@@ -206,85 +336,99 @@ class _EditfinanceMBState extends State<EditfinanceMB> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomDropdown(
+            textfieldy(
+              'Model Name',
+              modalname,
+              readonly: true
+            ),
+            textfieldy(
+              'Model Variant',
+              modalvariant,
+              readonly: true
+            ),
+            textfieldy(
+              'Model Color',
+              modalcolor,
+              readonly: true
+            ),
+            CustomNVCDropdown(
               title: 'Finance',
               selectedCustomDropdown: selectedfinanceitems,
               customDropdownItems: financeitems,
               onChanged:(newValue) {
                 setState(() {
                   selectedfinanceitems = newValue;
+                  financepreview(selectedfinanceitems ?? '');
                 });
               },
               readOnly: widget.edit,
             ),
-            if(financeitemse.isNotEmpty)
-            errormessage(financeitemse),
-            textfieldy(
-              'Vehicle Cost',
-              vehiclecost,
-              readonly: widget.edit,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                textfieldy(
+                  'On Road Price',
+                  vehiclecost,
+                  readonly: true
+                ),
+                textfieldy(
+                  'Max Loan Percentage',
+                  maxloanpercentage,
+                  readonly: true
+                ),
+                textfieldy(
+                  'Max Loan Amount',
+                  maxloanamount,
+                  readonly: true
+                ),
+
+                textfieldy(
+                  'Loan Amount',
+                  loanamount,
+                  readonly: widget.edit
+                ),
+                if(loanamounte.isNotEmpty)
+                errormessage(loanamounte),
+                CustomNVCDropdown(
+                  title: 'Loan Period (Months)',
+                  selectedCustomDropdown: selectedloanperioditems,
+                  customDropdownItems: loanperioditems,
+                  onChanged:(newValue) {
+                    setState(() {
+                      selectedloanperioditems = newValue;
+                    });
+                  },
+                  readOnly: widget.edit
+                ),
+                if(loanperioditemse.isNotEmpty)
+                errormessage(loanperioditemse),
+              ],
             ),
-            if(vehiclecoste.isNotEmpty)
-            errormessage(vehiclecoste),
-            textfieldy(
-              'Initial Payment',
-              initialpayment,
-              readonly: widget.edit,
+            SizedBox(height: SizeConfig.h(10)),
+            button(
+              'Calculate',
+              () {
+                finance();
+                print('Selected Loan Perod: $selectedloanperioditems');
+              }
             ),
-            if(initialpaymente.isNotEmpty)
-            errormessage(initialpaymente),
             textfieldy(
-              'Document Charges',
-              documentcharges,
-              readonly: widget.edit,
+              'EMI',
+              emi,
+              readonly: true
             ),
-            if(documentchargese.isNotEmpty)
-            errormessage(documentchargese),
-            textfieldy(
-              'Down Payment',
-              downpayment,
-              readonly: widget.edit,
-            ),
-            if(downpaymente.isNotEmpty)
-            errormessage(downpaymente),
             textfieldy(
               'Loan Interest',
               loaninterest,
-              readonly: widget.edit,
+              readonly: true
             ),
-            if(loanintereste.isNotEmpty)
-            errormessage(loanintereste),
-            CustomDropdown(
-              title: 'Loan Period',
-              selectedCustomDropdown: selectedloanperioditems,
-              customDropdownItems: loanperioditems,
-              onChanged:(newValue) {
-                setState(() {
-                  selectedloanperioditems = newValue;
-                });
-              },
-              readOnly: widget.edit,
-            ),
-            if(loanperioditemse.isNotEmpty)
-            errormessage(loanperioditemse),
-            // SizedBox(height: SizeConfig.h(20)),
-            // button(
-            //   'Calculate',
-            //   () {}
-            // ),
-            // textfieldy(
-            //   'EMI',
-            //   TextEditingController(),
-            //   // emi,
-            //   readonly: true
-            // ),
             if(isEdited() == true)
             SizedBox(height: SizeConfig.h(25)),
             if(isEdited() == true)
             button(
               'Update Quotation',
               () {
-                financeform();
+                submit();
               }
             ),
             SizedBox(height: SizeConfig.h(30)),

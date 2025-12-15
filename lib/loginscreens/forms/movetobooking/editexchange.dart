@@ -8,7 +8,6 @@ import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/loginscreens/forms/editing/createquotation.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
-import 'package:pravinhonda/utility/styles.dart';
 
 class EditexchangeMB extends StatefulWidget {
   final int enquiryid;
@@ -170,17 +169,6 @@ class _EditexchangeMBState extends State<EditexchangeMB> {
           padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(20)),
           child: Column(
             children: [
-              Center(
-                child: Text(
-                  'Exchange',
-                  style: customtext(
-                    fs20,
-                    kred,
-                    FontWeight.bold
-                  ),
-                ),
-              ),
-              SizedBox(height: SizeConfig.h(5)),
               textfieldy(
                 'Name',
                 name,
