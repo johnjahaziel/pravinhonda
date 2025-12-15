@@ -65,7 +65,12 @@ class _LoginState extends State<Login> {
 
         String username = responseData['user']['username'];
 
-        BlocProvider.of<UsernameCubit>(context).setusername(username);
+        final usernamestore = await SharedPreferences.getInstance();
+        await usernamestore.setString('username', username);
+
+        String? storedUsername = usernamestore.getString('username');
+
+        BlocProvider.of<UsernameCubit>(context).setusername(storedUsername ?? 'User');
         
         Navigator.pushAndRemoveUntil(
           context,

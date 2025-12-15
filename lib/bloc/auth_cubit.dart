@@ -21,9 +21,17 @@ class AuthState {
 }
 
 class AuthCubit extends Cubit<AuthState> {
-  AuthCubit(): super(AuthState());
+  AuthCubit() : super(AuthState());
 
-  void setToken(String token) => emit(state.copyWith(token: token, isAuthenticated: true));
-  void cleartoken() => emit(AuthState(token: null, isAuthenticated: false));
+  void setToken(String? token) {
+    if (token == null || token.isEmpty) {
+      emit(AuthState(token: null, isAuthenticated: false));
+    } else {
+      emit(AuthState(token: token, isAuthenticated: true));
+    }
+  }
 
+  void cleartoken() {
+    emit(AuthState(token: null, isAuthenticated: false));
+  }
 }

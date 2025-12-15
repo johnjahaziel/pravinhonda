@@ -3,12 +3,15 @@ import 'dart:convert';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/bloc/username_cubit.dart';
+import 'package:pravinhonda/loginscreens/login.dart';
 import 'package:pravinhonda/utility/boxes.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
@@ -381,8 +384,9 @@ class _RecentactivityState extends State<Recentactivity> {
         },
       );
 
+      final Map<String, dynamic> responseData = jsonDecode(response.body);
+
       if (response.statusCode == 200) {
-        final Map<String, dynamic> responseData = jsonDecode(response.body);
 
         final List<dynamic> dataList = (responseData['data'] as List<dynamic>?) ?? [];
 
@@ -395,6 +399,19 @@ class _RecentactivityState extends State<Recentactivity> {
           loading = false;
         });
 
+      } else if(response.statusCode == 401) {
+        final prefs = await SharedPreferences.getInstance();
+        prefs.remove('token');
+
+        BlocProvider.of<AuthCubit>(context).cleartoken();
+
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (_) => Login()),
+          (route) => false,
+        );
+
+        Fluttertoast.showToast(msg: responseData['message']);
       } else {
         print("Failed to load data. Status code: ${response.statusCode}");
         print("Response body: ${response.body}");
