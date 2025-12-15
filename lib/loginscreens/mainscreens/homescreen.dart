@@ -24,6 +24,136 @@ class _HomescreenState extends State<Homescreen> {
   bool recentactivity = true;
   bool todolist = false;
 
+  String? totalenquiry;
+  String? openenquiry;
+  String? allbooking;
+  String? lostcustomer;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchtotalenquiry();
+    fetchopenenquiry();
+    fetchallbooking();
+    fetchlostcustomer();
+  }
+
+  Future<void> fetchtotalenquiry() async {
+    final totalenquiryurl = Uri.parse('https://app.pravinhonda.com/api/total-enquiry-count');
+
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    try {
+      final response = await http.get(
+        totalenquiryurl,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if(response.statusCode == 200) {
+        setState(() {
+          totalenquiry = responseData['total_enquiry'].toString();
+        });
+      } else {
+        Fluttertoast.showToast(msg: responseData['message']);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> fetchopenenquiry() async {
+    final openenquiryurl = Uri.parse('https://app.pravinhonda.com/api/enquiry-count');
+
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    try {
+      final response = await http.get(
+        openenquiryurl,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if(response.statusCode == 200) {
+        setState(() {
+          openenquiry = responseData['enquiry_count'].toString();
+        });
+      } else {
+        Fluttertoast.showToast(msg: responseData['message']);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> fetchallbooking() async {
+    final allbookingurl = Uri.parse('https://app.pravinhonda.com/api/booking-count');
+
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    try {
+      final response = await http.get(
+        allbookingurl,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if(response.statusCode == 200) {
+        setState(() {
+          allbooking = responseData['booking_count'].toString();
+        });
+      } else {
+        Fluttertoast.showToast(msg: responseData['message']);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> fetchlostcustomer() async {
+    final lostcustomerurl = Uri.parse('https://app.pravinhonda.com/api/loss-customer-count');
+
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    try {
+      final response = await http.get(
+        lostcustomerurl,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if(response.statusCode == 200) {
+        setState(() {
+          lostcustomer = responseData['loss_customer_count'].toString();
+        });
+      } else {
+        Fluttertoast.showToast(msg: responseData['message']);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final blocusername = BlocProvider.of<UsernameCubit>(context).state.username;
@@ -149,27 +279,27 @@ class _HomescreenState extends State<Homescreen> {
                 child: Row(
                   children: [
                     rowdetails(
-                      '210',
+                      totalenquiry ?? '0',
                       'Total\nEnquiry',
                       kred
                     ),
                     rowdetails(
-                      '20',
+                      openenquiry ?? '0',
                       'Open\nEnquiry',
                       kyellow
                     ),
                     rowdetails(
-                      '87',
+                      allbooking ?? '0',
                       'Booking',
                       klightgreen
                     ),
+                    // rowdetails(
+                    //   '34',
+                    //   'Delivered',
+                    //   kdarkblue
+                    // ),
                     rowdetails(
-                      '34',
-                      'Delivered',
-                      kdarkblue
-                    ),
-                    rowdetails(
-                      '19',
+                      lostcustomer ?? '0',
                       'Lost\nCustomer',
                       kpurple
                     )
