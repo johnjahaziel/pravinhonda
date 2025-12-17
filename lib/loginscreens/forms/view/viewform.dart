@@ -1,30 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:pravinhonda/loginscreens/Navigation.dart';
-import 'package:pravinhonda/loginscreens/forms/movetobooking/bookingno.dart';
-import 'package:pravinhonda/loginscreens/forms/movetobooking/bookingyes.dart';
-import 'package:pravinhonda/loginscreens/forms/movetobooking/editenquiry.dart';
-import 'package:pravinhonda/loginscreens/forms/movetobooking/editexchange.dart';
-import 'package:pravinhonda/loginscreens/forms/movetobooking/editfinance.dart';
+import 'package:pravinhonda/loginscreens/forms/view/viewenquiry.dart';
+import 'package:pravinhonda/loginscreens/forms/view/viewexchange.dart';
+import 'package:pravinhonda/loginscreens/forms/view/viewfinace.dart';
 import 'package:pravinhonda/utility/customs/customappBar.dart';
 import 'package:pravinhonda/utility/customs/customdrawer.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
-class Movetobooking extends StatefulWidget {
+class Viewform extends StatefulWidget {
   final int enquiryid;
   final Map<String, dynamic> apiResponse;
-  const Movetobooking({
+  const Viewform({
     super.key,
     required this.enquiryid,
     required this.apiResponse
   });
 
   @override
-  State<Movetobooking> createState() => _MovetobookingState();
+  State<Viewform> createState() => _ViewformState();
 }
 
-class _MovetobookingState extends State<Movetobooking> {
+class _ViewformState extends State<Viewform> {
   bool createenquiry = true;
   bool finance = false;
   bool exchange = false;
@@ -74,7 +72,7 @@ class _MovetobookingState extends State<Movetobooking> {
 
   @override
   Widget build(BuildContext context) {
-  SizeConfig.init(context);
+    SizeConfig.init(context);
     return SafeArea(
       child: PopScope(
         canPop: false,
@@ -116,10 +114,10 @@ class _MovetobookingState extends State<Movetobooking> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: SizeConfig.h(10)),
-                  back(context, Navigation(initialIndex: 1)),
+                  back(context, Navigation(initialIndex: 0)),
                   Center(
                     child: Text(
-                      'Move to Booking',
+                      'View Details',
                       style: customtext(
                         fs18,
                         kred,
@@ -252,191 +250,27 @@ class _MovetobookingState extends State<Movetobooking> {
                       child: Column(
                         children: [
                           if(createenquiry == true)
-                          EditenquiryMB(
-                            financeselected: () {
-                              setState(() {
-                                previousTab = 'enquiry';
-                                financetrue = true;
-                                createenquiry = false;
-                                finance = true;
-                                exchange = false;
-                              });
-                            },
-                            exchangeselected: () {
-                              setState(() {
-                                previousTab = 'enquiry';
-                                exchangetrue = true;
-                                createenquiry = false;
-                                finance = false;
-                                exchange = true;
-                              });
-                            },
-                            enquiryid: widget.enquiryid,
+                          Viewenquiry(
                             apiResponse: widget.apiResponse,
-                            edit: edit(),
-                            isEditedform: () {
-                              setState(() {
-                                bookingtrue = false;
-                              });
-                            },
                           ),
                           if(finance == true)
-                          EditfinanceMB(
-                            exchangeflag: 'Yes',
-                            enquiryid: widget.enquiryid,
-                            exchangeselected: () {
-                              setState(() {
-                                previousTab = 'finance';
-                                exchangetrue = true;
-                                createenquiry = false;
-                                finance = false;
-                                exchange = true;
-                              });
-                            },
-                            edit: edit(),
-                            oldapiResponse: widget.apiResponse,
+                          Viewfinace(
                             apiResponse: widget.apiResponse,
                           ),
                           if(exchange == true)
-                          EditexchangeMB(
-                            enquiryid: widget.enquiryid,
+                          Viewexchange(
                             apiResponse: widget.apiResponse,
-                            edit: edit(),
                           )
                         ],
                       ),
                     ),
                   ),
-                  if(isEdited == false)
-                  button(
-                    'Move to Booking',
-                    () {
-                      showVehicleStockPopup(context);
-                    }
-                  )
                 ],
               ),
-              Positioned(
-                right: 10,
-                top: 20,
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      onEditpressed = !onEditpressed;
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: onEditpressed ? kwhite : kred,
-                    shape: CircleBorder(),
-                    elevation: 2,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: SizeConfig.w(12),
-                      vertical: SizeConfig.h(2)
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(6),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.edit,
-                          size: 28,
-                          color: onEditpressed ? kblack : kwhite,
-                        ),
-                        SizedBox(width: SizeConfig.w(3)),
-                        Text(
-                          'Edit',
-                          style: customtext(
-                            fs8,
-                            onEditpressed ? kblack : kwhite
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ),
-              )
             ],
           ),
         ),
       ),
-    );
-  }
-
-  void showVehicleStockPopup(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 24,
-            vertical: 20,
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                'Vehicle In Stock?',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  OutlinedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => BookingformNo(
-                          enquiryid: widget.enquiryid
-                          )
-                        )
-                      );
-                    },
-                    child: Text(
-                      'No',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: kred
-                      ),
-                    ),
-                  ),
-
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => BookingformYes(
-                          enquiryid: widget.enquiryid
-                          )
-                        )
-                      );
-                    },
-                    child: Text(
-                      'Yes',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: kred
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 }

@@ -52,21 +52,21 @@ class _AddexchangeState extends State<Addexchange> {
           'Authorization': 'Bearer $token'
         },
         body: jsonEncode({
-          // 'exchange_name': name.text,
-          // 'exchange_address': address.text,
-          // 'vehicle_model': vehiclemodal.text,
-          // 'new_vehicle_model': newvehiclemodal.text,
-          // 'expected_price': expectedprice.text,
-          // 'finalized_price': finalizedprice.text,
-          // 'assessed_by': assessedby.text,
+          'exchange_name': name.text,
+          'exchange_address': address.text,
+          'vehicle_model': vehiclemodal.text,
+          'new_vehicle_model': newvehiclemodal.text,
+          'expected_price': expectedprice.text,
+          'finalized_price': finalizedprice.text,
+          'assessed_by': assessedby.text,
 
-          "exchange_name": "Maha Kala",
-          "exchange_address": "123, MG Road, Chennai",
-          "vehicle_model": "Honda City 2018",
-          "new_vehicle_model": "September 2025",
-          "expected_price": 50000.00,
-          "finalized_price": 48000.00,
-          "assessed_by": "Athi"
+          // "exchange_name": "Maha Kala",
+          // "exchange_address": "123, MG Road, Chennai",
+          // "vehicle_model": "Honda City 2018",
+          // "new_vehicle_model": "September 2025",
+          // "expected_price": 50000.00,
+          // "finalized_price": 48000.00,
+          // "assessed_by": "Athi"
         }),
       );
 

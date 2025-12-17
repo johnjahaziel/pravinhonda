@@ -79,10 +79,10 @@ class _EditfinanceMBState extends State<EditfinanceMB> {
     return
       selectedfinanceitems != originalEnquiry['finance'] ||
       selectedloanperioditems != originalEnquiry['loan_period'].toString() ||
-      vehiclecost.text != (originalEnquiry['vehicle_cost']?.toString() ?? '') ||
-      loanamount.text != (originalEnquiry['loan_amount']?.toString() ?? '') ||
-      emi.text != (originalEnquiry['emi']?.toString() ?? '') ||
-      loaninterest.text != (originalEnquiry['loan_interest']?.toString() ?? '');
+      vehiclecost.text != (originalEnquiry['vehicle_cost'] ?? '') ||
+      loanamount.text != (originalEnquiry['loan_amount'] ?? '') ||
+      emi.text != (originalEnquiry['emi'] ?? '') ||
+      loaninterest.text != (originalEnquiry['loan_interest'] ?? '');
   }
 
   void oldapiexchange(Map<String, dynamic> resp) {
@@ -174,7 +174,7 @@ class _EditfinanceMBState extends State<EditfinanceMB> {
         setState(() {
           vehiclecost = TextEditingController(text: responseData['data']['finance_rule']['vehicle_price'].toString());
           maxloanpercentage = TextEditingController(text: responseData['data']['finance_rule']['max_loan_percentage'].toString());
-          maxloanamount = TextEditingController(text: responseData['data']['loan_amount'].toString());
+          maxloanamount = TextEditingController(text: responseData['data']['Max_loan_amount'].toString());
 
           List<dynamic> rates = responseData['data']['rates'];
 
@@ -330,110 +330,108 @@ class _EditfinanceMBState extends State<EditfinanceMB> {
   
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(20)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            textfieldy(
-              'Model Name',
-              modalname,
-              readonly: true
-            ),
-            textfieldy(
-              'Model Variant',
-              modalvariant,
-              readonly: true
-            ),
-            textfieldy(
-              'Model Color',
-              modalcolor,
-              readonly: true
-            ),
-            CustomNVCDropdown(
-              title: 'Finance',
-              selectedCustomDropdown: selectedfinanceitems,
-              customDropdownItems: financeitems,
-              onChanged:(newValue) {
-                setState(() {
-                  selectedfinanceitems = newValue;
-                  financepreview(selectedfinanceitems ?? '');
-                });
-              },
-              readOnly: widget.edit,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                textfieldy(
-                  'On Road Price',
-                  vehiclecost,
-                  readonly: true
-                ),
-                textfieldy(
-                  'Max Loan Percentage',
-                  maxloanpercentage,
-                  readonly: true
-                ),
-                textfieldy(
-                  'Max Loan Amount',
-                  maxloanamount,
-                  readonly: true
-                ),
-
-                textfieldy(
-                  'Loan Amount',
-                  loanamount,
-                  readonly: widget.edit
-                ),
-                if(loanamounte.isNotEmpty)
-                errormessage(loanamounte),
-                CustomNVCDropdown(
-                  title: 'Loan Period (Months)',
-                  selectedCustomDropdown: selectedloanperioditems,
-                  customDropdownItems: loanperioditems,
-                  onChanged:(newValue) {
-                    setState(() {
-                      selectedloanperioditems = newValue;
-                    });
-                  },
-                  readOnly: widget.edit
-                ),
-                if(loanperioditemse.isNotEmpty)
-                errormessage(loanperioditemse),
-              ],
-            ),
-            SizedBox(height: SizeConfig.h(10)),
-            button(
-              'Calculate',
-              () {
-                finance();
-                print('Selected Loan Perod: $selectedloanperioditems');
-              }
-            ),
-            textfieldy(
-              'EMI',
-              emi,
-              readonly: true
-            ),
-            textfieldy(
-              'Loan Interest',
-              loaninterest,
-              readonly: true
-            ),
-            if(isEdited() == true)
-            SizedBox(height: SizeConfig.h(25)),
-            if(isEdited() == true)
-            button(
-              'Update Quotation',
-              () {
-                submit();
-              }
-            ),
-            SizedBox(height: SizeConfig.h(30)),
-          ],
-        ),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(20)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          textfieldy(
+            'Model Name',
+            modalname,
+            readonly: true
+          ),
+          textfieldy(
+            'Model Variant',
+            modalvariant,
+            readonly: true
+          ),
+          textfieldy(
+            'Model Color',
+            modalcolor,
+            readonly: true
+          ),
+          CustomNVCDropdown(
+            title: 'Finance',
+            selectedCustomDropdown: selectedfinanceitems,
+            customDropdownItems: financeitems,
+            onChanged:(newValue) {
+              setState(() {
+                selectedfinanceitems = newValue;
+                financepreview(selectedfinanceitems ?? '');
+              });
+            },
+            readOnly: widget.edit,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              textfieldy(
+                'On Road Price',
+                vehiclecost,
+                readonly: true
+              ),
+              textfieldy(
+                'Max Loan Percentage',
+                maxloanpercentage,
+                readonly: true
+              ),
+              textfieldy(
+                'Max Loan Amount',
+                maxloanamount,
+                readonly: true
+              ),
+    
+              textfieldy(
+                'Loan Amount',
+                loanamount,
+                readonly: widget.edit
+              ),
+              if(loanamounte.isNotEmpty)
+              errormessage(loanamounte),
+              CustomNVCDropdown(
+                title: 'Loan Period (Months)',
+                selectedCustomDropdown: selectedloanperioditems,
+                customDropdownItems: loanperioditems,
+                onChanged:(newValue) {
+                  setState(() {
+                    selectedloanperioditems = newValue;
+                  });
+                },
+                readOnly: widget.edit
+              ),
+              if(loanperioditemse.isNotEmpty)
+              errormessage(loanperioditemse),
+            ],
+          ),
+          SizedBox(height: SizeConfig.h(10)),
+          button(
+            'Calculate',
+            () {
+              finance();
+              print('Selected Loan Perod: $selectedloanperioditems');
+            }
+          ),
+          textfieldy(
+            'EMI',
+            emi,
+            readonly: true
+          ),
+          textfieldy(
+            'Loan Interest',
+            loaninterest,
+            readonly: true
+          ),
+          if(isEdited() == true)
+          SizedBox(height: SizeConfig.h(25)),
+          if(isEdited() == true)
+          button(
+            'Update Quotation',
+            () {
+              submit();
+            }
+          ),
+          SizedBox(height: SizeConfig.h(30)),
+        ],
       ),
     );
   }

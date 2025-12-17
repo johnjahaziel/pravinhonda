@@ -258,6 +258,7 @@ Future<void> showMessagePopup(BuildContext context, String message, VoidCallback
                 ),
               ),
             ),
+            if(nextpage != '')
             SizedBox(height: SizeConfig.h(20)),
             if(nextpage != '')
             Row(

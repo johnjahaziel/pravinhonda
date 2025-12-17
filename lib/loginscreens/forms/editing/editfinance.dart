@@ -161,7 +161,7 @@ class _EditfinanceState extends State<Editfinance> {
         setState(() {
           vehiclecost = TextEditingController(text: responseData['data']['finance_rule']['vehicle_price'].toString());
           maxloanpercentage = TextEditingController(text: responseData['data']['finance_rule']['max_loan_percentage'].toString());
-          maxloanamount = TextEditingController(text: responseData['data']['loan_amount'].toString());
+          maxloanamount = TextEditingController(text: responseData['data']['Max_loan_amount'].toString());
 
           List<dynamic> rates = responseData['data']['rates'];
 

@@ -302,6 +302,7 @@ class _EditenquiryState extends State<Editenquiry> {
                 'Secondary Contact Number',
                 secondarycontactnumber,
                 readonly: widget.edit,
+                star: false
               ),
               if(secondarycontactnumbere.isNotEmpty)
               errormessage(secondarycontactnumbere),

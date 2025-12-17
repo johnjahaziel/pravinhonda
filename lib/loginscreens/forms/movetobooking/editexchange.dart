@@ -163,75 +163,71 @@ class _EditexchangeMBState extends State<EditexchangeMB> {
   
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(20)),
-          child: Column(
-            children: [
-              textfieldy(
-                'Name',
-                name,
-                readonly: widget.edit,
-              ),
-              if(namee.isNotEmpty)
-              errormessage(namee),
-              description(
-                'Address',
-                address,
-                star: true,
-                readonly: widget.edit,
-              ),
-              if(addresse.isNotEmpty)
-              errormessage(addresse),
-              textfieldy(
-                'Vehicle Modal',
-                vehiclemodal,
-                readonly: widget.edit,
-              ),
-              if(vehiclemodale.isNotEmpty)
-              errormessage(vehiclemodale),
-              textfieldy(
-                'New Vehicle Modal',
-                newvehiclemodal,
-                readonly: widget.edit,
-              ),
-              if(newvehiclemodale.isNotEmpty)
-              errormessage(newvehiclemodale),
-              textfieldy(
-                'Expected Price',
-                expectedprice,
-                readonly: widget.edit,
-              ),
-              if(expectedpricee.isNotEmpty)
-              errormessage(expectedpricee),
-              textfieldy(
-                'Finalized Price',
-                finalizedprice,
-                readonly: widget.edit,
-              ),
-              if(finalizedpricee.isNotEmpty)
-              errormessage(finalizedpricee),
-              textfieldy(
-                'Assessed By',
-                assessedby,
-                readonly: widget.edit,
-              ),
-              if(assessedbye.isNotEmpty)
-              errormessage(assessedbye),
-              if(isEdited() == true)
-              SizedBox(height: SizeConfig.h(25)),
-              if(isEdited() == true)
-              button(
-                'Update Quotation',
-                () {
-                  exchangeform();
-                }
-              ),
-              SizedBox(height: SizeConfig.h(30)),
-            ],
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(20)),
+      child: Column(
+        children: [
+          textfieldy(
+            'Name',
+            name,
+            readonly: widget.edit,
           ),
-        ),
+          if(namee.isNotEmpty)
+          errormessage(namee),
+          description(
+            'Address',
+            address,
+            star: true,
+            readonly: widget.edit,
+          ),
+          if(addresse.isNotEmpty)
+          errormessage(addresse),
+          textfieldy(
+            'Vehicle Modal',
+            vehiclemodal,
+            readonly: widget.edit,
+          ),
+          if(vehiclemodale.isNotEmpty)
+          errormessage(vehiclemodale),
+          textfieldy(
+            'New Vehicle Modal',
+            newvehiclemodal,
+            readonly: widget.edit,
+          ),
+          if(newvehiclemodale.isNotEmpty)
+          errormessage(newvehiclemodale),
+          textfieldy(
+            'Expected Price',
+            expectedprice,
+            readonly: widget.edit,
+          ),
+          if(expectedpricee.isNotEmpty)
+          errormessage(expectedpricee),
+          textfieldy(
+            'Finalized Price',
+            finalizedprice,
+            readonly: widget.edit,
+          ),
+          if(finalizedpricee.isNotEmpty)
+          errormessage(finalizedpricee),
+          textfieldy(
+            'Assessed By',
+            assessedby,
+            readonly: widget.edit,
+          ),
+          if(assessedbye.isNotEmpty)
+          errormessage(assessedbye),
+          if(isEdited() == true)
+          SizedBox(height: SizeConfig.h(25)),
+          if(isEdited() == true)
+          button(
+            'Update Quotation',
+            () {
+              exchangeform();
+            }
+          ),
+          SizedBox(height: SizeConfig.h(30)),
+        ],
       ),
     );
   }

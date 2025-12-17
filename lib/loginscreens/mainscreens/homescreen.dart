@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/bloc/username_cubit.dart';
+import 'package:pravinhonda/loginscreens/forms/view/viewform.dart';
 import 'package:pravinhonda/loginscreens/login.dart';
 import 'package:pravinhonda/utility/boxes.dart';
 import 'package:pravinhonda/utility/size_config.dart';
@@ -583,7 +584,16 @@ class _RecentactivityState extends State<Recentactivity> {
           cashfinance: details['purchase_type']?.toString() ?? '',
           textride: details['test_ride']?.toString() ?? '',
           exchange: details['exchange_flag']?.toString() ?? '',
-          onTap: () {}
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Viewform(
+                enquiryid: details['enquiry_id'] ?? 0,
+                apiResponse: details,
+                )
+              )
+            );
+          }
         );
       },
     );

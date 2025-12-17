@@ -1,44 +1,25 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart' as http;
-import 'package:pravinhonda/bloc/apirespnse_cubit.dart';
-import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/districtcity.dart';
-import 'package:pravinhonda/loginscreens/forms/editing/createquotation.dart';
 import 'package:pravinhonda/namevariantcolor.dart';
 import 'package:pravinhonda/utility/customs/customdatefield.dart';
 import 'package:pravinhonda/utility/customs/customdropdown.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 
-class EditenquiryMB extends StatefulWidget {
-  final int enquiryid;
+class Viewenquiry extends StatefulWidget {
   final Map<String, dynamic> apiResponse;
-  final bool edit;
-
-  final VoidCallback isEditedform;
-
-  final VoidCallback financeselected;
-  final VoidCallback exchangeselected;
-  
-  const EditenquiryMB({
+  const Viewenquiry({
     super.key,
-    required this.enquiryid,
     required this.apiResponse,
-    required this.isEditedform,
-    required this.financeselected,
-    required this.exchangeselected,
-    required this.edit
   });
 
   @override
-  State<EditenquiryMB> createState() => _EditenquiryMBState();
+  State<Viewenquiry> createState() => _ViewenquiryState();
 }
 
-class _EditenquiryMBState extends State<EditenquiryMB> {
+class _ViewenquiryState extends State<Viewenquiry> {
+
+  bool readonly = true;
 
   final customercategoryitems = customerCategoryItems;
   final enquirycategoryitems = enquirycategoryTypeItems;
@@ -85,13 +66,11 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
   void initState() {
     super.initState();
     _initControllersFromResponse(widget.apiResponse);
-    print('apiresponse: ${widget.apiResponse}');
+    print('Api Response from child: ${widget.apiResponse}');
   }
 
   void _initControllersFromResponse(Map<String, dynamic> resp) {
     final enquiry = resp;
-
-    originalEnquiry = Map<String, dynamic>.from(enquiry);
 
     enquiryid = TextEditingController(text: enquiry['enquiry_id']?.toString() ?? '');
     wingsenquiry = TextEditingController(text: enquiry['high_rise_number'] ?? '');
@@ -143,173 +122,6 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
   String exchangeflage = '';
   String customerremarkse = '';
 
-  String nextpagelocal = '';
-
-  Map<String, dynamic> originalEnquiry = {};
-
-  bool isEdited() {
-    return
-      wingsenquiry.text != (originalEnquiry['high_rise_number'] ?? '') ||
-      selectedcustomercategoryitems != originalEnquiry['customer_category'] ||
-      selectedenquirycategoryitems != originalEnquiry['enquiry_category'] ||
-      selectedcustomertypeitems != originalEnquiry['customer_type'] ||
-      selectedgenderitems != originalEnquiry['gender'] ||
-      selectedmartialstatusitems != originalEnquiry['marital_status'] ||
-      selectedenquirytypeitems != originalEnquiry['enquiry_type'] ||
-      selectedenquirysourceitems != originalEnquiry['enquiry_source'] ||
-      selectedmodelnameitems != originalEnquiry['model_name'] ||
-      selectedmodelvariantitems != originalEnquiry['model_variant'] ||
-      selectedmodelcoloritems != originalEnquiry['model_color'] ||
-      selecteddistrictitems != originalEnquiry['district'] ||
-      selectedcityitems != originalEnquiry['city'] ||
-      selectedpurchasetypeitems != originalEnquiry['purchase_type'] ||
-      selectedexchangeflagitems != originalEnquiry['exchange_flag'] ||
-      selectedtestrideitems != originalEnquiry['test_ride'] ||
-      customername.text != (originalEnquiry['customer_name'] ?? '') ||
-      customercontactnumber.text != (originalEnquiry['customer_contact_number'] ?? '') ||
-      secondarycontactnumber.text != (originalEnquiry['secondary_contact_number'] ?? '') ||
-      pincode.text != (originalEnquiry['pincode']?.toString() ?? '') ||
-      emailid.text != (originalEnquiry['email_id'] ?? '') ||
-      address.text != (originalEnquiry['address'] ?? '') ||
-      datecontroller.text != (originalEnquiry['dob'] ?? '') ||
-      followupdatecontroller.text != (originalEnquiry['follow_up_date'] ?? '') ||
-      customerremarks.text != (originalEnquiry['customers_remarks'] ?? '');
-  }
-
-  Future<void> apiconnection() async {
-    final url = Uri.parse('https://app.pravinhonda.com/api/enquiries/${widget.enquiryid}');
-
-    final token = BlocProvider.of<AuthCubit>(context).state.token;
-
-    try {
-      final response = await http.post(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer $token'
-        },
-        body: jsonEncode({
-          'high_rise_number': wingsenquiry.text,
-          'customer_category': selectedcustomercategoryitems?.toString(),
-          'enquiry_category': selectedenquirycategoryitems?.toString(),
-          'customer_type': selectedcustomertypeitems?.toString(),
-          'customer_contact_number': customercontactnumber.text,
-          'secondary_contact_number': secondarycontactnumber.text,
-          'pincode': pincode.text,
-          'customer_name': customername.text,
-          'gender': selectedgenderitems?.toString(),
-          'dob': datecontroller.text,
-          'marital_status': selectedmartialstatusitems?.toString(),
-          'email_id': emailid.text,
-          'address': address.text,
-          'district' : selecteddistrictitems?.toString(),
-          'city' : selectedcityitems?.toString(),
-          'enquiry_type': selectedenquirytypeitems?.toString(),
-          'enquiry_source': selectedenquirysourceitems?.toString(),
-          'model_name': selectedmodelnameitems?.toString(),
-          'model_variant': selectedmodelvariantitems?.toString(),
-          'model_color': selectedmodelcoloritems?.toString(),
-          'purchase_type': selectedpurchasetypeitems?.toString(),
-          'exchange_flag': selectedexchangeflagitems?.toString(),
-          'follow_up_date': followupdatecontroller.text,
-          'test_ride': selectedtestrideitems?.toString(),
-          'customers_remarks': customerremarks.text,
-        }),
-      );
-
-      final responseData = jsonDecode(response.body);
-
-      if (response.statusCode == 200) {
-        print('response data: $responseData');
-
-        BlocProvider.of<ApiresponseCubit>(context).clearApiresponse();
-        final apiresponse = responseData;
-        BlocProvider.of<ApiresponseCubit>(context).setApiresponse(apiresponse);
-
-        if (selectedpurchasetypeitems == 'finance' && responseData['data']['purchase_type'] != selectedpurchasetypeitems) {
-          nextpagelocal = 'Finance Form';
-        } else if (selectedpurchasetypeitems != 'finance' && selectedexchangeflagitems == 'yes'
-              && responseData['data']['exchange_flag'] != selectedexchangeflagitems
-        ) {
-          nextpagelocal = 'Exchange Form';
-        } else {
-          nextpagelocal = 'Print';
-        }
-
-        showMessagePopup(
-          context,
-          responseData['message'],
-          () {
-            Navigator.pop(context);
-            if(selectedpurchasetypeitems == 'finance' && responseData['data']['purchase_type'] != selectedpurchasetypeitems) {
-              widget.financeselected();
-            } else if (
-              selectedpurchasetypeitems != 'finance' && selectedexchangeflagitems == 'yes'
-              && responseData['data']['exchange_flag'] != selectedexchangeflagitems
-            ) {
-              widget.exchangeselected();
-            } else {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (_) => QuotationSuccessPopup(
-                  name: '${responseData['data']['customer_name']}',
-                  number: '${responseData['data']['customer_contact_number']}',
-                  enquiryid: responseData['data']['enquiry_id'],
-                ),
-              );
-            }
-          },
-          nextpage: nextpagelocal
-        );
-
-      } else if (response.statusCode == 422) {
-        final errors = responseData['errors'] ?? {};
-
-        setState(() {
-          wingsenquirye = errors['high_rise_number']?.toString() ?? '';
-          customercategorye = errors['customer_category']?.toString() ?? '';
-          enquirycategorye = errors['enquiry_category']?.toString() ?? '';
-          customertypee = errors['customer_type']?.toString() ?? '';
-          customernamee = errors['customer_name']?.toString() ?? '';
-          customercontactnumbere = errors['customer_contact_number']?.toString() ?? '';
-          secondarycontactnumbere = errors['secondary_contact_number']?.toString() ?? '';
-          pincodee = errors['pincode']?.toString() ?? '';
-          gendere = errors['gender']?.toString() ?? '';
-          emailide = errors['email_id']?.toString() ?? '';
-          addresse = errors['address']?.toString() ?? '';
-          enquirytypee = errors['enquiry_type']?.toString() ?? '';
-          enquirysourcee = errors['enquiry_source']?.toString() ?? '';
-          modelnamee = errors['model_name']?.toString() ?? '';
-          modelvariante = errors['model_variant']?.toString() ?? '';
-          modelcolore = errors['model_color']?.toString() ?? '';
-          districte = errors['district']?.toString() ?? '';
-          citye = errors['city']?.toString() ?? '';
-          purchasetypee = errors['purchase_type']?.toString() ?? '';
-          exchangeflage = errors['exchange_flag']?.toString() ?? '';
-          customerremarkse = errors['customers_remarks']?.toString() ?? '';
-        });
-
-        Fluttertoast.showToast(msg: responseData['message']);
-        print(response.body);
-
-      } else {
-        showMessagePopup(
-          context,
-          responseData['message'],
-          () {
-            Navigator.pop(context);
-          }
-        );
-        print('Failed to create enquiry. Status code: ${response.statusCode}');
-        print(response.body);
-      }
-    } catch (error) {
-      print('Error submitting finance form: $error');
-    }
-  }
-  
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -325,21 +137,21 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
           textfieldy(
             'Customer Name',
             customername,
-            readonly: widget.edit,
+            readonly: readonly,
           ),
           if(customernamee.isNotEmpty)
           errormessage(customernamee),
           textfieldy(
             'Customer Contact Number',
             customercontactnumber,
-            readonly: widget.edit,
+            readonly: readonly,
           ),
           if(customercontactnumbere.isNotEmpty)
           errormessage(customercontactnumbere),
           textfieldy(
             'Secondary Contact Number',
             secondarycontactnumber,
-            readonly: widget.edit,
+            readonly: readonly,
             star: false
           ),
           if(secondarycontactnumbere.isNotEmpty)
@@ -347,7 +159,7 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
           textfieldy(
             "Address",
             address,
-            readonly: widget.edit,
+            readonly: readonly,
           ),
           if(addresse.isNotEmpty)
           errormessage(addresse),
@@ -370,12 +182,12 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
               });
             },
         
-            edit: widget.edit,
+            edit: readonly,
           ),
           textfieldy(
             'Pincode',
             pincode,
-            readonly: widget.edit,
+            readonly: readonly,
           ),
           if(pincodee.isNotEmpty)
           errormessage(pincodee),
@@ -389,7 +201,7 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
               });
             },
             star: false,
-            readOnly: widget.edit,
+            readOnly: readonly,
           ),
           if(gendere.isNotEmpty)
           errormessage(gendere),
@@ -397,7 +209,7 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
             title: 'Date of Birth',
             datecontroller: datecontroller,
             star: false,
-            readOnly: widget.edit,
+            readOnly: readonly,
           ),
         
           CustomDropdown(
@@ -410,19 +222,19 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
               });
             },
             star: false,
-            readOnly: widget.edit,
+            readOnly: readonly,
           ),
           textfieldy(
             "Email ID",
             emailid,
-            readonly: widget.edit,
+            readonly: readonly,
           ),
           if(emailide.isNotEmpty)
           errormessage(emailide),
           textfieldy(
             'High Rise Number',
             wingsenquiry,
-            readonly: widget.edit,
+            readonly: readonly,
             star: false
           ),
           if(wingsenquirye.isNotEmpty)
@@ -436,7 +248,7 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
                 selectedcustomercategoryitems = newValue;
               });
             },
-            readOnly: widget.edit,
+            readOnly: readonly,
           ),
           if(customercategorye.isNotEmpty)
           errormessage(customercategorye),
@@ -449,7 +261,7 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
                 selectedenquirycategoryitems = newValue;
               });
             },
-            readOnly: widget.edit,
+            readOnly: readonly,
           ),
           if(enquirycategorye.isNotEmpty)
           errormessage(enquirycategorye),
@@ -462,7 +274,7 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
                 selectedcustomertypeitems = newValue;
               });
             },
-            readOnly: widget.edit,
+            readOnly: readonly,
           ),
           if(customertypee.isNotEmpty)
           errormessage(customertypee),
@@ -475,7 +287,7 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
                 selectedenquirytypeitems = newValue;
               });
             },
-            readOnly: widget.edit,
+            readOnly: readonly,
           ),
           if(enquirytypee.isNotEmpty)
           errormessage(enquirytypee),
@@ -488,7 +300,7 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
                 selectedenquirysourceitems = newValue;
               });
             },
-            readOnly: widget.edit,
+            readOnly: readonly,
           ),
           if(enquirysourcee.isNotEmpty)
           errormessage(enquirysourcee),
@@ -516,7 +328,7 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
                 selectedmodelcoloritems = value;
               });
             },
-            edit: widget.edit,
+            edit: readonly,
           ),
           CustomDropdown(
             title: 'Purchase Type',
@@ -527,7 +339,7 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
                 selectedpurchasetypeitems = newValue;
               });
             },
-            readOnly: widget.edit,
+            readOnly: readonly,
           ),
           if(purchasetypee.isNotEmpty)
           errormessage(purchasetypee),
@@ -540,7 +352,7 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
                 selectedexchangeflagitems = newValue;
               });
             },
-            readOnly: widget.edit,
+            readOnly: readonly,
           ),
           if(exchangeflage.isNotEmpty)
           errormessage(exchangeflage),
@@ -548,7 +360,7 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
             title: 'Follow Up Date',
             datecontroller: followupdatecontroller,
             star: false,
-            readOnly: widget.edit,
+            readOnly: readonly,
           ),
           CustomDropdown(
             title: 'Test Ride',
@@ -560,22 +372,13 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
               });
             },
             star: false,
-            readOnly: widget.edit,
+            readOnly: readonly,
           ),
           description(
             'Customer Remarks',
             customerremarks,
-            readonly: widget.edit
+            readonly: readonly
           ),
-          SizedBox(height: SizeConfig.h(20)),
-          if(isEdited() == true)
-          button(
-            'Update Quotation',
-            () {
-              apiconnection();
-            }
-          ),
-          
           SizedBox(height: SizeConfig.h(40)),
         ],
       ),
