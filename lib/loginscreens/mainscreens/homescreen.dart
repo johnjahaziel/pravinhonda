@@ -34,13 +34,10 @@ class _HomescreenState extends State<Homescreen> {
   void initState() {
     super.initState();
     fetchtotalenquiry();
-    fetchopenenquiry();
-    fetchallbooking();
-    fetchlostcustomer();
   }
 
   Future<void> fetchtotalenquiry() async {
-    final totalenquiryurl = Uri.parse('https://app.pravinhonda.com/api/total-enquiry-count');
+    final totalenquiryurl = Uri.parse('https://app.pravinhonda.com/api/total-count');
 
     final token = BlocProvider.of<AuthCubit>(context).state.token;
 
@@ -59,93 +56,9 @@ class _HomescreenState extends State<Homescreen> {
       if(response.statusCode == 200) {
         setState(() {
           totalenquiry = responseData['total_enquiry'].toString();
-        });
-      } else {
-        Fluttertoast.showToast(msg: responseData['message']);
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  Future<void> fetchopenenquiry() async {
-    final openenquiryurl = Uri.parse('https://app.pravinhonda.com/api/enquiry-count');
-
-    final token = BlocProvider.of<AuthCubit>(context).state.token;
-
-    try {
-      final response = await http.get(
-        openenquiryurl,
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer $token'
-        },
-      );
-
-      final responseData = jsonDecode(response.body);
-
-      if(response.statusCode == 200) {
-        setState(() {
-          openenquiry = responseData['enquiry_count'].toString();
-        });
-      } else {
-        Fluttertoast.showToast(msg: responseData['message']);
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  Future<void> fetchallbooking() async {
-    final allbookingurl = Uri.parse('https://app.pravinhonda.com/api/booking-count');
-
-    final token = BlocProvider.of<AuthCubit>(context).state.token;
-
-    try {
-      final response = await http.get(
-        allbookingurl,
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer $token'
-        },
-      );
-
-      final responseData = jsonDecode(response.body);
-
-      if(response.statusCode == 200) {
-        setState(() {
-          allbooking = responseData['booking_count'].toString();
-        });
-      } else {
-        Fluttertoast.showToast(msg: responseData['message']);
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  Future<void> fetchlostcustomer() async {
-    final lostcustomerurl = Uri.parse('https://app.pravinhonda.com/api/loss-customer-count');
-
-    final token = BlocProvider.of<AuthCubit>(context).state.token;
-
-    try {
-      final response = await http.get(
-        lostcustomerurl,
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer $token'
-        },
-      );
-
-      final responseData = jsonDecode(response.body);
-
-      if(response.statusCode == 200) {
-        setState(() {
-          lostcustomer = responseData['loss_customer_count'].toString();
+          openenquiry = responseData['enquiry count'].toString();
+          allbooking = responseData['booking count'].toString();
+          lostcustomer = responseData['lost customer count'].toString();
         });
       } else {
         Fluttertoast.showToast(msg: responseData['message']);
