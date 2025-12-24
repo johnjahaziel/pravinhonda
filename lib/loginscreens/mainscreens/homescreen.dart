@@ -100,12 +100,9 @@ class _HomescreenState extends State<Homescreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text(
-                              'Welcome $blocusername',
-                              style: customtext(fs12, kred, FontWeight.w600),
-                            ),
+                          Text(
+                            'Welcome $blocusername',
+                            style: customtext(fs12, kred, FontWeight.w600),
                           ),
                           SizedBox(height: SizeConfig.h(5)),
                           FittedBox(

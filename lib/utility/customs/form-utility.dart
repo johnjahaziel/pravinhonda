@@ -322,3 +322,128 @@ back(BuildContext context, Widget backscreen) => RawMaterialButton(
     ),
   ),
 );
+
+minimumpackages(String title, List<dynamic> product, List<dynamic> price, String total) => Padding(
+  padding: const EdgeInsets.only(top: 15),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        title,
+        style: TextStyle(
+          fontSize: fs12,
+          fontFamily: 'Poppins',
+          color: Color(0xff919EAB)
+        ),
+      ),
+      SizedBox(height: SizeConfig.h(5)),
+      Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: Color(0xff919EAB)
+          )
+        ),
+        padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(10), vertical: SizeConfig.h(10)),
+        child: (product.isEmpty || price.isEmpty || total.isEmpty)
+      ? Padding(
+          padding: EdgeInsets.symmetric(vertical: SizeConfig.h(30)),
+          child: Center(
+            child: Text(
+              'Select the model first',
+              style: customtext(
+                fs12,
+                Color(0xff919EAB),
+              ),
+            ),
+          ),
+        )
+      : Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xffD9D9D9),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(10), vertical: SizeConfig.h(5)),
+                  child: Text(
+                    'Products',
+                    style: customtext(
+                      fs10,
+                      Color(0xff494949),
+                    ),
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xffD9D9D9),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(10), vertical: SizeConfig.h(5)),
+                  child: Text(
+                    'Price',
+                    style: customtext(
+                      fs10,
+                      Color(0xff494949),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(2), vertical: SizeConfig.h(3)),
+              child: SizedBox(
+                height: product.length <= 5
+                  ? null
+                  : SizeConfig.h(120),
+                child: ListView.builder(
+                  shrinkWrap: product.length <= 5,
+                  physics: product.length <= 5
+                    ? const NeverScrollableScrollPhysics()
+                    : const BouncingScrollPhysics(),
+                  itemCount: product.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: EdgeInsets.only(top: SizeConfig.h(5)),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: Text(
+                              product[index],
+                              style: customtext(fs12, kblack),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                price[index],
+                                style: customtext(fs12, kblack),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            SizedBox(height: SizeConfig.h(10)),
+            Text(
+              'Total: $total',
+              style: textmedium12,
+            ),
+          ],
+        ),
+      ),
+    ]
+  ),
+);

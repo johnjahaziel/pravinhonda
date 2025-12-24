@@ -63,6 +63,11 @@ class _AddenquiryState extends State<Addenquiry> {
   TextEditingController followupdatecontroller = TextEditingController();
   TextEditingController customerremarks = TextEditingController();
 
+  List<dynamic> products = [];
+  List<dynamic> price = [];
+
+  String? total;
+
   String wingsenquirye = '';
   String customercategorye = '';
   String enquirycategorye = '';
@@ -263,6 +268,39 @@ class _AddenquiryState extends State<Addenquiry> {
       print('Error submitting finance form: $error');
     }
   }
+
+  Future<void> fetchminimumpackage(String modelname) async {
+    final url = Uri.parse('https://app.pravinhonda.com/api/minimum-package/$modelname');
+
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    try {
+
+      final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        }
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        
+        setState(() {
+          products = responseData['products'];
+          price = responseData['prices'];
+          total = responseData['total'];
+        });
+      } else {
+        print('Failed to fetch Minimum Package. Status code: ${response.statusCode}');
+      }
+
+    } catch (e) {
+      print('Fetching Minimum Package: $e');
+    }
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -438,6 +476,14 @@ class _AddenquiryState extends State<Addenquiry> {
                     selectedmodelnameitems = value;
                     selectedmodelvariantitems = null;
                     selectedmodelcoloritems = null;
+
+                    products.clear();
+                    price.clear();
+                    total = '';
+
+                    if (value != null && value.isNotEmpty) {
+                      fetchminimumpackage(value);
+                    }
                   });
                 },
                 onVariantChanged: (value) {
@@ -499,6 +545,12 @@ class _AddenquiryState extends State<Addenquiry> {
               ),
               if(customerremarkse.isNotEmpty)
               errormessage(customerremarkse),
+              minimumpackages(
+                'Minimum Packages',
+                products,
+                price,
+                total ?? '0'
+              ),
               SizedBox(height: SizeConfig.h(20)),
               button(
                 'Create Enquiry',
