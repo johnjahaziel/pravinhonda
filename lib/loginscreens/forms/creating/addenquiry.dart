@@ -63,10 +63,39 @@ class _AddenquiryState extends State<Addenquiry> {
   TextEditingController followupdatecontroller = TextEditingController();
   TextEditingController customerremarks = TextEditingController();
 
-  List<dynamic> products = [];
-  List<dynamic> price = [];
+  List<dynamic> mpproducts = [];
+  List<dynamic> mpprice = [];
+  String? mptotal;
 
-  String? total;
+  List<dynamic> efproducts = [
+    'Helmet',
+    'Gloves',
+    'Jacket',
+    'Knee Guard',
+    'Elbow Guard',
+    'Riding Shoes'
+  ];
+
+  List<dynamic> efprice = [
+    '500',
+    '300',
+    '1500',
+    '400',
+    '400',
+    '2000'
+  ];
+
+  String eftotal = '0';
+
+  void calculatetotal() {
+    int total = efprice.fold(0, (sum, item) {
+      return sum + (int.tryParse(item) ?? 0);
+    });
+
+    setState(() {
+      eftotal = total.toString();
+    });
+  }
 
   String wingsenquirye = '';
   String customercategorye = '';
@@ -89,6 +118,8 @@ class _AddenquiryState extends State<Addenquiry> {
   String purchasetypee = '';
   String exchangeflage = '';
   String customerremarkse = '';
+  String minimumpackagee = '';
+  String extrafittingse = '';
 
   String? selectedmodelnameitems;
   String? selectedmodelvariantitems;
@@ -96,6 +127,8 @@ class _AddenquiryState extends State<Addenquiry> {
 
   String? selecteddistrictitems;
   String? selectedcityitems;
+
+  List<String> extraFittingsSelected = [];
 
   String nextpagelocal = '';
 
@@ -139,6 +172,7 @@ class _AddenquiryState extends State<Addenquiry> {
           'follow_up_date': followupdatecontroller.text,
           'test_ride': selectedtestrideitems?.toString(),
           'customers_remarks': customerremarks.text,
+          "extra_fittings": extraFittingsSelected.join(','),
 
           // 'high_rise_number': wingsenquiry.text,
           // 'customer_category': "Individual",
@@ -249,6 +283,8 @@ class _AddenquiryState extends State<Addenquiry> {
           purchasetypee = errors['purchase_type']?.toString() ?? '';
           exchangeflage = errors['exchange_flag']?.toString() ?? '';
           customerremarkse = errors['customers_remarks']?.toString() ?? '';
+          minimumpackagee = errors['minimum_package']?.toString() ?? '';
+          extrafittingse = errors['extra_fittings']?.toString() ?? '';
         });
 
         Fluttertoast.showToast(msg: responseData['message']);
@@ -289,9 +325,9 @@ class _AddenquiryState extends State<Addenquiry> {
         final responseData = jsonDecode(response.body);
         
         setState(() {
-          products = responseData['products'];
-          price = responseData['prices'];
-          total = responseData['total'];
+          mpproducts = responseData['products'];
+          mpprice = responseData['prices'];
+          mptotal = responseData['total'];
         });
       } else {
         print('Failed to fetch Minimum Package. Status code: ${response.statusCode}');
@@ -477,9 +513,9 @@ class _AddenquiryState extends State<Addenquiry> {
                     selectedmodelvariantitems = null;
                     selectedmodelcoloritems = null;
 
-                    products.clear();
-                    price.clear();
-                    total = '';
+                    mpproducts.clear();
+                    mpprice.clear();
+                    mptotal = '';
 
                     if (value != null && value.isNotEmpty) {
                       fetchminimumpackage(value);
@@ -541,16 +577,30 @@ class _AddenquiryState extends State<Addenquiry> {
               description(
                 'Customer Remarks',
                 customerremarks,
-                star: true
+                star: false,
               ),
               if(customerremarkse.isNotEmpty)
               errormessage(customerremarkse),
               minimumpackages(
                 'Minimum Packages',
-                products,
-                price,
-                total ?? '0'
+                mpproducts,
+                mpprice,
+                mptotal ?? '0'
               ),
+              if(minimumpackagee.isNotEmpty)
+              errormessage(minimumpackagee),
+              Extrafittings(
+                title: 'Extra Fittings',
+                product: efproducts,
+                price: efprice,
+                onChanged: (items) {
+                  setState(() {
+                    extraFittingsSelected = items;
+                  });
+                },
+              ),
+              if(extrafittingse.isNotEmpty)
+              errormessage(extrafittingse),
               SizedBox(height: SizeConfig.h(20)),
               button(
                 'Create Enquiry',

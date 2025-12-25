@@ -350,7 +350,7 @@ minimumpackages(String title, List<dynamic> product, List<dynamic> price, String
           padding: EdgeInsets.symmetric(vertical: SizeConfig.h(30)),
           child: Center(
             child: Text(
-              'Select the model first',
+              'Select the Model first',
               style: customtext(
                 fs12,
                 Color(0xff919EAB),
@@ -447,3 +447,202 @@ minimumpackages(String title, List<dynamic> product, List<dynamic> price, String
     ]
   ),
 );
+
+class Extrafittings extends StatefulWidget {
+  final String title;
+  final List<dynamic> product;
+  final List<dynamic> price;
+  final void Function(List<String> selectedProducts) onChanged;
+  const Extrafittings({
+    super.key,
+    required this.title,
+    required this.product,
+    required this.price,
+    required this.onChanged,
+  });
+
+  @override
+  State<Extrafittings> createState() => _ExtrafittingsState();
+}
+
+class _ExtrafittingsState extends State<Extrafittings> {
+
+  void selectedvalue() {
+    List<String> selectedProducts = [];
+
+    widget.onChanged(selectedProducts);
+  }
+
+  late List<bool> selected;
+
+  String get total {
+    int sum = 0;
+
+    for (int i = 0; i < widget.price.length; i++) {
+      if (selected[i]) {
+        sum += int.tryParse(widget.price[i].toString()) ?? 0;
+      }
+    }
+
+    return sum.toString();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    selected = List.generate(widget.product.length, (_) => false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            widget.title,
+            style: TextStyle(
+              fontSize: fs12,
+              fontFamily: 'Poppins',
+              color: Color(0xff919EAB)
+            ),
+          ),
+          SizedBox(height: SizeConfig.h(5)),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: Color(0xff919EAB)
+              )
+            ),
+            padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(10), vertical: SizeConfig.h(10)),
+            child: (widget.product.isEmpty || widget.price.isEmpty)
+          ? Padding(
+              padding: EdgeInsets.symmetric(vertical: SizeConfig.h(30)),
+              child: Center(
+                child: Text(
+                  'Select the Model first',
+                  style: customtext(
+                    fs12,
+                    Color(0xff919EAB),
+                  ),
+                ),
+              ),
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xffD9D9D9),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(10), vertical: SizeConfig.h(5)),
+                      child: Text(
+                        'Products',
+                        style: customtext(
+                          fs10,
+                          Color(0xff494949),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xffD9D9D9),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(10), vertical: SizeConfig.h(5)),
+                      child: Text(
+                        'Price',
+                        style: customtext(
+                          fs10,
+                          Color(0xff494949),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(2), vertical: SizeConfig.h(3)),
+                  child: SizedBox(
+                    height: widget.product.length <= 5
+                      ? null
+                      : SizeConfig.h(120),
+                    child: ListView.builder(
+                      shrinkWrap: widget.product.length <= 5,
+                      physics: widget.product.length <= 5
+                        ? const NeverScrollableScrollPhysics()
+                        : const BouncingScrollPhysics(),
+                      itemCount: widget.product.length,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            setState(() {
+                              selected[index] = !selected[index];
+                            });
+                            selectedvalue();
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(top: SizeConfig.h(5)),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 4,
+                                  child: Row(
+                                    children: [
+                                      Checkbox(
+                                        activeColor: kred,
+                                        value: selected[index],
+                                        onChanged: (val) {
+                                          setState(() {
+                                            selected[index] = val ?? false;
+                                          });
+                                          selectedvalue();
+                                        },
+                                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                        visualDensity: VisualDensity.compact,
+                                      ),
+                                      SizedBox(width: SizeConfig.w(2)),
+                                      Text(
+                                        widget.product[index],
+                                        style: customtext(fs12, kblack),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                      widget.price[index],
+                                      style: customtext(fs12, kblack),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                SizedBox(height: SizeConfig.h(10)),
+                Text(
+                  'Total: $total',
+                  style: textmedium12,
+                ),
+              ],
+            ),
+          ),
+        ]
+      ),
+    );
+  }
+}
