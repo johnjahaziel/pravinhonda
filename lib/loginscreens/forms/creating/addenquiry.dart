@@ -85,18 +85,6 @@ class _AddenquiryState extends State<Addenquiry> {
     '2000'
   ];
 
-  String eftotal = '0';
-
-  void calculatetotal() {
-    int total = efprice.fold(0, (sum, item) {
-      return sum + (int.tryParse(item) ?? 0);
-    });
-
-    setState(() {
-      eftotal = total.toString();
-    });
-  }
-
   String wingsenquirye = '';
   String customercategorye = '';
   String enquirycategorye = '';
@@ -328,6 +316,38 @@ class _AddenquiryState extends State<Addenquiry> {
           mpproducts = responseData['products'];
           mpprice = responseData['prices'];
           mptotal = responseData['total'];
+        });
+      } else {
+        print('Failed to fetch Minimum Package. Status code: ${response.statusCode}');
+      }
+
+    } catch (e) {
+      print('Fetching Minimum Package: $e');
+    }
+  }
+
+  Future<void> fetchextrafitting(String modelname) async {
+    final url = Uri.parse('https://app.pravinhonda.com/api/minimum-package/$modelname');
+
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    try {
+
+      final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        }
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        
+        setState(() {
+          efproducts = responseData['products'];
+          efprice = responseData['prices'];
         });
       } else {
         print('Failed to fetch Minimum Package. Status code: ${response.statusCode}');
@@ -581,11 +601,11 @@ class _AddenquiryState extends State<Addenquiry> {
               ),
               if(customerremarkse.isNotEmpty)
               errormessage(customerremarkse),
-              minimumpackages(
-                'Minimum Packages',
-                mpproducts,
-                mpprice,
-                mptotal ?? '0'
+              Minimumpackage(
+                title: 'Minimum Packages',
+                product: mpproducts,
+                price: mpprice,
+                total: mptotal ?? '0'
               ),
               if(minimumpackagee.isNotEmpty)
               errormessage(minimumpackagee),
