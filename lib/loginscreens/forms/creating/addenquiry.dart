@@ -67,23 +67,11 @@ class _AddenquiryState extends State<Addenquiry> {
   List<dynamic> mpprice = [];
   String? mptotal;
 
-  List<dynamic> efproducts = [
-    'Helmet',
-    'Gloves',
-    'Jacket',
-    'Knee Guard',
-    'Elbow Guard',
-    'Riding Shoes'
-  ];
+  List<dynamic> efproducts = [];
+  List<dynamic> efprice = [];
 
-  List<dynamic> efprice = [
-    '500',
-    '300',
-    '1500',
-    '400',
-    '400',
-    '2000'
-  ];
+  String? minimumPackageAnswer;
+  List<String> extraFittingsSelected = [];
 
   String wingsenquirye = '';
   String customercategorye = '';
@@ -116,8 +104,6 @@ class _AddenquiryState extends State<Addenquiry> {
   String? selecteddistrictitems;
   String? selectedcityitems;
 
-  List<String> extraFittingsSelected = [];
-
   String nextpagelocal = '';
 
   Future<void> apiconnection() async {
@@ -135,50 +121,23 @@ class _AddenquiryState extends State<Addenquiry> {
           'Authorization': 'Bearer $token'
         },
         body: jsonEncode({
-          'high_rise_number': wingsenquiry.text,
-          'customer_category': selectedcustomercategoryitems?.toString(),
-          'enquiry_category': selectedenquirycategoryitems?.toString(),
-          'customer_type': selectedcustomertypeitems?.toString(),
-          'customer_contact_number': customercontactnumber.text,
-          'secondary_contact_number': secondarycontactnumber.text,
-          'pincode': pincode.text,
-          'customer_name': customername.text,
-          'gender': selectedgenderitems?.toString(),
-          'dob': datecontroller.text,
-          'marital_status': selectedmartialstatusitems?.toString(),
-          'email_id': emailid.text,
-          'address': address.text,
-          'district' : selecteddistrictitems?.toString(),
-          'city' : selectedcityitems?.toString(),
-          'enquiry_type': selectedenquirytypeitems?.toString(),
-          'enquiry_source': selectedenquirysourceitems?.toString(),
-          'model_name': selectedmodelnameitems?.toString(),
-          'model_variant': selectedmodelvariantitems?.toString(),
-          'model_color': selectedmodelcoloritems?.toString(),
-          'purchase_type': selectedpurchasetypeitems?.toString(),
-          'exchange_flag': selectedexchangeflagitems?.toString(),
-          'follow_up_date': followupdatecontroller.text,
-          'test_ride': selectedtestrideitems?.toString(),
-          'customers_remarks': customerremarks.text,
-          "extra_fittings": extraFittingsSelected.join(','),
-
           // 'high_rise_number': wingsenquiry.text,
-          // 'customer_category': "Individual",
-          // 'enquiry_category': "Individual",
-          // 'customer_type': "Replacement Buyer",
-          // 'customer_contact_number':  "1226586431",
+          // 'customer_category': selectedcustomercategoryitems?.toString(),
+          // 'enquiry_category': selectedenquirycategoryitems?.toString(),
+          // 'customer_type': selectedcustomertypeitems?.toString(),
+          // 'customer_contact_number': customercontactnumber.text,
           // 'secondary_contact_number': secondarycontactnumber.text,
-          // 'pincode': "555555",
-          // 'customer_name': "Maha",
-          // 'gender': "Female",
+          // 'pincode': pincode.text,
+          // 'customer_name': customername.text,
+          // 'gender': selectedgenderitems?.toString(),
           // 'dob': datecontroller.text,
           // 'marital_status': selectedmartialstatusitems?.toString(),
-          // 'email_id': "kalamahabluon@gmail.com",
-          // 'address': "gandhi nager",
-          // 'district' : "Thoothukkudi",
-          // 'city' : "Kovilpatti",
-          // 'enquiry_type': "Walk-In",
-          // 'enquiry_source': "Facebook",
+          // 'email_id': emailid.text,
+          // 'address': address.text,
+          // 'district' : selecteddistrictitems?.toString(),
+          // 'city' : selectedcityitems?.toString(),
+          // 'enquiry_type': selectedenquirytypeitems?.toString(),
+          // 'enquiry_source': selectedenquirysourceitems?.toString(),
           // 'model_name': selectedmodelnameitems?.toString(),
           // 'model_variant': selectedmodelvariantitems?.toString(),
           // 'model_color': selectedmodelcoloritems?.toString(),
@@ -186,7 +145,37 @@ class _AddenquiryState extends State<Addenquiry> {
           // 'exchange_flag': selectedexchangeflagitems?.toString(),
           // 'follow_up_date': followupdatecontroller.text,
           // 'test_ride': selectedtestrideitems?.toString(),
-          // 'customers_remarks': "Interested in finance option",
+          // 'customers_remarks': customerremarks.text,
+          // "minimum_package": minimumPackageAnswer,
+          // "extra_fittings": extraFittingsSelected.join(','),
+
+          'high_rise_number': wingsenquiry.text,
+          'customer_category': "Individual",
+          'enquiry_category': "Individual",
+          'customer_type': "Replacement Buyer",
+          'customer_contact_number':  "1226586431",
+          'secondary_contact_number': secondarycontactnumber.text,
+          'pincode': "555555",
+          'customer_name': "Maha",
+          'gender': "Female",
+          'dob': datecontroller.text,
+          'marital_status': selectedmartialstatusitems?.toString(),
+          'email_id': "kalamahabluon@gmail.com",
+          'address': "gandhi nager",
+          'district' : "Thoothukkudi",
+          'city' : "Kovilpatti",
+          'enquiry_type': "Walk-In",
+          'enquiry_source': "Facebook",
+          'model_name': selectedmodelnameitems?.toString(),
+          'model_variant': selectedmodelvariantitems?.toString(),
+          'model_color': selectedmodelcoloritems?.toString(),
+          'purchase_type': selectedpurchasetypeitems?.toString(),
+          'exchange_flag': selectedexchangeflagitems?.toString(),
+          'follow_up_date': followupdatecontroller.text,
+          'test_ride': selectedtestrideitems?.toString(),
+          'customers_remarks': "Interested in finance option",
+          "minimum_package": minimumPackageAnswer,
+          "extra_fittings": extraFittingsSelected.join(','),
         }),
       );
 
@@ -327,7 +316,7 @@ class _AddenquiryState extends State<Addenquiry> {
   }
 
   Future<void> fetchextrafitting(String modelname) async {
-    final url = Uri.parse('https://app.pravinhonda.com/api/minimum-package/$modelname');
+    final url = Uri.parse('https://app.pravinhonda.com/api/extra-fitting/$modelname');
 
     final token = BlocProvider.of<AuthCubit>(context).state.token;
 
@@ -540,6 +529,13 @@ class _AddenquiryState extends State<Addenquiry> {
                     if (value != null && value.isNotEmpty) {
                       fetchminimumpackage(value);
                     }
+
+                    efproducts.clear();
+                    efprice.clear();
+
+                    if (value != null && value.isNotEmpty) {
+                      fetchextrafitting(value);
+                    }
                   });
                 },
                 onVariantChanged: (value) {
@@ -605,7 +601,12 @@ class _AddenquiryState extends State<Addenquiry> {
                 title: 'Minimum Packages',
                 product: mpproducts,
                 price: mpprice,
-                total: mptotal ?? '0'
+                total: mptotal ?? '0',
+                onChanged: (answer) {
+                  setState(() {
+                    minimumPackageAnswer = answer;
+                  });
+                },
               ),
               if(minimumpackagee.isNotEmpty)
               errormessage(minimumpackagee),

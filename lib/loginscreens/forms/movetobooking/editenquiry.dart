@@ -81,11 +81,26 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
   late TextEditingController followupdatecontroller;
   late TextEditingController customerremarks;
 
+  List<dynamic> mpproducts = [];
+  List<dynamic> mpprice = [];
+  String? mptotal;
+
+  List<dynamic> efproducts = [];
+  List<dynamic> efprice = [];
+
+  String? minimumPackageAnswer;
+  List<String> extraFittingsSelected = [];
+
   @override
   void initState() {
     super.initState();
     _initControllersFromResponse(widget.apiResponse);
     print('apiresponse: ${widget.apiResponse}');
+    
+    if (selectedmodelnameitems != null && selectedmodelnameitems!.isNotEmpty) {
+      fetchminimumpackage(selectedmodelnameitems!);
+      fetchextrafitting(selectedmodelnameitems!);
+    }
   }
 
   void _initControllersFromResponse(Map<String, dynamic> resp) {
@@ -119,6 +134,8 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
     datecontroller = TextEditingController(text: enquiry['dob'] ?? '');
     followupdatecontroller = TextEditingController(text: enquiry['follow_up_date'] ?? '');
     customerremarks = TextEditingController(text: enquiry['customers_remarks'] ?? '');
+    minimumPackageAnswer = enquiry['minimum_package']?.toString();
+    extraFittingsSelected = List<String>.from(enquiry['extra_package'] ?? []);
   }
 
   String wingsenquirye = '';
@@ -142,6 +159,8 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
   String purchasetypee = '';
   String exchangeflage = '';
   String customerremarkse = '';
+  String minimumpackagee = '';
+  String extrafittingse = '';
 
   String nextpagelocal = '';
 
@@ -215,6 +234,8 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
           'follow_up_date': followupdatecontroller.text,
           'test_ride': selectedtestrideitems?.toString(),
           'customers_remarks': customerremarks.text,
+          'minimum_package': minimumPackageAnswer.toString(),
+          "extra_fittings": extraFittingsSelected.join(','),
         }),
       );
 
@@ -289,6 +310,8 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
           purchasetypee = errors['purchase_type']?.toString() ?? '';
           exchangeflage = errors['exchange_flag']?.toString() ?? '';
           customerremarkse = errors['customers_remarks']?.toString() ?? '';
+          minimumpackagee = errors['minimum_package']?.toString() ?? '';
+          extrafittingse = errors['extra_fittings']?.toString() ?? '';
         });
 
         Fluttertoast.showToast(msg: responseData['message']);
@@ -307,6 +330,71 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
       }
     } catch (error) {
       print('Error submitting finance form: $error');
+    }
+  }
+
+  Future<void> fetchminimumpackage(String modelname) async {
+    final url = Uri.parse('https://app.pravinhonda.com/api/minimum-package/$modelname');
+
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    try {
+
+      final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        }
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        
+        setState(() {
+          mpproducts = responseData['products'];
+          mpprice = responseData['prices'];
+          mptotal = responseData['total'];
+        });
+      } else {
+        print('Failed to fetch Minimum Package. Status code: ${response.statusCode}');
+      }
+
+    } catch (e) {
+      print('Fetching Minimum Package: $e');
+    }
+  }
+
+  Future<void> fetchextrafitting(String modelname) async {
+    final url = Uri.parse('https://app.pravinhonda.com/api/extra-fitting/$modelname');
+
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    try {
+
+      final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        }
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        
+        setState(() {
+          efproducts = responseData['products'];
+          efprice = responseData['prices'];
+        });
+      } else {
+        print('Failed to fetch Minimum Package. Status code: ${response.statusCode}');
+      }
+
+    } catch (e) {
+      print('Fetching Minimum Package: $e');
     }
   }
   
@@ -504,6 +592,21 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
               setState(() {
                 selectedmodelnameitems = value;
               });
+
+              mpproducts.clear();
+              mpprice.clear();
+              mptotal = '';
+
+              if (value != null && value.isNotEmpty) {
+                fetchminimumpackage(value);
+              }
+
+              efproducts.clear();
+              efprice.clear();
+
+              if (value != null && value.isNotEmpty) {
+                fetchextrafitting(value);
+              }
             },
             onVariantChanged: (value) {
               setState(() {
@@ -567,6 +670,34 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
             customerremarks,
             readonly: widget.edit
           ),
+          EditMinimumpackage(
+            title: 'Minimum Packages',
+            product: mpproducts,
+            price: mpprice,
+            total: mptotal ?? '0',
+            onChanged: (value) {
+              setState(() {
+                minimumPackageAnswer = value;
+              });
+            },
+            readonly: widget.edit,
+          ),
+          if(minimumpackagee.isNotEmpty)
+          errormessage(minimumpackagee),
+          EditExtrafittings(
+            title: 'Extra Fittings',
+            product: efproducts,
+            price: efprice,
+            initialSelected: extraFittingsSelected,
+            onChanged: (items) {
+              setState(() {
+                extraFittingsSelected = items;
+              });
+            },
+            readonly: widget.edit,
+          ),
+          if(extrafittingse.isNotEmpty)
+          errormessage(extrafittingse),
           SizedBox(height: SizeConfig.h(20)),
           if(isEdited() == true)
           button(

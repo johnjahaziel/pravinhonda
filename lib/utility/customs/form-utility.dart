@@ -328,12 +328,14 @@ class Minimumpackage extends StatefulWidget {
   final List<dynamic> product;
   final List<dynamic> price;
   final String total;
+  final void Function(String answer) onChanged;
   const Minimumpackage({
     super.key,
     required this.title,
     required this.product,
     required this.price,
     required this.total,
+    required this.onChanged,
   });
 
   @override
@@ -341,6 +343,8 @@ class Minimumpackage extends StatefulWidget {
 }
 
 class _MinimumpackageState extends State<Minimumpackage> {
+  String? selectedAnswer;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -470,8 +474,13 @@ class _MinimumpackageState extends State<Minimumpackage> {
               Row(
                 children: [
                   Checkbox(
-                    value: true,
-                    onChanged: (val) {},
+                    value: selectedAnswer == 'yes',
+                    onChanged: (val) {
+                      setState(() {
+                        selectedAnswer = 'yes';
+                      });
+                      widget.onChanged('yes');
+                    },
                     activeColor: kred,
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     visualDensity: VisualDensity.compact,
@@ -487,8 +496,13 @@ class _MinimumpackageState extends State<Minimumpackage> {
               Row(
                 children: [
                   Checkbox(
-                    value: true,
-                    onChanged: (val) {},
+                    value: selectedAnswer == 'no',
+                    onChanged: (val) {
+                      setState(() {
+                        selectedAnswer = 'no';
+                      });
+                      widget.onChanged('no');
+                    },
                     activeColor: kred,
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     visualDensity: VisualDensity.compact,
@@ -530,6 +544,12 @@ class _ExtrafittingsState extends State<Extrafittings> {
   void selectedvalue() {
     List<String> selectedProducts = [];
 
+    for (int i = 0; i < selected.length; i++) {
+      if (selected[i]) {
+        selectedProducts.add(widget.product[i].toString());
+      }
+    }
+
     widget.onChanged(selectedProducts);
   }
 
@@ -551,6 +571,15 @@ class _ExtrafittingsState extends State<Extrafittings> {
   void initState() {
     super.initState();
     selected = List.generate(widget.product.length, (_) => false);
+  }
+
+  @override
+  void didUpdateWidget(covariant Extrafittings oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.product.length != widget.product.length) {
+      selected = List.generate(widget.product.length, (_) => false);
+    }
   }
 
   @override
@@ -702,6 +731,497 @@ class _ExtrafittingsState extends State<Extrafittings> {
             ),
           ),
         ]
+      ),
+    );
+  }
+}
+
+class EditMinimumpackage extends StatefulWidget {
+  final String title;
+  final List<dynamic> product;
+  final List<dynamic> price;
+  final String total;
+  final void Function(String answer) onChanged;
+  final bool readonly;
+  const EditMinimumpackage({
+    super.key,
+    required this.title,
+    required this.product,
+    required this.price,
+    required this.total,
+    required this.onChanged,
+    this.readonly = false,
+  });
+
+  @override
+  State<EditMinimumpackage> createState() => _EditMinimumpackageState();
+}
+
+class _EditMinimumpackageState extends State<EditMinimumpackage> {
+  String? selectedAnswer;
+
+  @override
+  void initState() {
+    super.initState();
+    _setAnswerFromPackage();
+  }
+
+  @override
+  void didUpdateWidget(covariant EditMinimumpackage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.product != widget.product) {
+      _setAnswerFromPackage();
+    }
+  }
+
+  void _setAnswerFromPackage() {
+    final newAnswer = widget.product.isNotEmpty ? 'yes' : 'no';
+
+    if (selectedAnswer == newAnswer) return;
+
+    selectedAnswer = newAnswer;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        widget.onChanged(newAnswer);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 15),
+      child: Opacity(
+        opacity: widget.readonly ? 0.6 : 1,
+        child: IgnorePointer(
+          ignoring: widget.readonly,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.title,
+                style: TextStyle(
+                  fontSize: fs12,
+                  fontFamily: 'Poppins',
+                  color: Color(0xff919EAB)
+                ),
+              ),
+              SizedBox(height: SizeConfig.h(5)),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: Color(0xff919EAB)
+                  )
+                ),
+                padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(10), vertical: SizeConfig.h(10)),
+                child: (widget.product.isEmpty || widget.price.isEmpty || widget.total.isEmpty)
+              ? Padding(
+                  padding: EdgeInsets.symmetric(vertical: SizeConfig.h(30)),
+                  child: Center(
+                    child: Text(
+                      'Select the Model first',
+                      style: customtext(
+                        fs12,
+                        Color(0xff919EAB),
+                      ),
+                    ),
+                  ),
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Color(0xffD9D9D9),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(10), vertical: SizeConfig.h(5)),
+                          child: Text(
+                            'Products',
+                            style: customtext(
+                              fs10,
+                              Color(0xff494949),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Color(0xffD9D9D9),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(10), vertical: SizeConfig.h(5)),
+                          child: Text(
+                            'Price',
+                            style: customtext(
+                              fs10,
+                              Color(0xff494949),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(2), vertical: SizeConfig.h(3)),
+                      child: SizedBox(
+                        height: widget.product.length <= 5
+                          ? null
+                          : SizeConfig.h(120),
+                        child: ListView.builder(
+                          shrinkWrap: widget.product.length <= 5,
+                          physics: widget.product.length <= 5
+                            ? const NeverScrollableScrollPhysics()
+                            : const BouncingScrollPhysics(),
+                          itemCount: widget.product.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: EdgeInsets.only(top: SizeConfig.h(5)),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 4,
+                                    child: Text(
+                                      widget.product[index],
+                                      style: customtext(fs12, kblack),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        widget.price[index],
+                                        style: customtext(fs12, kblack),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: SizeConfig.h(10)),
+                    Text(
+                      'Total: ${widget.total}',
+                      style: textmedium12,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: SizeConfig.h(8)),
+              Row(
+                children: [
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: selectedAnswer == 'yes',
+                        onChanged: (val) {
+                          setState(() {
+                            selectedAnswer = 'yes';
+                          });
+                          widget.onChanged('yes');
+                        },
+                        activeColor: kred,
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        visualDensity: VisualDensity.compact,
+                      ),
+                      SizedBox(width: SizeConfig.w(2)),
+                      Text(
+                        'Yes',
+                        style: customtext(fs12, kblack),
+                      ),
+                    ],
+                  ),
+                  SizedBox(width: SizeConfig.w(10)),
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: selectedAnswer == 'no',
+                        onChanged: (val) {
+                          setState(() {
+                            selectedAnswer = 'no';
+                          });
+                          widget.onChanged('no');
+                        },
+                        activeColor: kred,
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        visualDensity: VisualDensity.compact,
+                      ),
+                      SizedBox(width: SizeConfig.w(2)),
+                      Text(
+                        'No',
+                        style: customtext(fs12, kblack),
+                      ),
+                    ],
+                  ),
+                ],
+              )
+            ]
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class EditExtrafittings extends StatefulWidget {
+  final String title;
+  final List<dynamic> product;
+  final List<dynamic> price;
+  final void Function(List<String> selectedProducts) onChanged;
+  final List<String> initialSelected;
+  final bool readonly;
+  const EditExtrafittings({
+    super.key,
+    required this.title,
+    required this.product,
+    required this.price,
+    required this.onChanged,
+    required this.initialSelected,
+    this.readonly = false,
+  });
+
+  @override
+  State<EditExtrafittings> createState() => _EditExtrafittingsState();
+}
+
+class _EditExtrafittingsState extends State<EditExtrafittings> {
+
+  bool _initialApplied = false;
+
+  void selectedvalue() {
+    List<String> selectedProducts = [];
+
+    for (int i = 0; i < selected.length; i++) {
+      if (selected[i]) {
+        selectedProducts.add(widget.product[i].toString());
+      }
+    }
+
+    widget.onChanged(selectedProducts);
+  }
+
+  late List<bool> selected;
+
+  String get total {
+    int sum = 0;
+
+    for (int i = 0; i < widget.price.length; i++) {
+      if (selected[i]) {
+        sum += int.tryParse(widget.price[i].toString()) ?? 0;
+      }
+    }
+
+    return sum.toString();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    selected = [];
+  }
+
+  @override
+  void didUpdateWidget(covariant EditExtrafittings oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.product.isNotEmpty &&
+        widget.product.length != oldWidget.product.length) {
+
+      selected = List.generate(widget.product.length, (_) => false);
+      _initialApplied = false; 
+    }
+
+    if (!_initialApplied &&
+        widget.product.isNotEmpty &&
+        widget.initialSelected.isNotEmpty) {
+
+      _applyInitialSelection();
+      _initialApplied = true;
+    }
+  }
+
+  void _applyInitialSelection() {
+    for (int i = 0; i < widget.product.length; i++) {
+      final product = widget.product[i].toString().trim().toLowerCase();
+
+      if (widget.initialSelected.any(
+        (e) => e.trim().toLowerCase() == product,
+      )) {
+        selected[i] = true;
+      }
+    }
+
+    setState(() {});
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      selectedvalue();
+    });
+  }
+    
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 15),
+      child: Opacity(
+        opacity: widget.readonly ? 0.6 : 1,
+        child: IgnorePointer(
+          ignoring: widget.readonly,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.title,
+                style: TextStyle(
+                  fontSize: fs12,
+                  fontFamily: 'Poppins',
+                  color: Color(0xff919EAB)
+                ),
+              ),
+              SizedBox(height: SizeConfig.h(5)),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: Color(0xff919EAB)
+                  )
+                ),
+                padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(10), vertical: SizeConfig.h(10)),
+                child: (widget.product.isEmpty || widget.price.isEmpty)
+              ? Padding(
+                  padding: EdgeInsets.symmetric(vertical: SizeConfig.h(30)),
+                  child: Center(
+                    child: Text(
+                      'Select the Model first',
+                      style: customtext(
+                        fs12,
+                        Color(0xff919EAB),
+                      ),
+                    ),
+                  ),
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Color(0xffD9D9D9),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(10), vertical: SizeConfig.h(5)),
+                          child: Text(
+                            'Products',
+                            style: customtext(
+                              fs10,
+                              Color(0xff494949),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Color(0xffD9D9D9),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(10), vertical: SizeConfig.h(5)),
+                          child: Text(
+                            'Price',
+                            style: customtext(
+                              fs10,
+                              Color(0xff494949),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(2), vertical: SizeConfig.h(3)),
+                      child: SizedBox(
+                        height: widget.product.length <= 5
+                          ? null
+                          : SizeConfig.h(120),
+                        child: ListView.builder(
+                          shrinkWrap: widget.product.length <= 5,
+                          physics: widget.product.length <= 5
+                            ? const NeverScrollableScrollPhysics()
+                            : const BouncingScrollPhysics(),
+                          itemCount: widget.product.length,
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              onTap: () {
+                                setState(() {
+                                  selected[index] = !selected[index];
+                                });
+                                selectedvalue();
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.only(top: SizeConfig.h(5)),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 4,
+                                      child: Row(
+                                        children: [
+                                          Checkbox(
+                                            activeColor: kred,
+                                            value: selected[index],
+                                            onChanged: (val) {
+                                              setState(() {
+                                                selected[index] = val ?? false;
+                                              });
+                                              selectedvalue();
+                                            },
+                                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                            visualDensity: VisualDensity.compact,
+                                          ),
+                                          SizedBox(width: SizeConfig.w(2)),
+                                          Text(
+                                            widget.product[index],
+                                            style: customtext(fs12, kblack),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Text(
+                                          widget.price[index],
+                                          style: customtext(fs12, kblack),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: SizeConfig.h(10)),
+                    Text(
+                      'Total: $total',
+                      style: textmedium12,
+                    ),
+                  ],
+                ),
+              ),
+            ]
+          ),
+        ),
       ),
     );
   }

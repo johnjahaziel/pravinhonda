@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
+import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/districtcity.dart';
 import 'package:pravinhonda/namevariantcolor.dart';
 import 'package:pravinhonda/utility/customs/customdatefield.dart';
@@ -62,11 +67,26 @@ class _ViewenquiryState extends State<Viewenquiry> {
   late TextEditingController followupdatecontroller;
   late TextEditingController customerremarks;
 
+  List<dynamic> mpproducts = [];
+  List<dynamic> mpprice = [];
+  String? mptotal;
+
+  List<dynamic> efproducts = [];
+  List<dynamic> efprice = [];
+
+  String? minimumPackageAnswer;
+  List<String> extraFittingsSelected = [];
+
   @override
   void initState() {
     super.initState();
     _initControllersFromResponse(widget.apiResponse);
     print('Api Response from child: ${widget.apiResponse}');
+
+    if (selectedmodelnameitems != null && selectedmodelnameitems!.isNotEmpty) {
+      fetchminimumpackage(selectedmodelnameitems!);
+      fetchextrafitting(selectedmodelnameitems!);
+    }
   }
 
   void _initControllersFromResponse(Map<String, dynamic> resp) {
@@ -98,6 +118,8 @@ class _ViewenquiryState extends State<Viewenquiry> {
     datecontroller = TextEditingController(text: enquiry['dob'] ?? '');
     followupdatecontroller = TextEditingController(text: enquiry['follow_up_date'] ?? '');
     customerremarks = TextEditingController(text: enquiry['customers_remarks'] ?? '');
+    minimumPackageAnswer = enquiry['minimum_package']?.toString();
+    extraFittingsSelected = List<String>.from(enquiry['extra_package'] ?? []);
   }
 
   String wingsenquirye = '';
@@ -121,6 +143,73 @@ class _ViewenquiryState extends State<Viewenquiry> {
   String purchasetypee = '';
   String exchangeflage = '';
   String customerremarkse = '';
+  String minimumpackagee = '';
+  String extrafittingse = '';
+
+  Future<void> fetchminimumpackage(String modelname) async {
+    final url = Uri.parse('https://app.pravinhonda.com/api/minimum-package/$modelname');
+
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    try {
+
+      final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        }
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        
+        setState(() {
+          mpproducts = responseData['products'];
+          mpprice = responseData['prices'];
+          mptotal = responseData['total'];
+        });
+      } else {
+        print('Failed to fetch Minimum Package. Status code: ${response.statusCode}');
+      }
+
+    } catch (e) {
+      print('Fetching Minimum Package: $e');
+    }
+  }
+
+  Future<void> fetchextrafitting(String modelname) async {
+    final url = Uri.parse('https://app.pravinhonda.com/api/extra-fitting/$modelname');
+
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    try {
+
+      final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        }
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        
+        setState(() {
+          efproducts = responseData['products'];
+          efprice = responseData['prices'];
+        });
+      } else {
+        print('Failed to fetch Minimum Package. Status code: ${response.statusCode}');
+      }
+
+    } catch (e) {
+      print('Fetching Minimum Package: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -316,6 +405,21 @@ class _ViewenquiryState extends State<Viewenquiry> {
               setState(() {
                 selectedmodelnameitems = value;
               });
+
+              mpproducts.clear();
+              mpprice.clear();
+              mptotal = '';
+
+              if (value != null && value.isNotEmpty) {
+                fetchminimumpackage(value);
+              }
+
+              efproducts.clear();
+              efprice.clear();
+
+              if (value != null && value.isNotEmpty) {
+                fetchextrafitting(value);
+              }
             },
             onVariantChanged: (value) {
               setState(() {
@@ -379,6 +483,34 @@ class _ViewenquiryState extends State<Viewenquiry> {
             customerremarks,
             readonly: readonly
           ),
+          EditMinimumpackage(
+            title: 'Minimum Packages',
+            product: mpproducts,
+            price: mpprice,
+            total: mptotal ?? '0',
+            onChanged: (value) {
+              setState(() {
+                minimumPackageAnswer = value;
+              });
+            },
+            readonly: readonly,
+          ),
+          if(minimumpackagee.isNotEmpty)
+          errormessage(minimumpackagee),
+          EditExtrafittings(
+            title: 'Extra Fittings',
+            product: efproducts,
+            price: efprice,
+            initialSelected: extraFittingsSelected,
+            onChanged: (items) {
+              setState(() {
+                extraFittingsSelected = items;
+              });
+            },
+            readonly: readonly,
+          ),
+          if(extrafittingse.isNotEmpty)
+          errormessage(extrafittingse),
           SizedBox(height: SizeConfig.h(40)),
         ],
       ),
