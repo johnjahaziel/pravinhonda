@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
-import 'package:pravinhonda/loginscreens/forms/movetobooking/movetobooking.dart';
+import 'package:pravinhonda/loginscreens/forms/deliverypage.dart';
 import 'package:pravinhonda/utility/boxes.dart';
 import 'package:pravinhonda/utility/custom.dart';
 import 'package:pravinhonda/utility/size_config.dart';
@@ -196,7 +196,7 @@ class _DeliveryState extends State<Delivery> {
                       SizedBox(height: SizeConfig.h(20)),
                       Center(
                         child: Text(
-                          'Delievery',
+                          'Delivery',
                           style: customtext(fs18, kred, FontWeight.bold),
                         ),
                       ),
@@ -251,7 +251,7 @@ class _DeliveryState extends State<Delivery> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => Movetobooking(
+                                          builder: (context) => Deliverypage(
                                             enquiryid: data['enquiry_id'] ?? 0,
                                             apiResponse: selected
                                           )
