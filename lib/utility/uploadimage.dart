@@ -76,13 +76,14 @@ class _UploadimageState extends State<Uploadimage> {
 
   Future<void> _pickFromGallery() async {
     final picker = ImagePicker();
-    final pickedFiles = await picker.pickMultiImage();
 
-    if (pickedFiles.isEmpty) return;
+    final XFile? pickedFile = await picker.pickImage(
+      source: ImageSource.gallery,
+    );
 
-    for (var picked in pickedFiles) {
-      _validateAndAddImage(File(picked.path));
-    }
+    if (pickedFile == null) return;
+
+    _validateAndAddImage(File(pickedFile.path));
   }
 
   void _validateAndAddImage(File file) {

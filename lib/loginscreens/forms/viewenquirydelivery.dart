@@ -217,7 +217,9 @@ class _ViewenquiryDeliveryState extends State<ViewenquiryDelivery> {
   List<File> uploadedImages = [];
 
   Future<void> _submitPhoto() async {
-    final url = Uri.parse('https://app.pravinhonda.com/api/move-to-delivery/$enquiryid');
+    final url = Uri.parse('https://app.pravinhonda.com/api/move-to-delivery/${enquiryid.text}');
+
+    print(url);
 
     final token = BlocProvider.of<AuthCubit>(context).state.token;
 
@@ -229,10 +231,14 @@ class _ViewenquiryDeliveryState extends State<ViewenquiryDelivery> {
 
       request.headers['Authorization'] = 'Bearer $token';
       request.headers['Accept'] = 'application/json';
+      request.headers['Content-Type'] = 'application/json';
 
-      for (var images in uploadedImages) {
-        request.files.add(await http.MultipartFile.fromPath('delivery_photo',images.path));
-      }
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'delivery_photo',
+          uploadedImages.first.path,
+        ),
+      );
 
       var response = await request.send();
 
@@ -566,6 +572,7 @@ class _ViewenquiryDeliveryState extends State<ViewenquiryDelivery> {
             'Submit',
             () {
               _submitPhoto();
+              print(enquiryid.text);
             }
           ),
           SizedBox(height: SizeConfig.h(40)),

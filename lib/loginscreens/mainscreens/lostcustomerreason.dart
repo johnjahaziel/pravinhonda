@@ -6,9 +6,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/loginscreens/Navigation.dart';
+import 'package:pravinhonda/namevariantcolor.dart';
 import 'package:pravinhonda/utility/customs/customappBar.dart';
 import 'package:pravinhonda/utility/customs/customdrawer.dart';
-import 'package:pravinhonda/utility/customs/customdropdown.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
@@ -29,19 +29,20 @@ class _LostcustomerReasonState extends State<LostcustomerReason> {
 
   String? selectedduetobranditems;
 
-  List<Map<String, String>> duetobranditems = [
-    {'label': 'Yes', 'value': 'Yes'},
-    {'label': 'No', 'value': 'No'},
-  ];
+  List<Map<String, String>> duetobranditems = [];
 
   String? selectedotherhondadealeritems;
 
-  List<Map<String, String>> otherhondadealeritems = [
-    {'label': 'Yes', 'value': 'Yes'},
-    {'label': 'No', 'value': 'No'},
-  ];
+  List<Map<String, String>> otherhondadealeritems = [];
 
   TextEditingController otherscomments = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchbrand();
+    fetchdealer();
+  }
 
   Future<void> apiconnection() async {
     final url = Uri.parse('https://app.pravinhonda.com/api/lost_customer/${widget.enquiryId}');
@@ -84,6 +85,88 @@ class _LostcustomerReasonState extends State<LostcustomerReason> {
     }
   }
 
+  Future<void> fetchbrand() async {
+    final url = Uri.parse('https://app.pravinhonda.com/api/brands');
+
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    try {
+
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+
+        final List<dynamic> dataList = (responseData['data'] as List<dynamic>?) ?? [];
+
+        setState(() {
+          duetobranditems = dataList.map((item) {
+            return {
+              'id': item['id'].toString(),
+              'name': item['brand_name'].toString(),
+            };
+          }).toList();
+        });
+
+        print(responseData);
+
+      } else {
+        print('Failed to fetch brands. Status Code: ${response.statusCode}');
+      }
+      
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  Future<void> fetchdealer() async {
+    final url = Uri.parse('https://app.pravinhonda.com/api/dealers');
+
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    try {
+
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+
+        final List<dynamic> dataList = (responseData['data'] as List<dynamic>?) ?? [];
+
+        setState(() {
+          otherhondadealeritems = dataList.map((item) {
+            return {
+              'id': item['id'].toString(),
+              'name': item['dealer_name'].toString(),
+            };
+          }).toList();
+        });
+
+        print(responseData);
+
+      } else {
+        print('Failed to fetch brands. Status Code: ${response.statusCode}');
+      }
+      
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
@@ -118,7 +201,7 @@ class _LostcustomerReasonState extends State<LostcustomerReason> {
                       },
                     ),
                     if (selectedReason == 'Due to Brand')
-                    CustomDropdown(
+                    CustomNVCDropdown(
                       title: 'Choose the Brand',
                       selectedCustomDropdown: selectedduetobranditems,
                       customDropdownItems: duetobranditems,
@@ -140,8 +223,8 @@ class _LostcustomerReasonState extends State<LostcustomerReason> {
                       },
                     ),
                     if (selectedReason == 'Other Honda Dealer')
-                    CustomDropdown(
-                      title: 'Choose the Brand',
+                    CustomNVCDropdown(
+                      title: 'Choose the Dealer',
                       selectedCustomDropdown: selectedotherhondadealeritems,
                       customDropdownItems: otherhondadealeritems,
                       onChanged: (newValue) {

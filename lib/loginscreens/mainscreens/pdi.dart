@@ -107,9 +107,7 @@ class _PdiState extends State<Pdi> {
 
         final List<dynamic> dataList = (responseData['data'] as List<dynamic>?) ?? [];
 
-        final List<dynamic> filteredList = dataList
-        .where((item) => item['status_code']?.toString() == "6")
-        .toList();
+        final List<dynamic> filteredList = dataList;
 
         setState(() {
           if (url == null) {
