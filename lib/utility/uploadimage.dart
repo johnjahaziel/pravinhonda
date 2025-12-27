@@ -4,7 +4,9 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
@@ -261,8 +263,35 @@ class _CameraOverlayScreenState extends State<CameraOverlayScreen> {
   }
 
   Future<void> _captureImage() async {
-    final image = await _controller!.takePicture();
-    Navigator.pop(context, File(image.path));
+    final XFile rawImage = await _controller!.takePicture();
+
+    final Uint8List cameraBytes = await File(rawImage.path).readAsBytes();
+    img.Image cameraImage = img.decodeImage(cameraBytes)!;
+
+    final ByteData overlayData =
+        await rootBundle.load('images/honda_frame.png');
+    final Uint8List overlayBytes = overlayData.buffer.asUint8List();
+    img.Image overlayImage = img.decodeImage(overlayBytes)!;
+
+    overlayImage = img.copyResize(
+      overlayImage,
+      width: cameraImage.width,
+      height: cameraImage.height,
+    );
+    
+    img.Image finalImage = img.compositeImage(
+      cameraImage,
+      overlayImage,
+    );
+
+    final directory = await getTemporaryDirectory();
+    final String finalPath =
+        '${directory.path}/camera_with_overlay_${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+    final File finalFile =
+        File(finalPath)..writeAsBytesSync(img.encodeJpg(finalImage, quality: 95));
+
+    Navigator.pop(context, finalFile);
   }
 
   @override
