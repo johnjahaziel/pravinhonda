@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pravinhonda/bloc/apirespnse_cubit.dart';
 import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/bloc/enquiry_id_cubit.dart';
+import 'package:pravinhonda/bloc/number_cubit.dart';
 import 'package:pravinhonda/bloc/username_cubit.dart';
 import 'package:pravinhonda/loginscreens/Navigation.dart';
 import 'package:pravinhonda/loginscreens/login.dart';
@@ -24,7 +25,8 @@ void main() async {
         BlocProvider.value(value: AuthCubit()..setToken(storedToken)),
         BlocProvider(create: (_) => EnquiryCubit()),
         BlocProvider(create: (_) => ApiresponseCubit()),
-        BlocProvider(create: (_) => UsernameCubit()..setusername(storedUsername ?? ''))
+        BlocProvider(create: (_) => UsernameCubit()..setusername(storedUsername ?? '')),
+        BlocProvider(create: (_) => NumberCubit()),
       ],
       child: MyApp(
         hasToken: storedToken != null && storedToken.isNotEmpty

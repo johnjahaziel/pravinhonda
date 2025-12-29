@@ -475,7 +475,7 @@ class _QuotationSuccessPopupState extends State<QuotationSuccessPopup> {
                 ),
               ),
             ],
-          ),
+          ),  
           SizedBox(height: SizeConfig.h(20)),
           LottieBuilder(
             height: SizeConfig.h(120),

@@ -212,9 +212,11 @@ class _BookinglistState extends State<Bookinglist> {
 
         final List<dynamic> dataList = (responseData['data'] as List<dynamic>?) ?? [];
 
-        final List<dynamic> filteredList = dataList
-        .where((item) => item['status_code']?.toString() == "2")
-        .toList();
+        // final List<dynamic> filteredList = dataList
+        // .where((item) => item['status_code']?.toString() == "2")
+        // .toList();
+
+        final List<dynamic> filteredList = dataList;
 
         setState(() {
           if (url == null) {
@@ -464,9 +466,7 @@ class _WaitingforapprovalState extends State<Waitingforapproval> {
 
         final List<dynamic> dataList = (responseData['data'] as List<dynamic>?) ?? [];
 
-        final List<dynamic> filteredList = dataList
-        .where((item) => item['status_code']?.toString() == "2")
-        .toList();
+        final List<dynamic> filteredList = dataList;
 
         setState(() {
           if (url == null) {

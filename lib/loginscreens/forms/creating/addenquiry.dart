@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/apirespnse_cubit.dart';
 import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/bloc/enquiry_id_cubit.dart';
+import 'package:pravinhonda/bloc/number_cubit.dart';
 import 'package:pravinhonda/districtcity.dart';
 import 'package:pravinhonda/loginscreens/forms/editing/createquotation.dart';
 import 'package:pravinhonda/namevariantcolor.dart';
@@ -105,6 +106,13 @@ class _AddenquiryState extends State<Addenquiry> {
   String? selectedcityitems;
 
   String nextpagelocal = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    customercontactnumber.text = BlocProvider.of<NumberCubit>(context).state.number ?? '';
+  }
 
   Future<void> apiconnection() async {
     final url = Uri.parse('https://app.pravinhonda.com/api/enquiries');
@@ -347,97 +355,6 @@ class _AddenquiryState extends State<Addenquiry> {
     }
   }
 
-  // Future<void> fetchsamemobile() async {
-  //   final url = Uri.parse('https://app.pravinhonda.com/api/sales/mobile-count?mobile=${customercontactnumber.text}');
-
-  //   final token = BlocProvider.of<AuthCubit>(context).state.token;
-
-  //   try {
-  //     final response = await http.get(
-  //       url,
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'Accept': 'application/json',
-  //         'Authorization': 'Bearer $token'
-  //       },
-  //     );
-
-  //     final responseData = jsonDecode(response.body);
-
-  //     if (response.statusCode == 200) {
-  //       Fluttertoast.showToast(msg: responseData['message']);
-
-  //       final String message = responseData['message'] ?? '';
-
-  //       if (message == "No records found for this mobile number within last 90 days") {
-
-  //         apiconnection();
-
-  //       }
-
-  //       else if (message == "Mobile records fetched successfully (last 90 days)") {
-
-  //         showDialog(
-  //           context: context,
-  //           barrierDismissible: true,
-  //           builder: (context) {
-  //             return AlertDialog(
-  //               title: const Text(
-  //                 'Records Found',
-  //                 style: TextStyle(fontWeight: FontWeight.bold),
-  //               ),
-  //               content: const Text(
-  //                 'Previous enquiry records were found for this mobile number.\n\nDo you want to continue?',
-  //               ),
-  //               actions: [
-
-  //                 TextButton(
-  //                   onPressed: () {
-  //                     Navigator.pop(context);
-  //                   },
-  //                   child: const Text('NO'),
-  //                 ),
-
-  //                 ElevatedButton(
-  //                   onPressed: () {
-  //                     Navigator.pop(context);
-
-  //                     if (selectedpurchasetypeitems == 'finance') {
-  //                       widget.financeselected();
-  //                       nextpagelocal = 'Finance Form';
-  //                     } else if (selectedpurchasetypeitems != 'finance' && selectedexchangeflagitems == 'yes') {
-  //                       widget.exchangeselected();
-  //                       nextpagelocal = 'Exchange Form';
-  //                     } else {
-  //                       Navigator.push(
-  //                         context,
-  //                         MaterialPageRoute(
-  //                           builder: (context) => Createquotation(
-  //                             enquiryid: responseData['data']['enquiry_id'],
-  //                             apiResponse: responseData,
-  //                           ),
-  //                         ),
-  //                       );
-  //                       nextpagelocal = 'Quotation';
-  //                     }
-  //                   },
-  //                   child: const Text('YES'),
-  //                 ),
-  //               ],
-  //             );
-  //           },
-  //         );
-  //       }
-
-  //       print('Same Mobile Number Response: $responseData');
-  //     } else {
-  //       Fluttertoast.showToast(msg: responseData['message']);
-  //     }
-  //   } catch (error) {
-  //     print('Error fetching same mobile number: $error');
-  //   }
-  // }
-  
   @override
   Widget build(BuildContext context) {
     return Expanded(
