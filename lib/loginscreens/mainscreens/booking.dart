@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
+import 'package:pravinhonda/loginscreens/forms/view/viewform.dart';
 import 'package:pravinhonda/utility/boxes.dart';
 import 'package:pravinhonda/utility/custom.dart';
 import 'package:pravinhonda/utility/size_config.dart';
@@ -344,7 +345,16 @@ class _BookinglistState extends State<Bookinglist> {
                           cashfinance: data['purchase_type']?.toString() ?? '',
                           textride: data['test_ride']?.toString() ?? '',
                           exchange: data['exchange_flag']?.toString() ?? '',
-                          onTap: () {}
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Viewform(
+                                enquiryid: data['enquiry_id'] ?? 0,
+                                apiResponse: data,
+                                )
+                              )
+                            );
+                          }
                         );
                       },
                     ),
@@ -587,7 +597,16 @@ class _WaitingforapprovalState extends State<Waitingforapproval> {
                           cashfinance: data['purchase_type']?.toString() ?? '',
                           textride: data['test_ride']?.toString() ?? '',
                           exchange: data['exchange_flag']?.toString() ?? '',
-                          onTap: () {}
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Viewform(
+                                enquiryid: data['enquiry_id'] ?? 0,
+                                apiResponse: data,
+                                )
+                              )
+                            );
+                          }
                         );
                       },
                     ),

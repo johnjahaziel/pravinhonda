@@ -14,18 +14,18 @@ import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/uploadimage.dart';
 
-class ViewenquiryDelivery extends StatefulWidget {
+class ViewenquiryPdi extends StatefulWidget {
   final Map<String, dynamic> apiResponse;
-  const ViewenquiryDelivery({
+  const ViewenquiryPdi({
     super.key,
     required this.apiResponse,
   });
 
   @override
-  State<ViewenquiryDelivery> createState() => _ViewenquiryDeliveryState();
+  State<ViewenquiryPdi> createState() => _ViewenquiryPdiState();
 }
 
-class _ViewenquiryDeliveryState extends State<ViewenquiryDelivery> {
+class _ViewenquiryPdiState extends State<ViewenquiryPdi> {
 
   bool readonly = true;
 

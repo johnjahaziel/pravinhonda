@@ -127,3 +127,44 @@ class _NavigationState extends State<Navigation> {
     );
   }
 }
+
+// void _showpopupmobilenumber(BuildContext context) {
+//   showDialog(
+//     context: context,
+//     builder: (BuildContext context) {
+//       return AlertDialog(
+//         title: Text(
+//           'Mobile Number',
+//           style: customtext(
+//             fs16,
+//             kblack,
+//             FontWeight.w600
+//           ),
+//         ),
+//         content: Text(
+//           'Please update your mobile number to proceed further.',
+//           style: customtext(
+//             fs14,
+//             kblack,
+//             FontWeight.w400
+//           ),
+//         ),
+//         actions: [
+//           TextButton(
+//             onPressed: () {
+//               Navigator.of(context).pop();
+//             },
+//             child: Text(
+//               'OK',
+//               style: customtext(
+//                 fs14,
+//                 kred,
+//                 FontWeight.w500
+//               ),
+//             ),
+//           ),
+//         ],
+//       );
+//     },
+//   );
+// }

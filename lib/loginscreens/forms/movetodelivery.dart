@@ -2,27 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:pravinhonda/loginscreens/Navigation.dart';
 import 'package:pravinhonda/loginscreens/forms/view/viewexchange.dart';
 import 'package:pravinhonda/loginscreens/forms/view/viewfinace.dart';
-import 'package:pravinhonda/loginscreens/forms/viewenquirydelivey.dart';
+import 'package:pravinhonda/loginscreens/forms/viewenquirypdi.dart';
 import 'package:pravinhonda/utility/customs/customappBar.dart';
 import 'package:pravinhonda/utility/customs/customdrawer.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
-class Deliverypage extends StatefulWidget {
+class Movetodelivery extends StatefulWidget {
   final int enquiryid;
   final Map<String, dynamic> apiResponse;
-  const Deliverypage({
+  const Movetodelivery({
     super.key,
     required this.enquiryid,
     required this.apiResponse,
   });
 
   @override
-  State<Deliverypage> createState() => _DeliverypageState();
+  State<Movetodelivery> createState() => _MovetodeliveryState();
 }
 
-class _DeliverypageState extends State<Deliverypage> {
+class _MovetodeliveryState extends State<Movetodelivery> {
   bool createenquiry = true;
   bool finance = false;
   bool exchange = false;
@@ -117,7 +117,7 @@ class _DeliverypageState extends State<Deliverypage> {
                   back(context, Navigation(initialIndex: 0)),
                   Center(
                     child: Text(
-                      'Delivery Details',
+                      'Completed Details',
                       style: customtext(
                         fs18,
                         kred,
@@ -250,7 +250,7 @@ class _DeliverypageState extends State<Deliverypage> {
                       child: Column(
                         children: [
                           if(createenquiry == true)
-                          Viewenquirydelivery(
+                          ViewenquiryPdi(
                             apiResponse: widget.apiResponse,
                           ),
                           if(finance == true)

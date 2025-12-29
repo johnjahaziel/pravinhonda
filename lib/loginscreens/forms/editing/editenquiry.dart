@@ -467,6 +467,7 @@ class _EditenquiryState extends State<Editenquiry> {
               textfieldy(
                 "Email ID",
                 emailid,
+                star: false,
                 readonly: widget.edit,
               ),
               if(emailide.isNotEmpty)

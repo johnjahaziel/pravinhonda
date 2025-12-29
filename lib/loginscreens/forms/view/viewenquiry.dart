@@ -316,6 +316,7 @@ class _ViewenquiryState extends State<Viewenquiry> {
           textfieldy(
             "Email ID",
             emailid,
+            star: false,
             readonly: readonly,
           ),
           if(emailide.isNotEmpty)

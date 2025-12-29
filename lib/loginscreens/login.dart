@@ -63,7 +63,7 @@ class _LoginState extends State<Login> {
           );
         }
 
-        String username = responseData['user']['username'];
+        String username = responseData['user']['name'];
 
         final usernamestore = await SharedPreferences.getInstance();
         await usernamestore.setString('username', username);

@@ -528,7 +528,8 @@ class _AddenquiryState extends State<Addenquiry> {
               ),
               textfieldy(
                 "Email ID",
-                emailid
+                emailid,
+                star: false
               ),
               if(emailide.isNotEmpty)
               errormessage(emailide),
