@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image/image.dart' as img;
-import 'package:image_picker/image_picker.dart';
+// import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
@@ -46,14 +46,14 @@ class _UploadimageState extends State<Uploadimage> {
                   _pickFromCamera();
                 },
               ),
-              ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: const Text('Open Gallery'),
-                onTap: () {
-                  Navigator.pop(context);
-                  _pickFromGallery();
-                },
-              ),
+              // ListTile(
+              //   leading: const Icon(Icons.photo_library),
+              //   title: const Text('Open Gallery'),
+              //   onTap: () {
+              //     Navigator.pop(context);
+              //     _pickFromGallery();
+              //   },
+              // ),
             ],
           ),
         );
@@ -74,17 +74,17 @@ class _UploadimageState extends State<Uploadimage> {
     }
   }
 
-  Future<void> _pickFromGallery() async {
-    final picker = ImagePicker();
+  // Future<void> _pickFromGallery() async {
+  //   final picker = ImagePicker();
 
-    final XFile? pickedFile = await picker.pickImage(
-      source: ImageSource.gallery,
-    );
+  //   final XFile? pickedFile = await picker.pickImage(
+  //     source: ImageSource.gallery,
+  //   );
 
-    if (pickedFile == null) return;
+  //   if (pickedFile == null) return;
 
-    _validateAndAddImage(File(pickedFile.path));
-  }
+  //   _validateAndAddImage(File(pickedFile.path));
+  // }
 
   void _validateAndAddImage(File file) {
     const int maxSizeInBytes = 5 * 1024 * 1024;

@@ -7,12 +7,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/districtcity.dart';
+import 'package:pravinhonda/loginscreens/Navigation.dart';
 import 'package:pravinhonda/namevariantcolor.dart';
 import 'package:pravinhonda/utility/customs/customdatefield.dart';
 import 'package:pravinhonda/utility/customs/customdropdown.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/uploadimage.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ViewenquiryPdi extends StatefulWidget {
   final Map<String, dynamic> apiResponse;
@@ -248,6 +250,18 @@ class _ViewenquiryPdiState extends State<ViewenquiryPdi> {
       if (response.statusCode == 200) {
         print('Photo submitted successfully: $responseData');
 
+        await shareOnWhatsApp(
+          phone: customercontactnumber.text,
+          imageFile: uploadedImages.first,
+        );
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Navigation(initialIndex: 2)
+          )
+        );
+
         Fluttertoast.showToast(msg: responseData['message']);
       } else {
         print('Failed to submit photo. Status code: ${response.statusCode}, Response: $responseData');
@@ -257,6 +271,19 @@ class _ViewenquiryPdiState extends State<ViewenquiryPdi> {
     } catch (e) {
       print('Submitting Photo: $e');
     }
+  }
+
+  Future<void> shareOnWhatsApp({
+    required String phone,
+    required File imageFile,
+  }) async {
+    final box = context.findRenderObject() as RenderBox?;
+
+    await Share.shareXFiles(
+      [XFile(imageFile.path)],
+      text: 'Your vehicle delivery photo 📸',
+      sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+    );
   }
 
   @override
@@ -572,6 +599,11 @@ class _ViewenquiryPdiState extends State<ViewenquiryPdi> {
             'Submit',
             () {
               _submitPhoto();
+
+              // shareOnWhatsApp(
+              //   phone: customercontactnumber.text,
+              //   imageFile: uploadedImages.first,
+              // );
               print(enquiryid.text);
             }
           ),
