@@ -101,6 +101,9 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
       fetchminimumpackage(selectedmodelnameitems!);
       fetchextrafitting(selectedmodelnameitems!);
     }
+
+    print(minimumPackageAnswer);
+    print(extraFittingsSelected);
   }
 
   void _initControllersFromResponse(Map<String, dynamic> resp) {
@@ -192,7 +195,9 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
       address.text != (originalEnquiry['address'] ?? '') ||
       datecontroller.text != (originalEnquiry['dob'] ?? '') ||
       followupdatecontroller.text != (originalEnquiry['follow_up_date'] ?? '') ||
-      customerremarks.text != (originalEnquiry['customers_remarks'] ?? '');
+      customerremarks.text != (originalEnquiry['customers_remarks'] ?? '') ||
+      minimumPackageAnswer != (originalEnquiry['minimum_package'] ?? '') ||
+      extraFittingsSelected != (originalEnquiry['extra_package'] ?? '');
   }
 
   Future<void> apiconnection() async {
@@ -248,10 +253,10 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
         final apiresponse = responseData;
         BlocProvider.of<ApiresponseCubit>(context).setApiresponse(apiresponse);
 
-        if (selectedpurchasetypeitems == 'finance' && responseData['data']['purchase_type'] != selectedpurchasetypeitems) {
+        if (selectedpurchasetypeitems == 'finance' && responseData['data']['purchase_type'] == selectedpurchasetypeitems) {
           nextpagelocal = 'Finance Form';
         } else if (selectedpurchasetypeitems != 'finance' && selectedexchangeflagitems == 'yes'
-              && responseData['data']['exchange_flag'] != selectedexchangeflagitems
+              && responseData['data']['exchange_flag'] == selectedexchangeflagitems
         ) {
           nextpagelocal = 'Exchange Form';
         } else {
@@ -263,11 +268,11 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
           responseData['message'],
           () {
             Navigator.pop(context);
-            if(selectedpurchasetypeitems == 'finance' && responseData['data']['purchase_type'] != selectedpurchasetypeitems) {
+            if(selectedpurchasetypeitems == 'finance' && responseData['data']['purchase_type'] == selectedpurchasetypeitems) {
               widget.financeselected();
             } else if (
               selectedpurchasetypeitems != 'finance' && selectedexchangeflagitems == 'yes'
-              && responseData['data']['exchange_flag'] != selectedexchangeflagitems
+              && responseData['data']['exchange_flag'] == selectedexchangeflagitems
             ) {
               widget.exchangeselected();
             } else {

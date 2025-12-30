@@ -138,7 +138,7 @@ class _EnquiryState extends State<Enquiry> {
             }).toList();
           }
 
-          nextPageUrl = responseData['next_page_url'] as String?;
+          nextPageUrl = responseData['pagination']['next_page_url'] as String?;
 
           hasMore = nextPageUrl != null;
 

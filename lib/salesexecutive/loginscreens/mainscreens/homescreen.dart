@@ -432,7 +432,7 @@ class _RecentactivityState extends State<Recentactivity> {
         final List<dynamic> dataList = (responseData['data'] as List<dynamic>?) ?? [];
 
         final List<dynamic> filteredList = dataList
-        .where((item) => item['details']?['status_code']?.toString() == "1")
+        .where((item) => item['status_code']?.toString() == "1")
         .toList();
 
         setState(() {
@@ -484,7 +484,7 @@ class _RecentactivityState extends State<Recentactivity> {
       itemCount: alldata.length,
       itemBuilder: (context, index) {
         final data = alldata[index];
-        final details = data['details'] ?? {};
+        final details = data ?? {};
         return Hondabox(
           enquiryid: details['enquiry_id'] ?? 0,
           id: details['enquiry_id']?.toString() ?? '',
