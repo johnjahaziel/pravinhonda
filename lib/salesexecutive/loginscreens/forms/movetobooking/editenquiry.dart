@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import 'package:pravinhonda/salesexecutive/bloc/apirespnse_cubit.dart';
-import 'package:pravinhonda/salesexecutive/bloc/auth_cubit.dart';
+import 'package:pravinhonda/bloc/apirespnse_cubit.dart';
+import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/salesexecutive/districtcity.dart';
 import 'package:pravinhonda/salesexecutive/loginscreens/forms/editing/createquotation.dart';
 import 'package:pravinhonda/salesexecutive/namevariantcolor.dart';
@@ -195,9 +195,7 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
       address.text != (originalEnquiry['address'] ?? '') ||
       datecontroller.text != (originalEnquiry['dob'] ?? '') ||
       followupdatecontroller.text != (originalEnquiry['follow_up_date'] ?? '') ||
-      customerremarks.text != (originalEnquiry['customers_remarks'] ?? '') ||
-      minimumPackageAnswer != (originalEnquiry['minimum_package'] ?? '') ||
-      extraFittingsSelected != (originalEnquiry['extra_package'] ?? '');
+      customerremarks.text != (originalEnquiry['customers_remarks'] ?? '');
   }
 
   Future<void> apiconnection() async {

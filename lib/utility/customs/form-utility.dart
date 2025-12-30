@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
+const List<Map<String, String>> helperItems = [
+  {'label': 'Helper 1', 'value': 'Helper 1'},
+  {'label': 'Helper 2', 'value': 'Helper 2'},
+  {'label': 'Helper 3', 'value': 'Helper 3'},
+  {'label': 'Helper 4', 'value': 'Helper 4'},
+];
+
 const List<Map<String, String>> customerCategoryItems= [
   {'label': 'Individual', 'value': 'Individual'},
   {'label': 'CSD', 'value': 'CSD'},

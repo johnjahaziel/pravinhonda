@@ -6,7 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
-import 'package:pravinhonda/salesexecutive/bloc/auth_cubit.dart';
+import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/salesexecutive/loginscreens/mainscreens/lostcustomerreason.dart';
 import 'package:pravinhonda/utility/customs/customdatefield.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
@@ -223,6 +223,156 @@ class _HondaboxState extends State<Hondabox> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class Pdiinchargebox extends StatefulWidget {
+  final int enquiryid;
+  final String id;
+  final String customername;
+  final String contactnumber;
+  final String model;
+  final String variant;
+  final String color;
+  final String status;
+  final String cashfinance;
+  final String textride;
+  final String exchange;
+  final VoidCallback onTap;
+
+  const Pdiinchargebox({
+    super.key,
+    required this.enquiryid,
+    required this.id,
+    required this.customername,
+    required this.contactnumber,
+    required this.model,
+    required this.variant,
+    required this.color,
+    required this.status,
+    this.cashfinance = 'no',
+    this.textride = 'No',
+    this.exchange = 'No',
+    required this.onTap,
+  });
+
+  @override
+  State<Pdiinchargebox> createState() => _PdiinchargeboxState();
+}
+
+class _PdiinchargeboxState extends State<Pdiinchargebox> {
+
+  void callNumber(String number) async {
+    final Uri url = Uri(scheme: 'tel', path: number);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    }
+  }
+
+  void openWhatsApp(String number) async {
+    final whatsappUrl = Uri.parse('https://wa.me/91${number}');
+    
+    launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        vertical: SizeConfig.h(5),
+      ),
+      child: RawMaterialButton(
+        onPressed: widget.onTap,
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: kgrey),
+          ),
+          padding: EdgeInsets.symmetric(
+            horizontal: SizeConfig.w(10),
+            vertical: SizeConfig.h(10),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+
+              /// 🔹 ENQUIRY ID (TOP)
+              Text(
+                'Enquiry ID : ${widget.id}',
+                style: textbold12,
+              ),
+
+              SizedBox(height: SizeConfig.h(8)),
+
+              /// 🔹 DETAILS WITH ICONS
+              infoRow(Icons.person_outline, widget.customername),
+              infoRow(Icons.call_outlined, widget.contactnumber),
+              infoRow(Icons.directions_bike_outlined, widget.model),
+              infoRow(Icons.layers_outlined, widget.variant),
+              infoRow(Icons.palette_outlined, widget.color),
+
+              SizedBox(height: SizeConfig.h(6)),
+
+              /// 🔹 TAGS ROW
+              Row(
+                children: [
+                  if (widget.textride == 'yes')
+                    _tag('Test Ride', kyellow),
+
+                  if (widget.cashfinance != 'no')
+                    _tag(
+                      '${widget.cashfinance[0].toUpperCase()}${widget.cashfinance.substring(1)}',
+                      kblue,
+                    ),
+
+                  if (widget.exchange == 'yes')
+                    _tag('Exchange', kgreen2),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _tag(String text, Color color) {
+    return Padding(
+      padding: EdgeInsets.only(right: SizeConfig.w(4)),
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: SizeConfig.w(6),
+          vertical: SizeConfig.h(2),
+        ),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: Text(text, style: textmedium8),
+      ),
+    );
+  }
+
+  Widget infoRow(IconData icon, String text) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: SizeConfig.h(4)),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 14, color: kgrey),
+          SizedBox(width: SizeConfig.w(6)),
+          Expanded(
+            child: Text(
+              text,
+              style: textmedium12,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
       ),
     );
   }

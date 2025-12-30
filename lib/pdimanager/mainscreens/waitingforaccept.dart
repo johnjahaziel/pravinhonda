@@ -4,20 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
-import 'package:pravinhonda/salesexecutive/loginscreens/forms/movetobooking/movetobooking.dart';
+import 'package:pravinhonda/pdimanager/movetoaccept.dart';
 import 'package:pravinhonda/utility/boxes.dart';
 import 'package:pravinhonda/utility/custom.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
-class Enquiry extends StatefulWidget {
-  const Enquiry({super.key});
+class Waitingforaccept extends StatefulWidget {
+  const Waitingforaccept({super.key});
 
   @override
-  State<Enquiry> createState() => _EnquiryState();
+  State<Waitingforaccept> createState() => _WaitingforacceptState();
 }
 
-class _EnquiryState extends State<Enquiry> {
+class _WaitingforacceptState extends State<Waitingforaccept> {
   List<dynamic> _allData = [];
   List<dynamic> alldata = [];
   bool isLoading = true;
@@ -80,7 +80,7 @@ class _EnquiryState extends State<Enquiry> {
 
   Future<void> _fetchPage({String? url}) async {
     try {
-      final Uri uri = Uri.parse(url ?? 'https://app.pravinhonda.com/api/enquiries');
+      final Uri uri = Uri.parse(url ?? 'https://app.pravinhonda.com/api/pdi');
 
       if (_allData.isEmpty && !isLoading) {
         setState(() {
@@ -109,7 +109,7 @@ class _EnquiryState extends State<Enquiry> {
         final List<dynamic> dataList = (responseData['data'] as List<dynamic>?) ?? [];
 
         final List<dynamic> filteredList = dataList
-        .where((item) => item['status_code']?.toString() == "1")
+        .where((item) => item['status_code']?.toString() == "6")
         .toList();
 
         setState(() {
@@ -196,7 +196,7 @@ class _EnquiryState extends State<Enquiry> {
                       SizedBox(height: SizeConfig.h(20)),
                       Center(
                         child: Text(
-                          'Enquiry',
+                          'Waiting for Accept',
                           style: customtext(fs18, kred, FontWeight.bold),
                         ),
                       ),
@@ -211,7 +211,7 @@ class _EnquiryState extends State<Enquiry> {
                                   SizedBox(height: SizeConfig.h(80)),
                                   Center(
                                     child: Text(
-                                      'No enquiries found.',
+                                      'No data found.',
                                       style: text12,
                                     ),
                                   ),
@@ -235,7 +235,7 @@ class _EnquiryState extends State<Enquiry> {
                                   }
                                       
                                   final data = alldata[index];
-                                  return Hondabox(
+                                  return Pdiinchargebox(
                                     enquiryid: data['enquiry_id'] ?? 0,
                                     id: data['enquiry_id']?.toString() ?? '',
                                     customername: data['customer_name']?.toString() ?? '',
@@ -251,13 +251,16 @@ class _EnquiryState extends State<Enquiry> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => Movetobooking(
+                                          builder: (context) => Movetoaccept(
                                             enquiryid: data['enquiry_id'] ?? 0,
                                             apiResponse: selected
                                           )
                                         ),
                                       );
                                     },
+                                    model: data['model_name']?.toString() ?? '',
+                                    variant: data['model_variant']?.toString() ?? '',
+                                    color: data['model_color']?.toString() ?? '',
                                   );
                                 },
                               ),

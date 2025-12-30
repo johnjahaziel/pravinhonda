@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pravinhonda/salesexecutive/bloc/enquiry_id_cubit.dart';
+import 'package:pravinhonda/bloc/enquiry_id_cubit.dart';
 import 'package:pravinhonda/salesexecutive/loginscreens/Navigation.dart';
 import 'package:pravinhonda/salesexecutive/loginscreens/forms/creating/addenquiry.dart';
 import 'package:pravinhonda/salesexecutive/loginscreens/forms/creating/addexchange.dart';

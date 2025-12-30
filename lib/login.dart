@@ -5,8 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
-import 'package:pravinhonda/salesexecutive/bloc/auth_cubit.dart';
-import 'package:pravinhonda/salesexecutive/bloc/username_cubit.dart';
+import 'package:pravinhonda/bloc/auth_cubit.dart';
+import 'package:pravinhonda/bloc/role_cubit.dart';
+import 'package:pravinhonda/bloc/username_cubit.dart';
+import 'package:pravinhonda/pdimanager/Navigation.dart';
 import 'package:pravinhonda/salesexecutive/loginscreens/Navigation.dart';
 import 'package:pravinhonda/utility/custom.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
@@ -71,14 +73,37 @@ class _LoginState extends State<Login> {
         String? storedUsername = usernamestore.getString('username');
 
         BlocProvider.of<UsernameCubit>(context).setusername(storedUsername ?? 'User');
-        
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Navigation(),
-          ),
-          ((route) => false)
-        );
+
+        String role = responseData['user']['role'];
+
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('role', role);
+
+        BlocProvider.of<RoleCubit>(context).setrole(role);
+
+        if (role == 'superadmin') {
+
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Navigation(),
+            ),
+            ((route) => false)
+          );
+
+        } else if (role == 'PDI Incharge') {
+
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => NavigationPdi(),
+            ),
+            ((route) => false)
+          );
+
+        } else {
+          Fluttertoast.showToast(msg: "Access denied");
+        }
 
         Fluttertoast.showToast(msg: responseData['message']);
 
