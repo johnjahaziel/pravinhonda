@@ -24,6 +24,7 @@ const List<Map<String, String>> customerTypeItems = [
 const List<Map<String, String>> genderTypeItems = [
   {'label': 'Male', 'value': 'Male'},
   {'label': 'Female', 'value': 'Female'},
+  {'label': 'Other', 'value': 'Other'},
 ];
 
 const List<Map<String, String>> martialstatusTypeItems = [
