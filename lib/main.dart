@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pravinhonda/bloc/apirespnse_cubit.dart';
-import 'package:pravinhonda/bloc/auth_cubit.dart';
-import 'package:pravinhonda/bloc/enquiry_id_cubit.dart';
-import 'package:pravinhonda/bloc/number_cubit.dart';
-import 'package:pravinhonda/bloc/username_cubit.dart';
-import 'package:pravinhonda/loginscreens/Navigation.dart';
-import 'package:pravinhonda/loginscreens/login.dart';
+import 'package:pravinhonda/salesexecutive/bloc/apirespnse_cubit.dart';
+import 'package:pravinhonda/salesexecutive/bloc/auth_cubit.dart';
+import 'package:pravinhonda/salesexecutive/bloc/enquiry_id_cubit.dart';
+import 'package:pravinhonda/salesexecutive/bloc/number_cubit.dart';
+import 'package:pravinhonda/salesexecutive/bloc/username_cubit.dart';
+import 'package:pravinhonda/salesexecutive/loginscreens/Navigation.dart';
+import 'package:pravinhonda/salesexecutive/loginscreens/login.dart';
 import 'package:pravinhonda/utility/styles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
