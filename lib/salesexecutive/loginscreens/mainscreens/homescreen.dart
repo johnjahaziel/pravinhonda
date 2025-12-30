@@ -595,7 +595,16 @@ class _TodolistState extends State<Todolist> {
           cashfinance: data['purchase_type']?.toString() ?? '',
           textride: data['test_ride']?.toString() ?? '',
           exchange: data['exchange_flag']?.toString() ?? '',
-          onTap: () {}
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Viewform(
+                enquiryid: data['enquiry_id'] ?? 0,
+                apiResponse: data,
+                )
+              )
+            );
+          }
         );
       },
     );
