@@ -110,7 +110,7 @@ class _MovetoworkingState extends State<Movetoworking> {
           context,
           MaterialPageRoute(
             builder: (context) => NavigationPdi(
-              initialIndex: 0,
+              initialIndex: 2,
             ),
           ),
         );
@@ -174,7 +174,7 @@ class _MovetoworkingState extends State<Movetoworking> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: SizeConfig.h(10)),
-                  back(context, NavigationPdi(initialIndex: 0)),
+                  back(context, NavigationPdi(initialIndex: 2)),
                   Center(
                     child: Text(
                       'View Details',

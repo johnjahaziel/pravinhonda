@@ -12,10 +12,12 @@ import 'package:pravinhonda/utility/styles.dart';
 class ViewformPdi extends StatefulWidget {
   final int enquiryid;
   final Map<String, dynamic> apiResponse;
+  final int initialIndex;
   const ViewformPdi({
     super.key,
     required this.enquiryid,
-    required this.apiResponse
+    required this.apiResponse,
+    this.initialIndex = 0
   });
 
   @override
@@ -114,7 +116,7 @@ class _ViewformPdiState extends State<ViewformPdi> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: SizeConfig.h(10)),
-                  back(context, NavigationPdi(initialIndex: 0)),
+                  back(context, NavigationPdi(initialIndex: widget.initialIndex)),
                   Center(
                     child: Text(
                       'View Details',

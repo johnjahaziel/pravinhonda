@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
       startPage = Login();
     } else if (role == 'PDI Incharge') {
       startPage = NavigationPdi();
-    } else if (role == 'superadmin') {
+    } else if (role == 'Sales Representative') {
       startPage = Navigation();
     } else {
       startPage = Login();

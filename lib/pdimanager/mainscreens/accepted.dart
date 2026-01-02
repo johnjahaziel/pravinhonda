@@ -255,7 +255,8 @@ class _AcceptedState extends State<Accepted> {
                                         MaterialPageRoute(
                                           builder: (context) => ViewformPdi(
                                             enquiryid: data['enquiry_id'] ?? 0,
-                                            apiResponse: selected
+                                            apiResponse: selected,
+                                            initialIndex: 1,
                                           )
                                         ),
                                       );

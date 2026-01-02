@@ -34,10 +34,14 @@ class _LoginState extends State<Login> {
     try {
       final response = await http.post(
         url,
-        body: {
+        body: jsonEncode({
           'username': useridcontroller.text,
           'password': passwordcontroller.text,
-        },
+        }),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }
       );
 
       final responseData = json.decode(response.body);
@@ -111,6 +115,8 @@ class _LoginState extends State<Login> {
 
       } else {
         print('Server error: ${response.statusCode}');
+
+        print(responseData);
         Fluttertoast.showToast(msg: responseData['message']);
       }
     } catch (e) {
