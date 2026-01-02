@@ -56,9 +56,9 @@ class _HomescreenState extends State<Homescreen> {
       if(response.statusCode == 200) {
         setState(() {
           totalenquiry = responseData['total_enquiry'].toString();
-          openenquiry = responseData['enquiry count'].toString();
-          allbooking = responseData['booking count'].toString();
-          lostcustomer = responseData['lost customer count'].toString();
+          openenquiry = responseData['enquiry_count'].toString();
+          allbooking = responseData['booking_count'].toString();
+          lostcustomer = responseData['lost_customer_count'].toString();
         });
       } else {
         Fluttertoast.showToast(msg: responseData['message']);
