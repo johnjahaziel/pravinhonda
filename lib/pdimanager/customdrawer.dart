@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pravinhonda/bloc/apirespnse_cubit.dart';
 import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/login.dart';
+import 'package:pravinhonda/pdimanager/Navigation.dart';
 import 'package:pravinhonda/salesexecutive/MenuScreen/alllostcustomer.dart';
 import 'package:pravinhonda/salesexecutive/MenuScreen/emicalculator.dart';
 import 'package:pravinhonda/salesexecutive/MenuScreen/searchcustomer.dart';
-import 'package:pravinhonda/salesexecutive/loginscreens/Navigation.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -90,7 +90,7 @@ class _CustomdrawerPdiState extends State<CustomdrawerPdi> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => Navigation(initialIndex: 0,)
+                          builder: (context) => NavigationPdi(initialIndex: 0,)
                         )
                       );
                     },
