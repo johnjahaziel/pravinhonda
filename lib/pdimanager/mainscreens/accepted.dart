@@ -80,7 +80,7 @@ class _AcceptedState extends State<Accepted> {
 
   Future<void> _fetchPage({String? url}) async {
     try {
-      final Uri uri = Uri.parse(url ?? 'https://app.pravinhonda.com/api/pdi');
+      final Uri uri = Uri.parse(url ?? 'https://app.pravinhonda.com/api/accepted');
 
       if (_allData.isEmpty && !isLoading) {
         setState(() {
@@ -108,9 +108,11 @@ class _AcceptedState extends State<Accepted> {
 
         final List<dynamic> dataList = (responseData['data'] as List<dynamic>?) ?? [];
 
-        final List<dynamic> filteredList = dataList
-        .where((item) => item['status_code']?.toString() == "7")
-        .toList();
+        // final List<dynamic> filteredList = dataList
+        // .where((item) => item['status_code']?.toString() == "7")
+        // .toList();
+
+        final List<dynamic> filteredList = dataList;
 
         setState(() {
           if (url == null) {

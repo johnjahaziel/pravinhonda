@@ -6,7 +6,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/pdimanager/Navigation.dart';
-import 'package:pravinhonda/salesexecutive/loginscreens/Navigation.dart';
 import 'package:pravinhonda/salesexecutive/loginscreens/forms/view/viewenquiry.dart';
 import 'package:pravinhonda/salesexecutive/loginscreens/forms/view/viewexchange.dart';
 import 'package:pravinhonda/salesexecutive/loginscreens/forms/view/viewfinace.dart';
@@ -162,7 +161,7 @@ class _MovetocompletedState extends State<Movetocompleted> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: SizeConfig.h(10)),
-                  back(context, Navigation(initialIndex: 0)),
+                  back(context, NavigationPdi(initialIndex: 0)),
                   Center(
                     child: Text(
                       'View Details',

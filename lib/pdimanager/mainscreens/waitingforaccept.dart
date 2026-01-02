@@ -80,7 +80,7 @@ class _WaitingforacceptState extends State<Waitingforaccept> {
 
   Future<void> _fetchPage({String? url}) async {
     try {
-      final Uri uri = Uri.parse(url ?? 'https://app.pravinhonda.com/api/pdi');
+      final Uri uri = Uri.parse(url ?? 'https://app.pravinhonda.com/api/waiting-for-accept');
 
       if (_allData.isEmpty && !isLoading) {
         setState(() {
@@ -108,9 +108,11 @@ class _WaitingforacceptState extends State<Waitingforaccept> {
 
         final List<dynamic> dataList = (responseData['data'] as List<dynamic>?) ?? [];
 
-        final List<dynamic> filteredList = dataList
-        .where((item) => item['status_code']?.toString() == "6")
-        .toList();
+        // final List<dynamic> filteredList = dataList
+        // .where((item) => item['status_code']?.toString() == "6")
+        // .toList();
+
+        final List<dynamic> filteredList = dataList;
 
         setState(() {
           if (url == null) {

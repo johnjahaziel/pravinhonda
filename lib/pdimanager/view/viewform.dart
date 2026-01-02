@@ -1,10 +1,4 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart' as http;
-import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/pdimanager/Navigation.dart';
 import 'package:pravinhonda/salesexecutive/loginscreens/forms/view/viewenquiry.dart';
 import 'package:pravinhonda/salesexecutive/loginscreens/forms/view/viewexchange.dart';
@@ -15,20 +9,20 @@ import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
-class Movetoaccept extends StatefulWidget {
+class ViewformPdi extends StatefulWidget {
   final int enquiryid;
   final Map<String, dynamic> apiResponse;
-  const Movetoaccept({
+  const ViewformPdi({
     super.key,
     required this.enquiryid,
     required this.apiResponse
   });
 
   @override
-  State<Movetoaccept> createState() => _MovetoacceptState();
+  State<ViewformPdi> createState() => _ViewformPdiState();
 }
 
-class _MovetoacceptState extends State<Movetoaccept> {
+class _ViewformPdiState extends State<ViewformPdi> {
   bool createenquiry = true;
   bool finance = false;
   bool exchange = false;
@@ -73,47 +67,6 @@ class _MovetoacceptState extends State<Movetoaccept> {
     } else {
         financetrue = false;
         exchangetrue = false;
-    }
-  }
-
-  Future<void> movetoaccept() async {
-    final url = Uri.parse('https://app.pravinhonda.com/api/accept/${widget.enquiryid}');
-
-    final token = BlocProvider.of<AuthCubit>(context).state.token;
-
-    try {
-      final response = await http.post(
-        url,
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-      );
-
-      final responseData = jsonDecode(response.body);
-
-      if (response.statusCode == 200) {
-        print(responseData);
-        Fluttertoast.showToast(msg: responseData['message']);
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => NavigationPdi(
-              initialIndex: 0,
-            ),
-          ),
-        );
-
-      } else {
-
-        print(responseData);
-        Fluttertoast.showToast(msg: responseData['message']);
-
-      }
-    } catch (e) {
-      print(e);
     }
   }
 
@@ -312,12 +265,6 @@ class _MovetoacceptState extends State<Movetoaccept> {
                       ),
                     ),
                   ),
-                  button(
-                    'Move to Accept',
-                    () {
-                      movetoaccept();
-                    }
-                  )
                 ],
               ),
             ],
