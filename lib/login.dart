@@ -81,7 +81,7 @@ class _LoginState extends State<Login> {
 
         BlocProvider.of<RoleCubit>(context).setrole(role);
 
-        if (role == 'superadmin') {
+        if (role == 'Sales Representative') {
 
           Navigator.pushAndRemoveUntil(
             context,
@@ -90,6 +90,8 @@ class _LoginState extends State<Login> {
             ),
             ((route) => false)
           );
+
+          Fluttertoast.showToast(msg: responseData['message']);
 
         } else if (role == 'PDI Incharge') {
 
@@ -101,11 +103,11 @@ class _LoginState extends State<Login> {
             ((route) => false)
           );
 
+          Fluttertoast.showToast(msg: responseData['message']);
+
         } else {
           Fluttertoast.showToast(msg: "Access denied");
         }
-
-        Fluttertoast.showToast(msg: responseData['message']);
 
       } else {
         print('Server error: ${response.statusCode}');
