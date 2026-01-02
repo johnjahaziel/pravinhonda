@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
-import 'package:pravinhonda/salesexecutive/loginscreens/forms/view/viewform.dart';
+import 'package:pravinhonda/pdimanager/view/viewform.dart';
 import 'package:pravinhonda/utility/boxes.dart';
 import 'package:pravinhonda/utility/custom.dart';
 import 'package:pravinhonda/utility/size_config.dart';
@@ -253,7 +253,7 @@ class _AcceptedState extends State<Accepted> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => Viewform(
+                                          builder: (context) => ViewformPdi(
                                             enquiryid: data['enquiry_id'] ?? 0,
                                             apiResponse: selected
                                           )
