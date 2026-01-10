@@ -20,6 +20,7 @@ class _ViewfinaceState extends State<Viewfinace> {
 
   TextEditingController maxloanpercentage= TextEditingController();
   TextEditingController maxloanamount= TextEditingController();
+  TextEditingController minimumdownpayment = TextEditingController();
 
   TextEditingController finance = TextEditingController();
   TextEditingController loanperiod= TextEditingController();
@@ -50,8 +51,8 @@ class _ViewfinaceState extends State<Viewfinace> {
     loanperiod = TextEditingController(text: (enquiry['loan_period'] ?? '').toString());
 
     vehiclecost = TextEditingController(text: (enquiry['vehicle_cost'] ?? '').toString());
-    loaninterest = TextEditingController(text: (enquiry['loan_interest'] ?? '').toString());
-    loanamount = TextEditingController(text: (enquiry['loan_amount'] ?? '').toString());
+    loaninterest = TextEditingController(text: (enquiry['interest_rate'] ?? '').toString());
+    loanamount = TextEditingController(text: (enquiry['user_down_payment'] ?? '').toString());
     emi = TextEditingController(text: (enquiry['emi'] ?? '').toString());
 
     modalname = TextEditingController(text: enquiry['model_name']);
@@ -94,18 +95,14 @@ class _ViewfinaceState extends State<Viewfinace> {
                 vehiclecost,
                 readonly: readonly
               ),
-              // textfieldy(
-              //   'Max Loan Percentage',
-              //   maxloanpercentage,
-              //   readonly: readonly
-              // ),
-              // textfieldy(
-              //   'Max Loan Amount',
-              //   maxloanamount,
-              //   readonly: readonly
-              // ),
               textfieldy(
-                'Loan Amount',
+                'Minimum Down Payment',
+                minimumdownpayment,
+                readonly: readonly
+              ),
+
+              textfieldy(
+                'Customer Down Payment',
                 loanamount,
                 readonly: readonly
               ),

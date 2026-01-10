@@ -47,6 +47,7 @@ class _EditfinanceMBState extends State<EditfinanceMB> {
 
   TextEditingController maxloanpercentage= TextEditingController();
   TextEditingController maxloanamount= TextEditingController();
+  TextEditingController minimumdownpayment = TextEditingController();
 
   TextEditingController loanamount= TextEditingController();
 
@@ -62,6 +63,22 @@ class _EditfinanceMBState extends State<EditfinanceMB> {
   Map<String, dynamic>? _financeResponse;
 
   String? oldexchange;
+
+  void validateDownPayment() {
+    final double minDown =
+        double.tryParse(minimumdownpayment.text) ?? 0;
+    final double customerDown =
+        double.tryParse(loanamount.text) ?? 0;
+
+    setState(() {
+      if (customerDown < minDown) {
+        loanamounte =
+            'Customer down payment should be greater than the minimum down payment (${minimumdownpayment.text})';
+      } else {
+        loanamounte = '';
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -175,6 +192,7 @@ class _EditfinanceMBState extends State<EditfinanceMB> {
           vehiclecost = TextEditingController(text: responseData['data']['finance_rule']['vehicle_price'].toString());
           maxloanpercentage = TextEditingController(text: responseData['data']['finance_rule']['max_loan_percentage'].toString());
           maxloanamount = TextEditingController(text: responseData['data']['Max_loan_amount'].toString());
+          minimumdownpayment = TextEditingController(text: responseData['data']['finance_rule']['minimum_down_payment'].toString());
 
           List<dynamic> rates = responseData['data']['rates'];
 
@@ -218,7 +236,7 @@ class _EditfinanceMBState extends State<EditfinanceMB> {
         },
         body: jsonEncode({
           'finance': selectedfinanceitems,
-          'loan_amount' : loanamount.text,
+          'user_down_payment' : loanamount.text,
           'loan_period' : selectedloanperioditems
         })
       );
@@ -229,7 +247,7 @@ class _EditfinanceMBState extends State<EditfinanceMB> {
 
         setState(() {
           emi = TextEditingController(text: responseData['data']['emi'].toString());
-          loaninterest = TextEditingController(text: responseData['data']['loan_interest'].toString());
+          loaninterest = TextEditingController(text: responseData['data']['interest_rate'].toString());
 
           getoneenquiry();
 
@@ -380,10 +398,18 @@ class _EditfinanceMBState extends State<EditfinanceMB> {
                 maxloanamount,
                 readonly: true
               ),
-    
               textfieldy(
-                'Loan Amount',
+                'Minimum Down Payment',
+                minimumdownpayment,
+                readonly: true
+              ),
+
+              textfieldy(
+                'Customer Down Payment',
                 loanamount,
+                onChanged: (value) {
+                  validateDownPayment();
+                },
                 readonly: widget.edit
               ),
               if(loanamounte.isNotEmpty)

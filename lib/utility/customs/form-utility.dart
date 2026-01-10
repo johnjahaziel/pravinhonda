@@ -49,7 +49,6 @@ const List<Map<String, String>> enquiryTypeItems = [
 const List<Map<String, String>> enquirysourceTypeItems = [
   {'label': 'Showroom Walk In', 'value': 'Showroom Walk In'},
   {'label': 'Railway', 'value': 'Railway'},
-  {'label': 'Auto-Expo 2025', 'value': 'Auto-Expo 2025'},
   {'label': 'NEWS', 'value': 'NEWS'},
   {'label': 'Online Booking', 'value': 'Online Booking'},
   {'label': 'TV', 'value': 'TV'},
@@ -79,7 +78,7 @@ const List<Map<String, String>> loanperiodTypeItems = [
   {'label': '12', 'value': '12'},
 ];
 
-textfieldy(String title, TextEditingController controller, {bool star = true, bool readonly = false, bool numpad = false}) => Padding(
+textfieldy(String title, TextEditingController controller, {bool star = true, bool readonly = false, bool numpad = false, Function(String)? onChanged}) => Padding(
   padding: const EdgeInsets.only(top: 15),
   child: Opacity(
     opacity: readonly ? 0.6 : 1,
@@ -114,6 +113,7 @@ textfieldy(String title, TextEditingController controller, {bool star = true, bo
               readOnly: readonly == true ? true : false,
               keyboardType: numpad == true ? TextInputType.number : TextInputType.text,
               maxLines: 1,
+              onChanged: onChanged,
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -228,69 +228,72 @@ errormessage(String message) {
   );
 }
 
-Future<void> showMessagePopup(BuildContext context, String message, VoidCallback onTap,{String nextpage = ''}) async {
+Future<void> showMessagePopup(
+  BuildContext context,
+  String message,
+  VoidCallback onTap, {
+  String nextpage = '',
+}) async {
   return showDialog(
     context: context,
     barrierDismissible: false,
     builder: (context) {
       return AlertDialog(
         backgroundColor: kwhite,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              message,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: fs14
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                message,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: fs14),
               ),
-            ),
-            SizedBox(height: SizeConfig.h(20)),
-            SizedBox(
-              width: SizeConfig.w(80),
-              child: ElevatedButton(
-                onPressed: onTap,
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+
+              SizedBox(height: SizeConfig.h(20)),
+
+              SizedBox(
+                width: SizeConfig.w(80),
+                child: ElevatedButton(
+                  onPressed: onTap,
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
-                ),
-                child: Text(
-                  "OK",
-                  style: customtext(
-                    fs12,
-                    kred,
-                    FontWeight.w500
+                  child: Text(
+                    "OK",
+                    style: customtext(fs12, kred, FontWeight.w500),
                   ),
                 ),
               ),
-            ),
-            if(nextpage != '')
-            SizedBox(height: SizeConfig.h(20)),
-            if(nextpage != '')
-            Row(
-              children: [
-                Text(
-                  'Next Page: ',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: fs12
-                  ),
-                ),
-                SizedBox(height: SizeConfig.w(2)),
-                Text(
-                  nextpage,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: fs14,
-                    fontWeight: FontWeight.bold,
-                    color: kred
-                  ),
+
+              if (nextpage.isNotEmpty) ...[
+                SizedBox(height: SizeConfig.h(20)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Next Page: ',
+                      style: TextStyle(fontSize: fs12),
+                    ),
+                    SizedBox(width: SizeConfig.w(2)),
+                    Text(
+                      nextpage,
+                      style: TextStyle(
+                        fontSize: fs14,
+                        fontWeight: FontWeight.bold,
+                        color: kred,
+                      ),
+                    ),
+                  ],
                 ),
               ],
-            ),
-          ],
+            ],
+          ),
         ),
       );
     },

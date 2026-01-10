@@ -43,6 +43,7 @@ class _AddfinanceState extends State<Addfinance> {
 
   TextEditingController maxloanpercentage= TextEditingController();
   TextEditingController maxloanamount= TextEditingController();
+  TextEditingController minimumdownpayment = TextEditingController();
 
   TextEditingController loanamount= TextEditingController();
 
@@ -56,6 +57,22 @@ class _AddfinanceState extends State<Addfinance> {
   String nextpagelocal = '';
 
   Map<String, dynamic>? _financeResponse;
+
+  void validateDownPayment() {
+    final double minDown =
+        double.tryParse(minimumdownpayment.text) ?? 0;
+    final double customerDown =
+        double.tryParse(loanamount.text) ?? 0;
+
+    setState(() {
+      if (customerDown < minDown) {
+        loanamounte =
+            'Customer down payment should be greater than the minimum down payment (${minimumdownpayment.text})';
+      } else {
+        loanamounte = '';
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -88,12 +105,18 @@ class _AddfinanceState extends State<Addfinance> {
           'Accept': 'application/json',
           'Authorization': 'Bearer $token'
         },
+        // body: {
+        //   'model_name' : modalname,
+        //   'variant_name' : modalvariant,
+        //   'color_name' : modalcolor
+        // }
       );
 
       final Map<String, dynamic> data = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
         final List<dynamic> finances = data['data'];
+        // final List<dynamic> finances = data['data']['finance_schemes'];
 
         setState(() {
           financeitems = finances.map((item) {
@@ -141,6 +164,7 @@ class _AddfinanceState extends State<Addfinance> {
           vehiclecost = TextEditingController(text: responseData['data']['finance_rule']['vehicle_price'].toString());
           maxloanpercentage = TextEditingController(text: responseData['data']['finance_rule']['max_loan_percentage'].toString());
           maxloanamount = TextEditingController(text: responseData['data']['Max_loan_amount'].toString());
+          minimumdownpayment = TextEditingController(text: responseData['data']['finance_rule']['minimum_down_payment'].toString());
 
           List<dynamic> rates = responseData['data']['rates'];
 
@@ -178,7 +202,7 @@ class _AddfinanceState extends State<Addfinance> {
         },
         body: jsonEncode({
           'finance': selectedfinanceitems,
-          'loan_amount' : loanamount.text,
+          'user_down_payment' : loanamount.text,
           'loan_period' : selectedloanperioditems
         })
       );
@@ -189,7 +213,7 @@ class _AddfinanceState extends State<Addfinance> {
 
         setState(() {
           emi = TextEditingController(text: responseData['data']['emi'].toString());
-          loaninterest = TextEditingController(text: responseData['data']['loan_interest'].toString());
+          loaninterest = TextEditingController(text: responseData['data']['interest_rate'].toString());
 
           getoneenquiry();
 
@@ -340,10 +364,18 @@ class _AddfinanceState extends State<Addfinance> {
                     maxloanamount,
                     readonly: true
                   ),
+                  textfieldy(
+                    'Minimum Down Payment',
+                    minimumdownpayment,
+                    readonly: true
+                  ),
 
                   textfieldy(
-                    'Loan Amount',
+                    'Customer Down Payment',
                     loanamount,
+                    onChanged: (value) {
+                      validateDownPayment();
+                    }
                   ),
                   if(loanamounte.isNotEmpty)
                   errormessage(loanamounte),

@@ -8,6 +8,7 @@ import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/salesexecutive/loginscreens/forms/editing/createquotation.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
+import 'package:pravinhonda/utility/styles.dart';
 
 class Addexchange extends StatefulWidget {
   final int enquiryid;
@@ -20,23 +21,78 @@ class Addexchange extends StatefulWidget {
   State<Addexchange> createState() => _AddexchangeState();
 }
 
+class DealerField {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
+}
+
 class _AddexchangeState extends State<Addexchange> {
 
-  TextEditingController name = TextEditingController();
-  TextEditingController address = TextEditingController();
   TextEditingController vehiclemodal = TextEditingController();
-  TextEditingController newvehiclemodal = TextEditingController();
+  TextEditingController vehiclemodalyr = TextEditingController();
+  TextEditingController noofowners = TextEditingController();
   TextEditingController expectedprice = TextEditingController();
-  TextEditingController finalizedprice = TextEditingController();
   TextEditingController assessedby = TextEditingController();
 
-  String namee = '';
-  String addresse = '';
+  TextEditingController dealername1 = TextEditingController();
+  TextEditingController price1 = TextEditingController();
+
+  TextEditingController finalizeddealer = TextEditingController();
+  TextEditingController finalizedprice = TextEditingController();
+
   String vehiclemodale = '';
-  String newvehiclemodale = '';
+  String vehiclemodalyre = '';
+  String noofownerse = '';
   String expectedpricee = '';
-  String finalizedpricee = '';
   String assessedbye = '';
+
+  String finalizeddealere = '';
+  String finalizedpricee = '';
+
+  bool showSubmit = false;
+
+  List<DealerField> dealers = [DealerField()];
+  final int maxdealers = 10;
+
+  Map<String, dynamic> buildDealerApiData() {
+    final Map<String, dynamic> data = {};
+
+    for (int i = 0; i < dealers.length; i++) {
+      data['dealer_name${i + 1}'] =
+          dealers[i].nameController.text.trim();
+      data['price${i + 1}'] =
+          dealers[i].priceController.text.trim();
+    }
+
+    return data;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    finalizeddealer.addListener(_checkFinalisedFields);
+    finalizedprice.addListener(_checkFinalisedFields);
+  }
+
+  void _checkFinalisedFields() {
+    final hasValue =
+        finalizeddealer.text.trim().isNotEmpty ||
+        finalizedprice.text.trim().isNotEmpty;
+
+    if (hasValue != showSubmit) {
+      setState(() {
+        showSubmit = hasValue;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    finalizeddealer.removeListener(_checkFinalisedFields);
+    finalizedprice.removeListener(_checkFinalisedFields);
+    super.dispose();
+  }
 
   Future<void> exchangeform() async {
     final url = Uri.parse('https://app.pravinhonda.com/api/exchange/${widget.enquiryid}');
@@ -52,21 +108,15 @@ class _AddexchangeState extends State<Addexchange> {
           'Authorization': 'Bearer $token'
         },
         body: jsonEncode({
-          'exchange_name': name.text,
-          'exchange_address': address.text,
           'vehicle_model': vehiclemodal.text,
-          'new_vehicle_model': newvehiclemodal.text,
+          'vehicle_year': vehiclemodalyr.text,
+          'no_of_owners' : noofowners.text,
           'expected_price': expectedprice.text,
-          'finalized_price': finalizedprice.text,
+          
           'assessed_by': assessedby.text,
 
-          // "exchange_name": "Maha Kala",
-          // "exchange_address": "123, MG Road, Chennai",
-          // "vehicle_model": "Honda City 2018",
-          // "new_vehicle_model": "September 2025",
-          // "expected_price": 50000.00,
-          // "finalized_price": 48000.00,
-          // "assessed_by": "Athi"
+          ...buildDealerApiData(),
+
         }),
       );
 
@@ -97,13 +147,85 @@ class _AddexchangeState extends State<Addexchange> {
         final errors = responseData['errors'] ?? {};
 
         setState(() {
-          namee = errors['exchange_name']?.toString() ?? '';
-          addresse = errors['exchange_address']?.toString() ?? '';
           vehiclemodale = errors['vehicle_model']?.toString() ?? '';
-          newvehiclemodale = errors['new_vehicle_model']?.toString() ?? '';
+          vehiclemodalyre = errors['vehicle_year']?.toString() ?? '';
+          noofownerse = errors['no_of_owners']?.toString() ?? '';
           expectedpricee = errors['expected_price']?.toString() ?? '';
-          finalizedpricee = errors['finalized_price']?.toString() ?? '';
+
           assessedbye = errors['assessed_by']?.toString() ?? '';
+        });
+
+        Fluttertoast.showToast(msg: responseData['message']);
+        print(response.body);
+      } else {
+        showMessagePopup(
+          context,
+          responseData['message'],
+          () {
+            Navigator.pop(context);
+          }
+        );
+        print(response.body);
+      }
+    } catch (error) {
+      print('Error submitting finance form: $error');
+    }
+  }
+
+  Future<void> submitexchange() async {
+    final url = Uri.parse('https://app.pravinhonda.com/api/exchange-final/${widget.enquiryid}');
+
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    try{
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({
+          'vehicle_model': vehiclemodal.text,
+          'vehicle_year': vehiclemodalyr.text,
+          'no_of_owners' : noofowners.text,
+          'finalized_dealer': finalizeddealer.text,
+          'finalized_price': finalizedprice.text,
+        }),
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        print('response data: $responseData');
+
+        showMessagePopup(
+          context,
+          responseData['message'],
+          () {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Createquotation(
+                  enquiryid: responseData['data']['enquiry_id'],
+                  apiResponse: responseData,
+                )
+              )
+            );
+          },
+          nextpage: 'Quotation'
+        );
+
+      } else if (response.statusCode == 422) {
+        final errors = responseData['errors'] ?? {};
+
+        setState(() {
+          vehiclemodale = errors['vehicle_model']?.toString() ?? '';
+          vehiclemodalyre = errors['vehicle_year']?.toString() ?? '';
+          noofownerse = errors['no_of_owners']?.toString() ?? '';
+          finalizeddealere = errors['finalized_dealer']?.toString() ?? '';
+          finalizedpricee = errors['finalized_price']?.toString() ?? '';
         });
 
         Fluttertoast.showToast(msg: responseData['message']);
@@ -134,30 +256,23 @@ class _AddexchangeState extends State<Addexchange> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               textfieldy(
-                'Name',
-                name
-              ),
-              if(namee.isNotEmpty)
-              errormessage(namee),
-              description(
-                'Address',
-                address,
-                star: true
-              ),
-              if(addresse.isNotEmpty)
-              errormessage(addresse),
-              textfieldy(
                 'Vehicle Modal',
                 vehiclemodal
               ),
               if(vehiclemodale.isNotEmpty)
               errormessage(vehiclemodale),
               textfieldy(
-                'New Vehicle Modal',
-                newvehiclemodal
+                'Vehicle Year',
+                vehiclemodalyr
               ),
-              if(newvehiclemodale.isNotEmpty)
-              errormessage(newvehiclemodale),
+              if(vehiclemodalyre.isNotEmpty)
+              errormessage(vehiclemodalyre),
+              textfieldy(
+                'No of Owners',
+                noofowners
+              ),
+              if(noofownerse.isNotEmpty)
+              errormessage(noofownerse),
               textfieldy(
                 'Expected Price',
                 expectedprice
@@ -165,23 +280,110 @@ class _AddexchangeState extends State<Addexchange> {
               if(expectedpricee.isNotEmpty)
               errormessage(expectedpricee),
               textfieldy(
-                'Finalized Price',
-                finalizedprice
-              ),
-              if(finalizedpricee.isNotEmpty)
-              errormessage(finalizedpricee),
-              textfieldy(
                 'Assessed By',
                 assessedby
               ),
               if(assessedbye.isNotEmpty)
               errormessage(assessedbye),
-              SizedBox(height: SizeConfig.h(25)),
+
+              Column(
+                children: [
+                  ListView.builder(
+                    itemCount: dealers.length,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: Stack(
+                          children: [
+                            Column(
+                              children: [
+                                textfieldy(
+                                  'Dealer ${index + 1}',
+                                  dealers[index].nameController,
+                                  star: false
+                                ),
+                                textfieldy(
+                                  'Price ${index + 1}',
+                                  dealers[index].priceController,
+                                  numpad: true,
+                                  star: false
+                                ),
+                              ],
+                            ),
+
+                            if (dealers.length > 1)
+                              Positioned(
+                                right: 0,
+                                top: 0,
+                                child: IconButton(
+                                  icon: Icon(
+                                    Icons.close,
+                                    size: 20,
+                                    color: Colors.red,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      dealers.removeAt(index);
+                                    });
+                                  },
+                                ),
+                              ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+
+                  SizedBox(height: SizeConfig.h(10)),
+
+                  if (dealers.length < maxdealers)
+                  OutlinedButton(
+                    style: ButtonStyle(
+                      shape: WidgetStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadiusGeometry.circular(2)
+                        )
+                      )
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        dealers.add(DealerField());
+                      });
+                    },
+                    child: Text(
+                      'Add Another Dealer',
+                      style: textmedium12.copyWith(
+                        color: kred
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              textfieldy(
+                'Finalised Dealer',
+                finalizeddealer
+              ),
+              if(finalizeddealere.isNotEmpty)
+              errormessage(finalizeddealere),
+              textfieldy(
+                'Finalised Price',
+                finalizedprice
+              ),
+              if(finalizedpricee.isNotEmpty)
+              errormessage(finalizedpricee),
+              SizedBox(height: SizeConfig.h(10)),
               button(
-                'Submit',
-                () {
-                  exchangeform();
-                }
+                showSubmit ? 'Submit' : 'Update',
+                () async {
+                  if (showSubmit) {
+                    await exchangeform();
+                    await submitexchange();
+                  } else {
+                    await exchangeform();
+                  }
+                },
               ),
               SizedBox(height: SizeConfig.h(30)),
             ],
