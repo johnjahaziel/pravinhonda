@@ -93,30 +93,33 @@ class _AddfinanceState extends State<Addfinance> {
   }
 
   Future<void> fetchfinance() async {
-    final financeUrl = Uri.parse('https://app.pravinhonda.com/api/finance/schemes');
+    final financeUrl = Uri.parse('https://app.pravinhonda.com/api/finances/schemes');
 
     final token = BlocProvider.of<AuthCubit>(context).state.token;
 
     try {
-      final response = await http.get(
+      final response = await http.post(
         financeUrl,
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
           'Authorization': 'Bearer $token'
         },
-        // body: {
-        //   'model_name' : modalname,
-        //   'variant_name' : modalvariant,
-        //   'color_name' : modalcolor
-        // }
+        body: jsonEncode({
+          'model_name' : modalname.text,
+          'variant_name' : modalvariant.text,
+          'color_name' : modalcolor.text
+        })
       );
+
+      
 
       final Map<String, dynamic> data = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        final List<dynamic> finances = data['data'];
-        // final List<dynamic> finances = data['data']['finance_schemes'];
+        final List<dynamic> finances = data['data']['finance_schemes'];
+
+        print('Finance: $finances');
 
         setState(() {
           financeitems = finances.map((item) {
@@ -133,7 +136,7 @@ class _AddfinanceState extends State<Addfinance> {
         print("Failed to load citys. Status code: ${response.statusCode}");
       }
     } catch (e) {
-      print("City fetch error: $e");
+      print("Fetch error: $e");
     }
   }
 

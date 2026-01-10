@@ -8,6 +8,7 @@ import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/salesexecutive/loginscreens/forms/editing/createquotation.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
+import 'package:pravinhonda/utility/styles.dart';
 
 class Editexchange extends StatefulWidget {
   final int enquiryid;
@@ -25,22 +26,50 @@ class Editexchange extends StatefulWidget {
   State<Editexchange> createState() => _EditexchangeState();
 }
 
-class _EditexchangeState extends State<Editexchange> {
-  late TextEditingController name;
-  late TextEditingController address;
-  late TextEditingController vehiclemodal;
-  late TextEditingController newvehiclemodal;
-  late TextEditingController expectedprice;
-  late TextEditingController finalizedprice;
-  late TextEditingController assessedby;
+class DealerField {
+  TextEditingController nameController;
+  TextEditingController priceController;
 
-  String namee = '';
-  String addresse = '';
+  DealerField({
+    String name = '',
+    String price = '',
+  })  : nameController = TextEditingController(text: name),
+        priceController = TextEditingController(text: price);
+}
+
+class _EditexchangeState extends State<Editexchange> {
+  late TextEditingController vehiclemodal;
+  late TextEditingController vehiclemodalyr;
+  late TextEditingController noofowners;
+  late TextEditingController expectedprice;
+  late TextEditingController assessedby;
+  late TextEditingController finalizeddealer;
+  late TextEditingController finalizedprice;
+
   String vehiclemodale = '';
-  String newvehiclemodale = '';
+  String vehiclemodalyre = '';
+  String noofownerse = '';
   String expectedpricee = '';
-  String finalizedpricee = '';
   String assessedbye = '';
+
+  String finalizeddealere = '';
+  String finalizedpricee = '';
+
+  List<DealerField> dealers = [DealerField()];
+  final int maxdealers = 10;
+
+  Map<String, dynamic> buildDealerApiData() {
+    final Map<String, dynamic> data = {};
+
+    for (int i = 0; i < dealers.length; i++) {
+      data['dealer_name${i + 1}'] =
+          dealers[i].nameController.text.trim();
+      data['price${i + 1}'] =
+          dealers[i].priceController.text.trim();
+    }
+
+    return data;
+  }
 
   @override
   void initState() {
@@ -52,13 +81,36 @@ class _EditexchangeState extends State<Editexchange> {
   void initControllersFromResponse(Map<String, dynamic> resp) {
     final enquiry = resp['data'] ?? {};
 
-    name = TextEditingController(text: (enquiry['exchange_name'] ?? '').toString());
-    address = TextEditingController(text: (enquiry['exchange_address'] ?? '').toString());
     vehiclemodal = TextEditingController(text: (enquiry['vehicle_model'] ?? '').toString());
-    newvehiclemodal = TextEditingController(text: (enquiry['new_vehicle_model'] ?? '').toString());
+    vehiclemodalyr = TextEditingController(text: (enquiry['vehicle_year'] ?? '').toString());
+    noofowners = TextEditingController(text: (enquiry['no_of_owners'] ?? '').toString());
     expectedprice = TextEditingController(text: (enquiry['expected_price'] ?? '').toString());
-    finalizedprice = TextEditingController(text: (enquiry['finalized_price'] ?? '').toString());
     assessedby = TextEditingController(text: (enquiry['assessed_by'] ?? '').toString());
+    finalizeddealer = TextEditingController(text: (enquiry['finalized_dealer'] ?? '').toString());
+    finalizedprice = TextEditingController(text: (enquiry['finalized_price'] ?? '').toString());
+
+    dealers.clear();
+
+    for (int i = 1; i <= maxdealers; i++) {
+      final dealerNameKey = 'dealer_name$i';
+      final priceKey = 'price$i';
+
+      if (enquiry[dealerNameKey] != null &&
+          enquiry[dealerNameKey].toString().isNotEmpty) {
+        dealers.add(
+          DealerField(
+            name: enquiry[dealerNameKey].toString(),
+            price: (enquiry[priceKey] ?? '').toString(),
+          ),
+        );
+      }
+    }
+
+    if (dealers.isEmpty) {
+      dealers.add(DealerField());
+    }
+
+    setState(() {});
   }
 
   Future<void> exchangeform() async {
@@ -75,21 +127,17 @@ class _EditexchangeState extends State<Editexchange> {
           'Authorization': 'Bearer $token'
         },
         body: jsonEncode({
-          'exchange_name': name.text,
-          'exchange_address': address.text,
           'vehicle_model': vehiclemodal.text,
-          'new_vehicle_model': newvehiclemodal.text,
+          'vehicle_year': vehiclemodalyr.text,
+          'no_of_owners' : noofowners.text,
           'expected_price': expectedprice.text,
-          'finalized_price': finalizedprice.text,
+          
           'assessed_by': assessedby.text,
 
-          // "exchange_name": "Maha Kala",
-          // "exchange_address": "123, MG Road, Chennai",
-          // "vehicle_model": "Honda City 2018",
-          // "new_vehicle_model": "September 2025",
-          // "expected_price": 50000.00,
-          // "finalized_price": 48000.00,
-          // "assessed_by": "Athi"
+          'finalized_dealer': finalizeddealer.text,
+          'finalized_price': finalizedprice.text,
+
+          ...buildDealerApiData(),
         }),
       );
 
@@ -120,13 +168,15 @@ class _EditexchangeState extends State<Editexchange> {
         final errors = responseData['errors'] ?? {};
 
         setState(() {
-          namee = errors['exchange_name']?.toString() ?? '';
-          addresse = errors['exchange_address']?.toString() ?? '';
           vehiclemodale = errors['vehicle_model']?.toString() ?? '';
-          newvehiclemodale = errors['new_vehicle_model']?.toString() ?? '';
+          vehiclemodalyre = errors['vehicle_year']?.toString() ?? '';
+          noofownerse = errors['no_of_owners']?.toString() ?? '';
           expectedpricee = errors['expected_price']?.toString() ?? '';
-          finalizedpricee = errors['finalized_price']?.toString() ?? '';
+
           assessedbye = errors['assessed_by']?.toString() ?? '';
+
+          finalizeddealere = errors['finalized_dealer']?.toString() ?? '';
+          finalizedpricee = errors['finalized_price']?.toString() ?? '';
         });
 
         Fluttertoast.showToast(msg: responseData['message']);
@@ -155,61 +205,143 @@ class _EditexchangeState extends State<Editexchange> {
           child: Column(
             children: [
               textfieldy(
-                'Name',
-                name,
-                readonly: widget.edit,
-              ),
-              if(namee.isNotEmpty)
-              errormessage(namee),
-              description(
-                'Address',
-                address,
-                star: true,
-                readonly: widget.edit,
-              ),
-              if(addresse.isNotEmpty)
-              errormessage(addresse),
-              textfieldy(
                 'Vehicle Modal',
                 vehiclemodal,
-                readonly: widget.edit,
+                readonly: widget.edit
               ),
               if(vehiclemodale.isNotEmpty)
               errormessage(vehiclemodale),
               textfieldy(
-                'New Vehicle Modal',
-                newvehiclemodal,
-                readonly: widget.edit,
+                'Vehicle Year',
+                vehiclemodalyr,
+                readonly: widget.edit
               ),
-              if(newvehiclemodale.isNotEmpty)
-              errormessage(newvehiclemodale),
+              if(vehiclemodalyre.isNotEmpty)
+              errormessage(vehiclemodalyre),
+              textfieldy(
+                'No of Owners',
+                noofowners,
+                readonly: widget.edit
+              ),
+              if(noofownerse.isNotEmpty)
+              errormessage(noofownerse),
               textfieldy(
                 'Expected Price',
                 expectedprice,
-                readonly: widget.edit,
+                readonly: widget.edit
               ),
               if(expectedpricee.isNotEmpty)
               errormessage(expectedpricee),
               textfieldy(
-                'Finalized Price',
-                finalizedprice,
-                readonly: widget.edit,
-              ),
-              if(finalizedpricee.isNotEmpty)
-              errormessage(finalizedpricee),
-              textfieldy(
                 'Assessed By',
                 assessedby,
-                readonly: widget.edit,
+                star: false,
+                readonly: widget.edit
               ),
               if(assessedbye.isNotEmpty)
               errormessage(assessedbye),
-              SizedBox(height: SizeConfig.h(25)),
+
+              Column(
+                children: [
+                  ListView.builder(
+                    itemCount: dealers.length,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: Stack(
+                          children: [
+                            Column(
+                              children: [
+                                textfieldy(
+                                  'Dealer ${index + 1}',
+                                  dealers[index].nameController,
+                                  star: false,
+                                  readonly: widget.edit
+                                ),
+                                textfieldy(
+                                  'Price ${index + 1}',
+                                  dealers[index].priceController,
+                                  numpad: true,
+                                  star: false,
+                                  readonly: widget.edit
+                                ),
+                              ],
+                            ),
+
+                            if(widget.edit == false)
+                            if (dealers.length > 1)
+                              Positioned(
+                                right: 0,
+                                top: 0,
+                                child: IconButton(
+                                  icon: Icon(
+                                    Icons.close,
+                                    size: 20,
+                                    color: Colors.red,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      dealers.removeAt(index);
+                                    });
+                                  },
+                                ),
+                              ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+
+                  SizedBox(height: SizeConfig.h(10)),
+
+                  if(widget.edit == false)
+                  if (dealers.length < maxdealers)
+                  OutlinedButton(
+                    style: ButtonStyle(
+                      shape: WidgetStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadiusGeometry.circular(2)
+                        )
+                      )
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        dealers.add(DealerField());
+                      });
+                    },
+                    child: Text(
+                      'Add Another Dealer',
+                      style: textmedium12.copyWith(
+                        color: kred
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              textfieldy(
+                'Finalised Dealer',
+                finalizeddealer,
+                readonly: widget.edit,
+                star: false
+              ),
+              if(finalizeddealere.isNotEmpty)
+              errormessage(finalizeddealere),
+              textfieldy(
+                'Finalised Price',
+                finalizedprice,
+                readonly: widget.edit,
+                star: false
+              ),
+              if(finalizedpricee.isNotEmpty)
+              errormessage(finalizedpricee),
+              SizedBox(height: SizeConfig.h(10)),
               button(
-                'Create Quotation',
+                'Submit',
                 () {
                   exchangeform();
-                }
+                },
               ),
               SizedBox(height: SizeConfig.h(30)),
             ],

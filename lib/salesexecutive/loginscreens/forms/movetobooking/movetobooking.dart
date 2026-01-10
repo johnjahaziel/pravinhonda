@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pravinhonda/bloc/apirespnse_cubit.dart';
 import 'package:pravinhonda/salesexecutive/loginscreens/Navigation.dart';
 import 'package:pravinhonda/salesexecutive/loginscreens/forms/movetobooking/bookingno.dart';
 import 'package:pravinhonda/salesexecutive/loginscreens/forms/movetobooking/bookingyes.dart';
@@ -76,7 +74,7 @@ class _MovetobookingState extends State<Movetobooking> {
 
   @override
   Widget build(BuildContext context) {
-    final apiresponseLocal = BlocProvider.of<ApiresponseCubit>(context).state.apiresponse;
+    // final apiresponseLocal = BlocProvider.of<ApiresponseCubit>(context).state.apiresponse;
     SizeConfig.init(context);
     return SafeArea(
       child: PopScope(
@@ -275,7 +273,7 @@ class _MovetobookingState extends State<Movetobooking> {
                               });
                             },
                             enquiryid: widget.enquiryid,
-                            apiResponse: apiresponseLocal ?? {},
+                            apiResponse: widget.apiResponse,
                             edit: edit(),
                             isEditedform: () {
                               setState(() {

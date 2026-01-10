@@ -49,8 +49,6 @@ class _AddexchangeState extends State<Addexchange> {
   String finalizeddealere = '';
   String finalizedpricee = '';
 
-  bool showSubmit = false;
-
   List<DealerField> dealers = [DealerField()];
   final int maxdealers = 10;
 
@@ -67,33 +65,6 @@ class _AddexchangeState extends State<Addexchange> {
     return data;
   }
 
-  @override
-  void initState() {
-    super.initState();
-
-    finalizeddealer.addListener(_checkFinalisedFields);
-    finalizedprice.addListener(_checkFinalisedFields);
-  }
-
-  void _checkFinalisedFields() {
-    final hasValue =
-        finalizeddealer.text.trim().isNotEmpty ||
-        finalizedprice.text.trim().isNotEmpty;
-
-    if (hasValue != showSubmit) {
-      setState(() {
-        showSubmit = hasValue;
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    finalizeddealer.removeListener(_checkFinalisedFields);
-    finalizedprice.removeListener(_checkFinalisedFields);
-    super.dispose();
-  }
-
   Future<void> exchangeform() async {
     final url = Uri.parse('https://app.pravinhonda.com/api/exchange/${widget.enquiryid}');
 
@@ -108,12 +79,20 @@ class _AddexchangeState extends State<Addexchange> {
           'Authorization': 'Bearer $token'
         },
         body: jsonEncode({
-          'vehicle_model': vehiclemodal.text,
-          'vehicle_year': vehiclemodalyr.text,
-          'no_of_owners' : noofowners.text,
-          'expected_price': expectedprice.text,
+          // 'vehicle_model': vehiclemodal.text,
+          // 'vehicle_year': vehiclemodalyr.text,
+          // 'no_of_owners' : noofowners.text,
+          // 'expected_price': expectedprice.text,
           
           'assessed_by': assessedby.text,
+
+          'finalized_dealer': finalizeddealer.text,
+          'finalized_price': finalizedprice.text,
+
+          'vehicle_model': 'asda',
+          'vehicle_year': '2018',
+          'no_of_owners' : '1',
+          'expected_price': '50000',
 
           ...buildDealerApiData(),
 
@@ -153,77 +132,7 @@ class _AddexchangeState extends State<Addexchange> {
           expectedpricee = errors['expected_price']?.toString() ?? '';
 
           assessedbye = errors['assessed_by']?.toString() ?? '';
-        });
 
-        Fluttertoast.showToast(msg: responseData['message']);
-        print(response.body);
-      } else {
-        showMessagePopup(
-          context,
-          responseData['message'],
-          () {
-            Navigator.pop(context);
-          }
-        );
-        print(response.body);
-      }
-    } catch (error) {
-      print('Error submitting finance form: $error');
-    }
-  }
-
-  Future<void> submitexchange() async {
-    final url = Uri.parse('https://app.pravinhonda.com/api/exchange-final/${widget.enquiryid}');
-
-    final token = BlocProvider.of<AuthCubit>(context).state.token;
-
-    try{
-      final response = await http.post(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer $token'
-        },
-        body: jsonEncode({
-          'vehicle_model': vehiclemodal.text,
-          'vehicle_year': vehiclemodalyr.text,
-          'no_of_owners' : noofowners.text,
-          'finalized_dealer': finalizeddealer.text,
-          'finalized_price': finalizedprice.text,
-        }),
-      );
-
-      final responseData = jsonDecode(response.body);
-
-      if (response.statusCode == 200) {
-        print('response data: $responseData');
-
-        showMessagePopup(
-          context,
-          responseData['message'],
-          () {
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Createquotation(
-                  enquiryid: responseData['data']['enquiry_id'],
-                  apiResponse: responseData,
-                )
-              )
-            );
-          },
-          nextpage: 'Quotation'
-        );
-
-      } else if (response.statusCode == 422) {
-        final errors = responseData['errors'] ?? {};
-
-        setState(() {
-          vehiclemodale = errors['vehicle_model']?.toString() ?? '';
-          vehiclemodalyre = errors['vehicle_year']?.toString() ?? '';
-          noofownerse = errors['no_of_owners']?.toString() ?? '';
           finalizeddealere = errors['finalized_dealer']?.toString() ?? '';
           finalizedpricee = errors['finalized_price']?.toString() ?? '';
         });
@@ -244,7 +153,7 @@ class _AddexchangeState extends State<Addexchange> {
       print('Error submitting finance form: $error');
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
@@ -281,7 +190,8 @@ class _AddexchangeState extends State<Addexchange> {
               errormessage(expectedpricee),
               textfieldy(
                 'Assessed By',
-                assessedby
+                assessedby,
+                star: false
               ),
               if(assessedbye.isNotEmpty)
               errormessage(assessedbye),
@@ -363,26 +273,23 @@ class _AddexchangeState extends State<Addexchange> {
               ),
               textfieldy(
                 'Finalised Dealer',
-                finalizeddealer
+                finalizeddealer,
+                star: false
               ),
               if(finalizeddealere.isNotEmpty)
               errormessage(finalizeddealere),
               textfieldy(
                 'Finalised Price',
-                finalizedprice
+                finalizedprice,
+                star: false
               ),
               if(finalizedpricee.isNotEmpty)
               errormessage(finalizedpricee),
               SizedBox(height: SizeConfig.h(10)),
               button(
-                showSubmit ? 'Submit' : 'Update',
+                'Submit',
                 () async {
-                  if (showSubmit) {
-                    await exchangeform();
-                    await submitexchange();
-                  } else {
-                    await exchangeform();
-                  }
+                  exchangeform();
                 },
               ),
               SizedBox(height: SizeConfig.h(30)),

@@ -83,11 +83,11 @@ class _EditfinanceState extends State<Editfinance> {
   @override
   void initState() {
     super.initState();
-    fetchfinance();
     print('old api response: ${widget.oldapiResponse}');
     oldapiexchange(widget.oldapiResponse);
     print('api response: ${widget.apiResponse}');
     initControllersFromResponse(widget.apiResponse);
+    fetchfinance();
   }
 
   void oldapiexchange(Map<String, dynamic> resp) {
@@ -115,24 +115,29 @@ class _EditfinanceState extends State<Editfinance> {
   }
 
   Future<void> fetchfinance() async {
-    final financeUrl = Uri.parse('https://app.pravinhonda.com/api/finance/schemes');
+    final financeUrl = Uri.parse('https://app.pravinhonda.com/api/finances/schemes');
 
     final token = BlocProvider.of<AuthCubit>(context).state.token;
 
     try {
-      final response = await http.get(
+      final response = await http.post(
         financeUrl,
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
           'Authorization': 'Bearer $token'
         },
+        body: jsonEncode({
+          'model_name' : modalname.text,
+          'variant_name' : modalvariant.text,
+          'color_name' : modalcolor.text
+        })
       );
 
       final Map<String, dynamic> data = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        final List<dynamic> finances = data['data'];
+        final List<dynamic> finances = data['data']['finance_schemes'];
 
         setState(() {
           financeitems = finances.map((item) {
