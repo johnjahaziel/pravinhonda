@@ -19,6 +19,7 @@ class AllLostcustomer extends StatefulWidget {
 
 class _AllLostcustomerState extends State<AllLostcustomer> {
   List<dynamic> alldata = [];
+  List<dynamic> _allData = [];
   bool loading = true;
 
   final TextEditingController searchController = TextEditingController();
@@ -26,7 +27,33 @@ class _AllLostcustomerState extends State<AllLostcustomer> {
   @override
   void initState() {
     super.initState();
+    searchController.addListener(_onSearchChanged);
     fetchRecent();
+  }
+
+  @override
+  void dispose() {
+    searchController.removeListener(_onSearchChanged);
+    searchController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchChanged() {
+    final query = searchController.text.trim().toLowerCase();
+
+    setState(() {
+      if (query.isEmpty) {
+        alldata = List<dynamic>.from(_allData);
+      } else {
+        alldata = _allData.where((item) {
+          final name = (item['customer_name'] ?? '').toString().toLowerCase();
+          final mobile = (item['customer_contact_number'] ?? '').toString().toLowerCase();
+
+          return name.contains(query) ||
+              mobile.contains(query);
+        }).toList();
+      }
+    });
   }
 
   Future<void> fetchRecent() async {
@@ -50,9 +77,23 @@ class _AllLostcustomerState extends State<AllLostcustomer> {
         final List<dynamic> dataList = (responseData['data'] as List<dynamic>?) ?? [];
 
         setState(() {
-          alldata = dataList;
+          _allData = dataList;
           loading = false;
+          alldata = List<dynamic>.from(_allData);
         });
+
+        final query = searchController.text.trim().toLowerCase();
+        if (query.isEmpty) {
+          alldata = List<dynamic>.from(_allData);
+        } else {
+          alldata = _allData.where((item) {
+            final name = (item['customer_name'] ?? '').toString().toLowerCase();
+            final mobile = (item['customer_contact_number'] ?? '').toString().toLowerCase();
+
+            return name.contains(query) ||
+                mobile.contains(query);
+          }).toList();
+        }
 
       } else {
         print("Failed to load data. Status code: ${response.statusCode}");
@@ -96,7 +137,8 @@ class _AllLostcustomerState extends State<AllLostcustomer> {
                       customername: data['customer_name']?.toString() ?? '',
                       contactnumber: data['phone_number']?.toString() ?? '',
                       status: data['status']?.toString() ?? '',
-                      onTap: () {}
+                      onTap: () {},
+                      buttonneed: false,
                     );
                   },
                 ),

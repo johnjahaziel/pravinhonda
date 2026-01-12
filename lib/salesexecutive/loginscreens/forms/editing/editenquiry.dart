@@ -57,6 +57,8 @@ class _EditenquiryState extends State<Editenquiry> {
   String? selectedpurchasetypeitems;
   String? selectedexchangeflagitems;
   String? selectedtestrideitems;
+  String followupdatecontrollere = '';
+  String testrideitemse = '';
 
   String? selectedmodelnameitems;
   String? selectedmodelvariantitems;
@@ -96,6 +98,7 @@ class _EditenquiryState extends State<Editenquiry> {
       fetchextrafitting(selectedmodelnameitems!);
     }
 
+    print('answer: $minimumPackageAnswer');
     print(extraFittingsSelected);
   }
 
@@ -279,6 +282,8 @@ class _EditenquiryState extends State<Editenquiry> {
           customerremarkse = errors['customers_remarks']?.toString() ?? '';
           minimumpackagee = errors['minimum_package']?.toString() ?? '';
           extrafittingse = errors['extra_fittings']?.toString() ?? '';
+          testrideitemse = errors['test_ride']?.toString() ?? '';
+          followupdatecontrollere = errors['follow_up_date']?.toString() ?? '';
         });
 
         Fluttertoast.showToast(msg: responseData['message']);
@@ -615,9 +620,10 @@ class _EditenquiryState extends State<Editenquiry> {
               Followupdate(
                 title: 'Follow Up Date',
                 datecontroller: followupdatecontroller,
-                star: false,
                 readOnly: widget.edit,
               ),
+              if(followupdatecontrollere.isNotEmpty)
+              errormessage(followupdatecontrollere),
               CustomDropdown(
                 title: 'Test Ride',
                 selectedCustomDropdown: selectedtestrideitems,
@@ -627,9 +633,10 @@ class _EditenquiryState extends State<Editenquiry> {
                     selectedtestrideitems = newValue;
                   });
                 },
-                star: false,
                 readOnly: widget.edit,
               ),
+              if(testrideitemse.isNotEmpty)
+              errormessage(testrideitemse),
               description(
                 'Customer Remarks',
                 customerremarks,

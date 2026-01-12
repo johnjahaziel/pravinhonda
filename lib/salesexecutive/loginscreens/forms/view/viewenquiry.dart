@@ -464,7 +464,6 @@ class _ViewenquiryState extends State<Viewenquiry> {
           Followupdate(
             title: 'Follow Up Date',
             datecontroller: followupdatecontroller,
-            star: false,
             readOnly: readonly,
           ),
           CustomDropdown(
@@ -476,7 +475,6 @@ class _ViewenquiryState extends State<Viewenquiry> {
                 selectedtestrideitems = newValue;
               });
             },
-            star: false,
             readOnly: readonly,
           ),
           description(

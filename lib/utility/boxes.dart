@@ -24,6 +24,7 @@ class Hondabox extends StatefulWidget {
   final String textride;
   final String exchange;
   final VoidCallback onTap;
+  final bool buttonneed;
   const Hondabox({
     super.key,
     required this.enquiryid,
@@ -35,6 +36,7 @@ class Hondabox extends StatefulWidget {
     this.textride = 'No',
     this.exchange = 'No',
     required this.onTap,
+    this.buttonneed = true
   });
 
   @override
@@ -113,6 +115,7 @@ class _HondaboxState extends State<Hondabox> {
                         ],
                       ),
                     ),
+                    if(widget.buttonneed == true)
                     Column(
                       children: [
                         RawMaterialButton(

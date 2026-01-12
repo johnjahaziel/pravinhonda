@@ -1,4 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
+import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 
@@ -36,28 +42,71 @@ class _ViewfinaceState extends State<Viewfinace> {
 
   String nextpagelocal = '';
 
+  int enquiryid = 0;
+
   bool readonly = true;
 
   @override
   void initState() {
     super.initState();
     initControllersFromResponse(widget.apiResponse);
+    financepreview(finance.text);
   }
 
   void initControllersFromResponse(Map<String, dynamic> resp) {
     final enquiry = resp;
 
+    enquiryid = enquiry['enquiry_id'];
+
     finance  = TextEditingController(text: (enquiry['finance'] ?? '').toString());
     loanperiod = TextEditingController(text: (enquiry['loan_period'] ?? '').toString());
 
     vehiclecost = TextEditingController(text: (enquiry['vehicle_cost'] ?? '').toString());
-    loaninterest = TextEditingController(text: (enquiry['interest_rate'] ?? '').toString());
-    loanamount = TextEditingController(text: (enquiry['user_down_payment'] ?? '').toString());
+    loaninterest = TextEditingController(text: (enquiry['loan_interest'] ?? '').toString());
+    loanamount = TextEditingController(text: (enquiry['loan_amount'] ?? '').toString());
     emi = TextEditingController(text: (enquiry['emi'] ?? '').toString());
 
     modalname = TextEditingController(text: enquiry['model_name']);
     modalvariant = TextEditingController(text: enquiry['model_variant']);
     modalcolor = TextEditingController(text: enquiry['model_color']);
+  }
+
+  Future<void> financepreview(String selectedfinace) async {
+    final url = Uri.parse('https://app.pravinhonda.com/api/finance/preview/$enquiryid');
+
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({
+          'finance': selectedfinace
+        })
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if(response.statusCode == 200) {
+
+        setState(() {
+          vehiclecost = TextEditingController(text: responseData['data']['finance_rule']['vehicle_price'].toString());
+          minimumdownpayment = TextEditingController(text: responseData['data']['finance_rule']['minimum_down_payment'].toString());
+
+        });
+        print(responseData);
+
+      } else {
+        Fluttertoast.showToast(msg: responseData['message']);
+        print(responseData);
+      }
+    } catch (error) {
+      print('Error submitting finance form: $error');
+    }
   }
   
   @override

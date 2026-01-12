@@ -102,7 +102,7 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
       fetchextrafitting(selectedmodelnameitems!);
     }
 
-    print(minimumPackageAnswer);
+    print('answer: $minimumPackageAnswer');
     print(extraFittingsSelected);
   }
 
@@ -164,6 +164,8 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
   String customerremarkse = '';
   String minimumpackagee = '';
   String extrafittingse = '';
+  String followupdatecontrollere = '';
+  String testrideitemse = '';
 
   String nextpagelocal = '';
 
@@ -315,6 +317,8 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
           customerremarkse = errors['customers_remarks']?.toString() ?? '';
           minimumpackagee = errors['minimum_package']?.toString() ?? '';
           extrafittingse = errors['extra_fittings']?.toString() ?? '';
+          testrideitemse = errors['test_ride']?.toString() ?? '';
+          followupdatecontrollere = errors['follow_up_date']?.toString() ?? '';
         });
 
         Fluttertoast.showToast(msg: responseData['message']);
@@ -654,9 +658,10 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
           Followupdate(
             title: 'Follow Up Date',
             datecontroller: followupdatecontroller,
-            star: false,
             readOnly: widget.edit,
           ),
+          if(followupdatecontrollere.isNotEmpty)
+          errormessage(followupdatecontrollere),
           CustomDropdown(
             title: 'Test Ride',
             selectedCustomDropdown: selectedtestrideitems,
@@ -666,9 +671,10 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
                 selectedtestrideitems = newValue;
               });
             },
-            star: false,
             readOnly: widget.edit,
           ),
+          if(testrideitemse.isNotEmpty)
+          errormessage(testrideitemse),
           description(
             'Customer Remarks',
             customerremarks,

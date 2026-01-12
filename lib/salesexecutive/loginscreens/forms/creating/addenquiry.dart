@@ -97,6 +97,8 @@ class _AddenquiryState extends State<Addenquiry> {
   String customerremarkse = '';
   String minimumpackagee = '';
   String extrafittingse = '';
+  String followupdatecontrollere = '';
+  String testrideitemse = '';
 
   String? selectedmodelnameitems;
   String? selectedmodelvariantitems;
@@ -129,51 +131,23 @@ class _AddenquiryState extends State<Addenquiry> {
           'Authorization': 'Bearer $token'
         },
         body: jsonEncode({
-          // 'high_rise_number': wingsenquiry.text,
-          // 'customer_category': selectedcustomercategoryitems?.toString(),
-          // 'enquiry_category': selectedenquirycategoryitems?.toString(),
-          // 'customer_type': selectedcustomertypeitems?.toString(),
-          // 'customer_contact_number': customercontactnumber.text,
-          // 'secondary_contact_number': secondarycontactnumber.text,
-          // 'pincode': pincode.text,
-          // 'customer_name': customername.text,
-          // 'gender': selectedgenderitems?.toString(),
-          // 'dob': datecontroller.text,
-          // 'marital_status': selectedmartialstatusitems?.toString(),
-          // 'email_id': emailid.text,
-          // 'address': address.text,
-          // 'district' : selecteddistrictitems?.toString(),
-          // 'city' : selectedcityitems?.toString(),
-          // 'enquiry_type': selectedenquirytypeitems?.toString(),
-          // 'enquiry_source': selectedenquirysourceitems?.toString(),
-          // 'model_name': selectedmodelnameitems?.toString(),
-          // 'model_variant': selectedmodelvariantitems?.toString(),
-          // 'model_color': selectedmodelcoloritems?.toString(),
-          // 'purchase_type': selectedpurchasetypeitems?.toString(),
-          // 'exchange_flag': selectedexchangeflagitems?.toString(),
-          // 'follow_up_date': followupdatecontroller.text,
-          // 'test_ride': selectedtestrideitems?.toString(),
-          // 'customers_remarks': customerremarks.text,
-          // "minimum_package": minimumPackageAnswer,
-          // "extra_fittings": extraFittingsSelected.join(','),
-
           'high_rise_number': wingsenquiry.text,
-          'customer_category': "Individual",
-          'enquiry_category': "Individual",
-          'customer_type': "Replacement Buyer",
-          'customer_contact_number':  "1226586431",
+          'customer_category': selectedcustomercategoryitems?.toString(),
+          'enquiry_category': selectedenquirycategoryitems?.toString(),
+          'customer_type': selectedcustomertypeitems?.toString(),
+          'customer_contact_number': customercontactnumber.text,
           'secondary_contact_number': secondarycontactnumber.text,
-          'pincode': "555555",
-          'customer_name': "Maha",
-          'gender': "Female",
+          'pincode': pincode.text,
+          'customer_name': customername.text,
+          'gender': selectedgenderitems?.toString(),
           'dob': datecontroller.text,
           'marital_status': selectedmartialstatusitems?.toString(),
-          'email_id': "kalamahabluon@gmail.com",
-          'address': "gandhi nager",
-          'district' : "Thoothukkudi",
-          'city' : "Kovilpatti",
-          'enquiry_type': "Walk-In",
-          'enquiry_source': "Facebook",
+          'email_id': emailid.text,
+          'address': address.text,
+          'district' : selecteddistrictitems?.toString(),
+          'city' : selectedcityitems?.toString(),
+          'enquiry_type': selectedenquirytypeitems?.toString(),
+          'enquiry_source': selectedenquirysourceitems?.toString(),
           'model_name': selectedmodelnameitems?.toString(),
           'model_variant': selectedmodelvariantitems?.toString(),
           'model_color': selectedmodelcoloritems?.toString(),
@@ -181,9 +155,37 @@ class _AddenquiryState extends State<Addenquiry> {
           'exchange_flag': selectedexchangeflagitems?.toString(),
           'follow_up_date': followupdatecontroller.text,
           'test_ride': selectedtestrideitems?.toString(),
-          'customers_remarks': "Interested in finance option",
+          'customers_remarks': customerremarks.text,
           "minimum_package": minimumPackageAnswer,
           "extra_fittings": extraFittingsSelected.join(','),
+
+          // 'high_rise_number': wingsenquiry.text,
+          // 'customer_category': "Individual",
+          // 'enquiry_category': "Individual",
+          // 'customer_type': "Replacement Buyer",
+          // 'customer_contact_number':  "1226586431",
+          // 'secondary_contact_number': secondarycontactnumber.text,
+          // 'pincode': "555555",
+          // 'customer_name': "Maha",
+          // 'gender': "Female",
+          // 'dob': datecontroller.text,
+          // 'marital_status': selectedmartialstatusitems?.toString(),
+          // 'email_id': "kalamahabluon@gmail.com",
+          // 'address': "gandhi nager",
+          // 'district' : "Thoothukkudi",
+          // 'city' : "Kovilpatti",
+          // 'enquiry_type': "Walk-In",
+          // 'enquiry_source': "Facebook",
+          // 'model_name': selectedmodelnameitems?.toString(),
+          // 'model_variant': selectedmodelvariantitems?.toString(),
+          // 'model_color': selectedmodelcoloritems?.toString(),
+          // 'purchase_type': selectedpurchasetypeitems?.toString(),
+          // 'exchange_flag': selectedexchangeflagitems?.toString(),
+          // 'follow_up_date': followupdatecontroller.text,
+          // 'test_ride': selectedtestrideitems?.toString(),
+          // 'customers_remarks': "Interested in finance option",
+          // "minimum_package": minimumPackageAnswer,
+          // "extra_fittings": extraFittingsSelected.join(','),
         }),
       );
 
@@ -193,6 +195,7 @@ class _AddenquiryState extends State<Addenquiry> {
 
       if (response.statusCode == 201) {
         print('response data: $responseData');
+        print('answer: $minimumPackageAnswer');
 
         if (selectedpurchasetypeitems == 'finance') {
           nextpagelocal = 'Finance Form';
@@ -270,6 +273,8 @@ class _AddenquiryState extends State<Addenquiry> {
           customerremarkse = errors['customers_remarks']?.toString() ?? '';
           minimumpackagee = errors['minimum_package']?.toString() ?? '';
           extrafittingse = errors['extra_fittings']?.toString() ?? '';
+          testrideitemse = errors['test_ride']?.toString() ?? '';
+          followupdatecontrollere = errors['follow_up_date']?.toString() ?? '';
         });
 
         Fluttertoast.showToast(msg: responseData['message']);
@@ -586,8 +591,9 @@ class _AddenquiryState extends State<Addenquiry> {
               Followupdate(
                 title: 'Follow Up Date',
                 datecontroller: followupdatecontroller,
-                star: false,
               ),
+              if(followupdatecontrollere.isNotEmpty)
+              errormessage(followupdatecontrollere),
               CustomDropdown(
                 title: 'Test Ride',
                 selectedCustomDropdown: selectedtestrideitems,
@@ -597,8 +603,9 @@ class _AddenquiryState extends State<Addenquiry> {
                     selectedtestrideitems = newValue;
                   });
                 },
-                star: false,
               ),
+              if(testrideitemse.isNotEmpty)
+              errormessage(testrideitemse),
               description(
                 'Customer Remarks',
                 customerremarks,

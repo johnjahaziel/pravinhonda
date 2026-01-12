@@ -7,8 +7,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/bloc/username_cubit.dart';
-import 'package:pravinhonda/salesexecutive/loginscreens/forms/view/viewform.dart';
 import 'package:pravinhonda/login.dart';
+import 'package:pravinhonda/salesexecutive/loginscreens/forms/view/viewform.dart';
 import 'package:pravinhonda/utility/boxes.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
@@ -431,9 +431,7 @@ class _RecentactivityState extends State<Recentactivity> {
 
         final List<dynamic> dataList = (responseData['data'] as List<dynamic>?) ?? [];
 
-        final List<dynamic> filteredList = dataList
-        .where((item) => item['status_code']?.toString() == "1")
-        .toList();
+        final List<dynamic> filteredList = dataList;
 
         setState(() {
           alldata = filteredList;
@@ -547,9 +545,7 @@ class _TodolistState extends State<Todolist> {
 
         final List<dynamic> dataList = (responseData['data'] as List<dynamic>?) ?? [];
 
-        final List<dynamic> filteredList = dataList
-          .where((item) => item['status_code']?.toString() == "1")
-          .toList();
+        final List<dynamic> filteredList = dataList;
 
         setState(() {
           alldata = filteredList;

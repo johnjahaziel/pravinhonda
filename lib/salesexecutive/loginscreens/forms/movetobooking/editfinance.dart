@@ -122,6 +122,8 @@ class _EditfinanceMBState extends State<EditfinanceMB> {
     loanamount = TextEditingController(text: (enquiry['loan_amount'] ?? '').toString());
     emi = TextEditingController(text: (enquiry['emi'] ?? '').toString());
 
+    minimumdownpayment = TextEditingController(text: (enquiry['emi'] ?? '').toString());
+
     modalname = TextEditingController(text: enquiry['model_name']);
     modalvariant = TextEditingController(text: enquiry['model_variant']);
     modalcolor = TextEditingController(text: enquiry['model_color']);
