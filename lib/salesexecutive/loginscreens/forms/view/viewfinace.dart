@@ -27,6 +27,7 @@ class _ViewfinaceState extends State<Viewfinace> {
   TextEditingController maxloanpercentage= TextEditingController();
   TextEditingController maxloanamount= TextEditingController();
   TextEditingController minimumdownpayment = TextEditingController();
+  TextEditingController totaldocumentcharge = TextEditingController();
 
   TextEditingController finance = TextEditingController();
   TextEditingController loanperiod= TextEditingController();
@@ -96,6 +97,7 @@ class _ViewfinaceState extends State<Viewfinace> {
         setState(() {
           vehiclecost = TextEditingController(text: responseData['data']['finance_rule']['vehicle_price'].toString());
           minimumdownpayment = TextEditingController(text: responseData['data']['finance_rule']['minimum_down_payment'].toString());
+          totaldocumentcharge = TextEditingController(text: responseData['data']['finance_rule']['total_doc_charges'].toString());
 
         });
         print(responseData);
@@ -143,6 +145,11 @@ class _ViewfinaceState extends State<Viewfinace> {
                 'On Road Price',
                 vehiclecost,
                 readonly: readonly
+              ),
+              textfieldy(
+                'Total Document Charge',
+                totaldocumentcharge,
+                readonly: true
               ),
               textfieldy(
                 'Minimum Down Payment',

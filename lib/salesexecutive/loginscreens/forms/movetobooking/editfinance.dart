@@ -48,6 +48,7 @@ class _EditfinanceMBState extends State<EditfinanceMB> {
   TextEditingController maxloanpercentage= TextEditingController();
   TextEditingController maxloanamount= TextEditingController();
   TextEditingController minimumdownpayment = TextEditingController();
+  TextEditingController totaldocumentcharge = TextEditingController();
 
   TextEditingController loanamount= TextEditingController();
 
@@ -205,6 +206,7 @@ class _EditfinanceMBState extends State<EditfinanceMB> {
           maxloanpercentage = TextEditingController(text: responseData['data']['finance_rule']['max_loan_percentage'].toString());
           maxloanamount = TextEditingController(text: responseData['data']['Max_loan_amount'].toString());
           minimumdownpayment = TextEditingController(text: responseData['data']['finance_rule']['minimum_down_payment'].toString());
+          totaldocumentcharge = TextEditingController(text: responseData['data']['finance_rule']['total_doc_charges'].toString());
 
           List<dynamic> rates = responseData['data']['rates'];
 
@@ -408,6 +410,11 @@ class _EditfinanceMBState extends State<EditfinanceMB> {
               textfieldy(
                 'Max Loan Amount',
                 maxloanamount,
+                readonly: true
+              ),
+              textfieldy(
+                'Total Document Charge',
+                totaldocumentcharge,
                 readonly: true
               ),
               textfieldy(
