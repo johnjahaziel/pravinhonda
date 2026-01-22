@@ -3,6 +3,7 @@ import 'package:pravinhonda/pdimanager/customdrawer.dart';
 import 'package:pravinhonda/pdimanager/mainscreens/accepted.dart';
 import 'package:pravinhonda/pdimanager/mainscreens/allocated.dart';
 import 'package:pravinhonda/pdimanager/mainscreens/completed.dart';
+import 'package:pravinhonda/pdimanager/mainscreens/deliverypdi.dart';
 import 'package:pravinhonda/pdimanager/mainscreens/sparedept.dart';
 import 'package:pravinhonda/pdimanager/mainscreens/waitingforaccept.dart';
 import 'package:pravinhonda/pdimanager/mainscreens/working.dart';
@@ -59,6 +60,7 @@ class _NavigationPdiState extends State<NavigationPdi> {
             Sparedept(),
             Working(),
             Completed(),
+            DeliveryPdi()
           ],
         ),
         bottomNavigationBar: SizedBox(
@@ -104,6 +106,10 @@ class _NavigationPdiState extends State<NavigationPdi> {
               BottomNavigationBarItem(
                 icon: Icon(Icons.check_circle_outline),
                 label: 'Completed',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.trolley),
+                label: 'Delivery',
               ),
             ],
           ),

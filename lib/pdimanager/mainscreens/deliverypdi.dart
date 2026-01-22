@@ -4,20 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
-import 'package:pravinhonda/pdimanager/movetocompleted.dart';
+import 'package:pravinhonda/pdimanager/view/viewformdelivery.dart';
 import 'package:pravinhonda/utility/boxes.dart';
 import 'package:pravinhonda/utility/custom.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
-class Working extends StatefulWidget {
-  const Working({super.key});
+class DeliveryPdi extends StatefulWidget {
+  const DeliveryPdi({super.key});
 
   @override
-  State<Working> createState() => _WorkingState();
+  State<DeliveryPdi> createState() => _DeliveryPdiState();
 }
 
-class _WorkingState extends State<Working> {
+class _DeliveryPdiState extends State<DeliveryPdi> {
   List<dynamic> _allData = [];
   List<dynamic> alldata = [];
   bool isLoading = true;
@@ -80,7 +80,7 @@ class _WorkingState extends State<Working> {
 
   Future<void> _fetchPage({String? url}) async {
     try {
-      final Uri uri = Uri.parse(url ?? 'https://app.pravinhonda.com/api/working');
+      final Uri uri = Uri.parse(url ?? 'https://app.pravinhonda.com/api/delivery');
 
       if (_allData.isEmpty && !isLoading) {
         setState(() {
@@ -107,10 +107,6 @@ class _WorkingState extends State<Working> {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
 
         final List<dynamic> dataList = (responseData['data'] as List<dynamic>?) ?? [];
-
-        // final List<dynamic> filteredList = dataList
-        // .where((item) => item['status_code']?.toString() == "9")
-        // .toList();
 
         final List<dynamic> filteredList = dataList;
 
@@ -140,7 +136,7 @@ class _WorkingState extends State<Working> {
             }).toList();
           }
 
-          nextPageUrl = responseData['pagination']['next_page_url'] as String?;
+          nextPageUrl = responseData['next_page_url'] as String?;
 
           hasMore = nextPageUrl != null;
 
@@ -198,7 +194,7 @@ class _WorkingState extends State<Working> {
                       SizedBox(height: SizeConfig.h(20)),
                       Center(
                         child: Text(
-                          'Working',
+                          'Delivery',
                           style: customtext(fs18, kred, FontWeight.bold),
                         ),
                       ),
@@ -213,7 +209,7 @@ class _WorkingState extends State<Working> {
                                   SizedBox(height: SizeConfig.h(80)),
                                   Center(
                                     child: Text(
-                                      'No data found.',
+                                      'No delivery found.',
                                       style: text12,
                                     ),
                                   ),
@@ -255,9 +251,11 @@ class _WorkingState extends State<Working> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => Movetocompleted(
+                                          builder: (context) => ViewformPdidelivery(
+                                            pagename: 'Delivery',
                                             enquiryid: data['enquiry_id'] ?? 0,
-                                            apiResponse: selected
+                                            apiResponse: selected,
+                                            initialIndex: 5,
                                           )
                                         ),
                                       );

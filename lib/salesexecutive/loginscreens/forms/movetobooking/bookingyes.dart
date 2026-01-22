@@ -258,13 +258,13 @@ class _BookingformYesState extends State<BookingformYes> {
                     if(allotedbye.isNotEmpty)
                     errormessage(allotedbye),
                     Followupdate(
-                      title: 'Delivery Date',
+                      title: 'Estimated Delivery Date',
                       datecontroller: deliverydate,
                     ),
                     if(deliverydatee.isNotEmpty)
                     errormessage(deliverydatee),
                     TimeField(
-                      title: 'Delivery Time',
+                      title: 'Estimated Delivery Time',
                       timeController: deliverytime,
                     ),
                     if(deliverytimee.isNotEmpty)

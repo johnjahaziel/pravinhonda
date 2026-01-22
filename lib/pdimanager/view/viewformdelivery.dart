@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:pravinhonda/pdimanager/Navigation.dart';
-import 'package:pravinhonda/pdimanager/view/simpleview.dart';
+import 'package:pravinhonda/pdimanager/view/simpleviewdelivery.dart';
 import 'package:pravinhonda/utility/customs/customappBar.dart';
 import 'package:pravinhonda/utility/customs/customdrawer.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
-class ViewformPdi extends StatefulWidget {
+class ViewformPdidelivery extends StatefulWidget {
   final String pagename;
   final int enquiryid;
   final Map<String, dynamic> apiResponse;
   final int initialIndex;
-  const ViewformPdi({
+  const ViewformPdidelivery({
     super.key,
     required this.pagename,
     required this.enquiryid,
@@ -21,10 +21,10 @@ class ViewformPdi extends StatefulWidget {
   });
 
   @override
-  State<ViewformPdi> createState() => _ViewformPdiState();
+  State<ViewformPdidelivery> createState() => _ViewformPdideliveryState();
 }
 
-class _ViewformPdiState extends State<ViewformPdi> {
+class _ViewformPdideliveryState extends State<ViewformPdidelivery> {
   bool isEdited = false;
 
   bool onEditpressed = false;
@@ -63,7 +63,7 @@ class _ViewformPdiState extends State<ViewformPdi> {
                 ),
                 SizedBox(height: SizeConfig.h(15)),
                 Expanded(
-                  child: Simpleview(
+                  child: Simpleviewdelivery(
                     enquiryid: widget.enquiryid,
                     apiResponse: widget.apiResponse
                   ),

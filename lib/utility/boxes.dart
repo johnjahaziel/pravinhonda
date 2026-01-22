@@ -235,10 +235,12 @@ class Pdiinchargebox extends StatefulWidget {
   final int enquiryid;
   final String id;
   final String customername;
-  final String contactnumber;
+  final String highrisenumber;
   final String model;
   final String variant;
   final String color;
+  final String deliverydate;
+  final String deliverytime;
   final String status;
   final String cashfinance;
   final String textride;
@@ -250,7 +252,9 @@ class Pdiinchargebox extends StatefulWidget {
     required this.enquiryid,
     required this.id,
     required this.customername,
-    required this.contactnumber,
+    required this.highrisenumber,
+    required this.deliverydate,
+    required this.deliverytime,
     required this.model,
     required this.variant,
     required this.color,
@@ -280,6 +284,21 @@ class _PdiinchargeboxState extends State<Pdiinchargebox> {
     launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
   }
 
+  Color getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return const Color(0xFFFFF3CD);
+      case 'completed':
+        return const Color(0xFFE6F4EA);
+      case 'cancelled':
+        return const Color(0xFFFDECEA);
+      case 'in progress':
+        return const Color(0xFFE8F0FE);
+      default:
+        return const Color(0xFFF2F2F2);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -303,37 +322,100 @@ class _PdiinchargeboxState extends State<Pdiinchargebox> {
             children: [
 
               /// 🔹 ENQUIRY ID (TOP)
-              Text(
-                'Enquiry ID : ${widget.id}',
-                style: textbold12,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Enquiry ID : ${widget.id}',
+                    style: textbold12,
+                  ),
+                  Text(
+                    'HRN : ${widget.highrisenumber}',
+                    style: textbold12,
+                  ),
+                ],
               ),
 
               SizedBox(height: SizeConfig.h(8)),
 
               /// 🔹 DETAILS WITH ICONS
               infoRow(Icons.person_outline, widget.customername),
-              infoRow(Icons.call_outlined, widget.contactnumber),
               infoRow(Icons.directions_bike_outlined, widget.model),
               infoRow(Icons.layers_outlined, widget.variant),
               infoRow(Icons.palette_outlined, widget.color),
-
-              SizedBox(height: SizeConfig.h(6)),
-
-              /// 🔹 TAGS ROW
+              
               Row(
                 children: [
-                  if (widget.textride == 'yes')
-                    _tag('Test Ride', kyellow),
-
-                  if (widget.cashfinance != 'no')
-                    _tag(
-                      '${widget.cashfinance[0].toUpperCase()}${widget.cashfinance.substring(1)}',
-                      kblue,
-                    ),
-
-                  if (widget.exchange == 'yes')
-                    _tag('Exchange', kgreen2),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(Icons.calendar_today_outlined, size: 14, color: kgrey),
+                      SizedBox(width: SizeConfig.w(6)),
+                      Text(
+                        widget.deliverydate,
+                        style: textmedium12,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                  SizedBox(width: SizeConfig.w(10)),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(Icons.access_time_outlined, size: 14, color: kgrey),
+                      SizedBox(width: SizeConfig.w(6)),
+                      Text(
+                        widget.deliverytime,
+                        style: textmedium12,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
                 ],
+              ),
+
+              // SizedBox(height: SizeConfig.h(6)),
+
+              /// 🔹 TAGS ROW
+              // Row(
+              //   children: [
+              //     if (widget.textride == 'yes')
+              //       _tag('Test Ride', kyellow),
+
+              //     if (widget.cashfinance != 'no')
+              //       _tag(
+              //         '${widget.cashfinance[0].toUpperCase()}${widget.cashfinance.substring(1)}',
+              //         kblue,
+              //       ),
+
+              //     if (widget.exchange == 'yes')
+              //       _tag('Exchange', kgreen2),
+              //   ],
+              // ),
+
+              SizedBox(height: SizeConfig.h(10)),
+
+              /// 🔹 STATUS STRIP (BOTTOM)
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(
+                  vertical: SizeConfig.h(6),
+                ),
+                decoration: BoxDecoration(
+                  color: getStatusColor(widget.status),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Center(
+                  child: Text(
+                    widget.status.toUpperCase(),
+                    style: textbold12.copyWith(
+                      color: Colors.black87,
+                      letterSpacing: 0.8,
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
@@ -342,22 +424,22 @@ class _PdiinchargeboxState extends State<Pdiinchargebox> {
     );
   }
 
-  Widget _tag(String text, Color color) {
-    return Padding(
-      padding: EdgeInsets.only(right: SizeConfig.w(4)),
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: SizeConfig.w(6),
-          vertical: SizeConfig.h(2),
-        ),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(5),
-        ),
-        child: Text(text, style: textmedium8),
-      ),
-    );
-  }
+  // Widget _tag(String text, Color color) {
+  //   return Padding(
+  //     padding: EdgeInsets.only(right: SizeConfig.w(4)),
+  //     child: Container(
+  //       padding: EdgeInsets.symmetric(
+  //         horizontal: SizeConfig.w(6),
+  //         vertical: SizeConfig.h(2),
+  //       ),
+  //       decoration: BoxDecoration(
+  //         color: color,
+  //         borderRadius: BorderRadius.circular(5),
+  //       ),
+  //       child: Text(text, style: textmedium8),
+  //     ),
+  //   );
+  // }
 
   Widget infoRow(IconData icon, String text) {
     return Padding(

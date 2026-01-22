@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/salesexecutive/loginscreens/forms/movetodelivery.dart';
-import 'package:pravinhonda/salesexecutive/loginscreens/forms/view/viewform.dart';
 import 'package:pravinhonda/utility/boxes.dart';
 import 'package:pravinhonda/utility/custom.dart';
 import 'package:pravinhonda/utility/size_config.dart';
@@ -335,11 +334,13 @@ class _CompletedlistState extends State<Completedlist> {
                         }
                             
                         final data = alldata[index];
-                        return Hondabox(
+                        return Pdiinchargebox(
                           enquiryid: data['enquiry_id'] ?? 0,
                           id: data['enquiry_id']?.toString() ?? '',
                           customername: data['customer_name']?.toString() ?? '',
-                          contactnumber: data['customer_contact_number']?.toString() ?? '',
+                          highrisenumber: data['high_rise_number']?.toString() ?? '',
+                          deliverydate: data['delivery_date']?.toString() ?? '',
+                          deliverytime: data['delivery_time']?.toString() ?? '',
                           status: data['status']?.toString() ?? '',
                           cashfinance: data['purchase_type']?.toString() ?? '',
                           textride: data['test_ride']?.toString() ?? '',
@@ -353,7 +354,10 @@ class _CompletedlistState extends State<Completedlist> {
                                 )
                               )
                             );
-                          }
+                          },
+                          model: data['model_name']?.toString() ?? '',
+                          variant: data['model_variant']?.toString() ?? '',
+                          color: data['model_color']?.toString() ?? '',
                         );
                       },
                     ),
@@ -585,11 +589,13 @@ class _PdilistState extends State<Pdilist> {
                         }
                             
                         final data = alldata[index];
-                        return Hondabox(
+                        return Pdiinchargebox(
                           enquiryid: data['enquiry_id'] ?? 0,
                           id: data['enquiry_id']?.toString() ?? '',
                           customername: data['customer_name']?.toString() ?? '',
-                          contactnumber: data['customer_contact_number']?.toString() ?? '',
+                          highrisenumber: data['high_rise_number']?.toString() ?? '',
+                          deliverydate: data['delivery_date']?.toString() ?? '',
+                          deliverytime: data['delivery_time']?.toString() ?? '',
                           status: data['status']?.toString() ?? '',
                           cashfinance: data['purchase_type']?.toString() ?? '',
                           textride: data['test_ride']?.toString() ?? '',
@@ -597,13 +603,16 @@ class _PdilistState extends State<Pdilist> {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => Viewform(
+                              MaterialPageRoute(builder: (context) => Movetodelivery(
                                 enquiryid: data['enquiry_id'] ?? 0,
                                 apiResponse: data,
                                 )
                               )
                             );
-                          }
+                          },
+                          model: data['model_name']?.toString() ?? '',
+                          variant: data['model_variant']?.toString() ?? '',
+                          color: data['model_color']?.toString() ?? '',
                         );
                       },
                     ),

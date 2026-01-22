@@ -4,22 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
+import 'package:pravinhonda/salesexecutive/loginscreens/forms/view/viewform.dart';
 import 'package:pravinhonda/utility/boxes.dart';
 import 'package:pravinhonda/utility/custom.dart';
 import 'package:pravinhonda/utility/customs/customappBar.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
-class Searchcustomer extends StatefulWidget {
-  const Searchcustomer({super.key});
+class Updatehrn extends StatefulWidget {
+  const Updatehrn({super.key});
 
   @override
-  State<Searchcustomer> createState() => _SearchcustomerState();
+  State<Updatehrn> createState() => _UpdatehrnState();
 }
 
-class _SearchcustomerState extends State<Searchcustomer> {
-  List<dynamic> _allData = [];
+class _UpdatehrnState extends State<Updatehrn> {
   List<dynamic> alldata = [];
+  List<dynamic> _allData = [];
   bool loading = true;
 
   final TextEditingController searchController = TextEditingController();
@@ -60,7 +61,7 @@ class _SearchcustomerState extends State<Searchcustomer> {
     final token = BlocProvider.of<AuthCubit>(context).state.token;
 
     final url = Uri.parse(
-        "https://app.pravinhonda.com/api/customers");
+        "https://app.pravinhonda.com/api/highrise");
 
     try {
       final response = await http.get(
@@ -83,17 +84,17 @@ class _SearchcustomerState extends State<Searchcustomer> {
         });
 
         final query = searchController.text.trim().toLowerCase();
-          if (query.isEmpty) {
-            alldata = List<dynamic>.from(_allData);
-          } else {
-            alldata = _allData.where((item) {
-              final name = (item['customer_name'] ?? '').toString().toLowerCase();
-              final mobile = (item['customer_contact_number'] ?? '').toString().toLowerCase();
+        if (query.isEmpty) {
+          alldata = List<dynamic>.from(_allData);
+        } else {
+          alldata = _allData.where((item) {
+            final name = (item['customer_name'] ?? '').toString().toLowerCase();
+            final mobile = (item['customer_contact_number'] ?? '').toString().toLowerCase();
 
-              return name.contains(query) ||
-                  mobile.contains(query);
-            }).toList();
-          }
+            return name.contains(query) ||
+                mobile.contains(query);
+          }).toList();
+        }
 
       } else {
         print("Failed to load data. Status code: ${response.statusCode}");
@@ -138,7 +139,14 @@ class _SearchcustomerState extends State<Searchcustomer> {
                       contactnumber: data['customer_contact_number']?.toString() ?? '',
                       status: data['status']?.toString() ?? '',
                       onTap: () {
-                        
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Viewform(
+                            enquiryid: data['enquiry_id'] ?? 0,
+                            apiResponse: data,
+                            )
+                          )
+                        );
                       },
                       buttonneed: false,
                     );

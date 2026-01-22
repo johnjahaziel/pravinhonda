@@ -241,7 +241,9 @@ class _CompletedState extends State<Completed> {
                                     enquiryid: data['enquiry_id'] ?? 0,
                                     id: data['enquiry_id']?.toString() ?? '',
                                     customername: data['customer_name']?.toString() ?? '',
-                                    contactnumber: data['customer_contact_number']?.toString() ?? '',
+                                    highrisenumber: data['high_rise_number']?.toString() ?? '',
+                                    deliverydate: data['delivery_date']?.toString() ?? '',
+                                    deliverytime: data['delivery_time']?.toString() ?? '',
                                     status: data['status']?.toString() ?? '',
                                     cashfinance: data['purchase_type']?.toString() ?? '',
                                     textride: data['test_ride']?.toString() ?? '',
@@ -254,9 +256,10 @@ class _CompletedState extends State<Completed> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => ViewformPdi(
+                                            pagename: 'Completed Helper',
                                             enquiryid: data['enquiry_id'] ?? 0,
                                             apiResponse: selected,
-                                            initialIndex: 4,
+                                            initialIndex: 5,
                                           )
                                         ),
                                       );
