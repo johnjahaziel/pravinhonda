@@ -11,7 +11,6 @@ import 'package:pravinhonda/salesexecutive/loginscreens/forms/view/viewexchange.
 import 'package:pravinhonda/salesexecutive/loginscreens/forms/view/viewfinace.dart';
 import 'package:pravinhonda/utility/customs/customappBar.dart';
 import 'package:pravinhonda/utility/customs/customdrawer.dart';
-import 'package:pravinhonda/utility/customs/customdropdown.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
@@ -30,11 +29,6 @@ class Movetoworking extends StatefulWidget {
 }
 
 class _MovetoworkingState extends State<Movetoworking> {
-  final helperitems = helperItems;
-  String? selectedhelper;
-
-  String helpere = '';
-
   bool createenquiry = true;
   bool finance = false;
   bool exchange = false;
@@ -90,9 +84,6 @@ class _MovetoworkingState extends State<Movetoworking> {
     try {
       final response = await http.post(
         url,
-        body: jsonEncode({
-          'helper': selectedhelper,
-        }),
         headers: {
           'Authorization': 'Bearer $token',
           'Accept': 'application/json',
@@ -110,7 +101,7 @@ class _MovetoworkingState extends State<Movetoworking> {
           context,
           MaterialPageRoute(
             builder: (context) => NavigationPdi(
-              initialIndex: 2,
+              initialIndex: 4,
             ),
           ),
         );
@@ -119,10 +110,6 @@ class _MovetoworkingState extends State<Movetoworking> {
 
         print(responseData);
         Fluttertoast.showToast(msg: responseData['message']);
-
-        setState(() {
-          helpere = responseData['message'];
-        });
 
       }
     } catch (e) {
@@ -324,25 +311,6 @@ class _MovetoworkingState extends State<Movetoworking> {
                         ],
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(20),),
-                    child: CustomDropdown(
-                      title: 'Helper',
-                      selectedCustomDropdown: selectedhelper,
-                      customDropdownItems: helperitems,
-                      onChanged: (newValue) {
-                        setState(() {
-                          selectedhelper = newValue;
-                        });
-                      },
-                      star: true,
-                    ),
-                  ),
-                  if(helpere.isNotEmpty)
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(20),),
-                    child: errormessage(helpere),
                   ),
                   button(
                     'Move to Working',

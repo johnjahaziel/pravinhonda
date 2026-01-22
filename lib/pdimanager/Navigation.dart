@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pravinhonda/pdimanager/customdrawer.dart';
 import 'package:pravinhonda/pdimanager/mainscreens/accepted.dart';
+import 'package:pravinhonda/pdimanager/mainscreens/allocated.dart';
 import 'package:pravinhonda/pdimanager/mainscreens/completed.dart';
 import 'package:pravinhonda/pdimanager/mainscreens/sparedept.dart';
 import 'package:pravinhonda/pdimanager/mainscreens/waitingforaccept.dart';
@@ -54,6 +55,7 @@ class _NavigationPdiState extends State<NavigationPdi> {
           children: const [
             Waitingforaccept(),
             Accepted(),
+            Allocated(),
             Sparedept(),
             Working(),
             Completed(),
@@ -86,6 +88,10 @@ class _NavigationPdiState extends State<NavigationPdi> {
               BottomNavigationBarItem(
                 icon: Icon(Icons.check_box_outline_blank),
                 label: 'Accepted',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.help_outline),
+                label: 'Allocated Helper',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.build_circle_outlined),

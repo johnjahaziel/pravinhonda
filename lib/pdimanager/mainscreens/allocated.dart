@@ -4,20 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
-import 'package:pravinhonda/pdimanager/movetoallocated.dart';
+import 'package:pravinhonda/pdimanager/view/viewform.dart';
 import 'package:pravinhonda/utility/boxes.dart';
 import 'package:pravinhonda/utility/custom.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
-class Accepted extends StatefulWidget {
-  const Accepted({super.key});
+class Allocated extends StatefulWidget {
+  const Allocated({super.key});
 
   @override
-  State<Accepted> createState() => _AcceptedState();
+  State<Allocated> createState() => _AllocatedState();
 }
 
-class _AcceptedState extends State<Accepted> {
+class _AllocatedState extends State<Allocated> {
   List<dynamic> _allData = [];
   List<dynamic> alldata = [];
   bool isLoading = true;
@@ -80,7 +80,7 @@ class _AcceptedState extends State<Accepted> {
 
   Future<void> _fetchPage({String? url}) async {
     try {
-      final Uri uri = Uri.parse(url ?? 'https://app.pravinhonda.com/api/accepted');
+      final Uri uri = Uri.parse(url ?? 'https://app.pravinhonda.com/api/allocated-helper');
 
       if (_allData.isEmpty && !isLoading) {
         setState(() {
@@ -109,7 +109,7 @@ class _AcceptedState extends State<Accepted> {
         final List<dynamic> dataList = (responseData['data'] as List<dynamic>?) ?? [];
 
         // final List<dynamic> filteredList = dataList
-        // .where((item) => item['status_code']?.toString() == "7")
+        // .where((item) => item['status_code']?.toString() == "10")
         // .toList();
 
         final List<dynamic> filteredList = dataList;
@@ -198,7 +198,7 @@ class _AcceptedState extends State<Accepted> {
                       SizedBox(height: SizeConfig.h(20)),
                       Center(
                         child: Text(
-                          'Accepted',
+                          'Allocated Helper',
                           style: customtext(fs18, kred, FontWeight.bold),
                         ),
                       ),
@@ -253,9 +253,10 @@ class _AcceptedState extends State<Accepted> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => Movetoallocated(
+                                          builder: (context) => ViewformPdi(
                                             enquiryid: data['enquiry_id'] ?? 0,
-                                            apiResponse: selected
+                                            apiResponse: selected,
+                                            initialIndex: 4,
                                           )
                                         ),
                                       );

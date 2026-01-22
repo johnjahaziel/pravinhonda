@@ -11,24 +11,30 @@ import 'package:pravinhonda/salesexecutive/loginscreens/forms/view/viewexchange.
 import 'package:pravinhonda/salesexecutive/loginscreens/forms/view/viewfinace.dart';
 import 'package:pravinhonda/utility/customs/customappBar.dart';
 import 'package:pravinhonda/utility/customs/customdrawer.dart';
+import 'package:pravinhonda/utility/customs/customdropdown.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
-class Movetocompleted extends StatefulWidget {
+class Movetoallocated extends StatefulWidget {
   final int enquiryid;
   final Map<String, dynamic> apiResponse;
-  const Movetocompleted({
+  const Movetoallocated({
     super.key,
     required this.enquiryid,
     required this.apiResponse
   });
 
   @override
-  State<Movetocompleted> createState() => _MovetocompletedState();
+  State<Movetoallocated> createState() => _MovetoallocatedState();
 }
 
-class _MovetocompletedState extends State<Movetocompleted> {
+class _MovetoallocatedState extends State<Movetoallocated> {
+  final helperitems = helperItems;
+  String? selectedhelper;
+
+  String helpere = '';
+
   bool createenquiry = true;
   bool finance = false;
   bool exchange = false;
@@ -76,14 +82,17 @@ class _MovetocompletedState extends State<Movetocompleted> {
     }
   }
 
-  Future<void> movetoaccept() async {
-    final url = Uri.parse('https://app.pravinhonda.com/api/move-to-completed/${widget.enquiryid}');
+  Future<void> movetoworking() async {
+    final url = Uri.parse('https://app.pravinhonda.com/api/allocated-helper/${widget.enquiryid}');
 
     final token = BlocProvider.of<AuthCubit>(context).state.token;
 
     try {
       final response = await http.post(
         url,
+        body: jsonEncode({
+          'helper': selectedhelper,
+        }),
         headers: {
           'Authorization': 'Bearer $token',
           'Accept': 'application/json',
@@ -101,7 +110,7 @@ class _MovetocompletedState extends State<Movetocompleted> {
           context,
           MaterialPageRoute(
             builder: (context) => NavigationPdi(
-              initialIndex: 5,
+              initialIndex: 2,
             ),
           ),
         );
@@ -110,6 +119,10 @@ class _MovetocompletedState extends State<Movetocompleted> {
 
         print(responseData);
         Fluttertoast.showToast(msg: responseData['message']);
+
+        setState(() {
+          helpere = responseData['message'];
+        });
 
       }
     } catch (e) {
@@ -161,7 +174,7 @@ class _MovetocompletedState extends State<Movetocompleted> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: SizeConfig.h(10)),
-                  back(context, NavigationPdi(initialIndex: 3)),
+                  back(context, NavigationPdi(initialIndex: 2)),
                   Center(
                     child: Text(
                       'View Details',
@@ -312,10 +325,29 @@ class _MovetocompletedState extends State<Movetocompleted> {
                       ),
                     ),
                   ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(20),),
+                    child: CustomDropdown(
+                      title: 'Helper',
+                      selectedCustomDropdown: selectedhelper,
+                      customDropdownItems: helperitems,
+                      onChanged: (newValue) {
+                        setState(() {
+                          selectedhelper = newValue;
+                        });
+                      },
+                      star: true,
+                    ),
+                  ),
+                  if(helpere.isNotEmpty)
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(20),),
+                    child: errormessage(helpere),
+                  ),
                   button(
-                    'Move to Completed',
+                    'Move to Allocated Helper',
                     () {
-                      movetoaccept();
+                      movetoworking();
                     }
                   )
                 ],
