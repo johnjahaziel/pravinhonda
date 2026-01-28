@@ -184,7 +184,7 @@ class _CompletedlistState extends State<Completedlist> {
 
   Future<void> _fetchPage({String? url}) async {
     try {
-      final Uri uri = Uri.parse(url ?? 'https://app.pravinhonda.com/api/completed');
+      final Uri uri = Uri.parse(url ?? 'https://app.pravinhonda.com/api/completedlist');
 
       if (_allData.isEmpty && !isLoading) {
         setState(() {

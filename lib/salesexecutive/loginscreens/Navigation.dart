@@ -241,6 +241,7 @@ class _SameMobileState extends State<SameMobile> {
           textfieldy(
             'Enter Mobile Number',
             mobileController,
+            numpad: true
           ),
           if(mobilenumbere.isNotEmpty)
           errormessage(mobilenumbere),
