@@ -85,33 +85,10 @@ class _HondaboxState extends State<Hondabox> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            widget.id,
-                            style: textmedium12,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          SizedBox(height: SizeConfig.h(5)),
-                          Text(
-                            widget.customername,
-                            style: textmedium12,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          SizedBox(height: SizeConfig.h(5)),
-                          Text(
-                            widget.contactnumber,
-                            style: textmedium12,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          SizedBox(height: SizeConfig.h(5)),
-                          Text(
-                            widget.status,
-                            style: textmedium12,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                          infoRow(Icons.confirmation_number_outlined, widget.id),
+                          infoRow(Icons.person_outline, widget.customername),
+                          infoRow(Icons.phone_outlined, widget.contactnumber),
+                          infoRow(Icons.info_outline, widget.status, gap: false),
                         ],
                       ),
                     ),
@@ -171,7 +148,6 @@ class _HondaboxState extends State<Hondabox> {
                     )
                   ],
                 ),
-                SizedBox(height: SizeConfig.h(5)),
                 Row(
                   children: [
                     if(widget.textride == 'yes')
@@ -226,6 +202,27 @@ class _HondaboxState extends State<Hondabox> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget infoRow(IconData icon, String text, {bool gap = true}) {
+    return Padding(
+      padding: gap == true ? EdgeInsets.only(bottom: SizeConfig.h(4)) : EdgeInsetsGeometry.zero,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 14, color: kgrey),
+          SizedBox(width: SizeConfig.w(6)),
+          Expanded(
+            child: Text(
+              text,
+              style: textmedium12,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -289,11 +286,11 @@ class _PdiinchargeboxState extends State<Pdiinchargebox> {
       case 'pending':
         return const Color(0xFFFFF3CD);
       case 'completed':
-        return const Color(0xFFE6F4EA);
-      case 'cancelled':
-        return const Color(0xFFFDECEA);
-      case 'in progress':
-        return const Color(0xFFE8F0FE);
+        return const Color.fromARGB(255, 183, 254, 203);
+      case 'working':
+        return const Color.fromARGB(255, 232, 175, 169);
+      case 'allocated helper':
+        return const Color.fromARGB(255, 204, 223, 255);
       default:
         return const Color(0xFFF2F2F2);
     }
