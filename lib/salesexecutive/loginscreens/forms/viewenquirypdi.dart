@@ -258,7 +258,7 @@ class _ViewenquiryPdiState extends State<ViewenquiryPdi> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Navigation(initialIndex: 2)
+            builder: (context) => Navigation(initialIndex: 4)
           )
         );
 

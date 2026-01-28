@@ -80,7 +80,7 @@ class _AllocatedState extends State<Allocated> {
 
   Future<void> _fetchPage({String? url}) async {
     try {
-      final Uri uri = Uri.parse(url ?? 'https://app.pravinhonda.com/api/allocated-helper');
+      final Uri uri = Uri.parse(url ?? 'https://app.pravinhonda.com/api/pdi');
 
       if (_allData.isEmpty && !isLoading) {
         setState(() {
@@ -108,11 +108,11 @@ class _AllocatedState extends State<Allocated> {
 
         final List<dynamic> dataList = (responseData['data'] as List<dynamic>?) ?? [];
 
-        // final List<dynamic> filteredList = dataList
-        // .where((item) => item['status_code']?.toString() == "10")
-        // .toList();
+        final List<dynamic> filteredList = dataList
+        .where((item) => item['status_code']?.toString() == "7")
+        .toList();
 
-        final List<dynamic> filteredList = dataList;
+        // final List<dynamic> filteredList = dataList;
 
         setState(() {
           if (url == null) {

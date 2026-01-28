@@ -283,16 +283,22 @@ class _PdiinchargeboxState extends State<Pdiinchargebox> {
 
   Color getStatusColor(String status) {
     switch (status.toLowerCase()) {
-      case 'pending':
-        return const Color(0xFFFFF3CD);
-      case 'completed':
-        return const Color.fromARGB(255, 183, 254, 203);
-      case 'working':
-        return const Color.fromARGB(255, 232, 175, 169);
+      case 'booking':
+        return const Color(0xFFFFF3CD); // soft yellow
+      case 'accepted':
+        return const Color(0xFFD1FAE5); // mint green
       case 'allocated helper':
-        return const Color.fromARGB(255, 204, 223, 255);
+        return const Color(0xFFE0E7FF); // indigo blue
+      case 'spare dep':
+        return const Color(0xFFFFE4E6); // light rose
+      case 'working':
+        return const Color(0xFFFDE68A); // amber
+      case 'completed':
+        return const Color(0xFFBBF7D0); // success green
+      case 'delivery':
+        return const Color(0xFFDBEAFE); // sky blue
       default:
-        return const Color(0xFFF2F2F2);
+        return const Color(0xFFF3F4F6); // neutral grey
     }
   }
 
