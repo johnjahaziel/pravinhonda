@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
+import 'package:pravinhonda/salesexecutive/loginscreens/forms/view/viewbookingno.dart';
+import 'package:pravinhonda/salesexecutive/loginscreens/forms/view/viewbookingyes.dart';
 import 'package:pravinhonda/salesexecutive/loginscreens/forms/view/viewform.dart';
 import 'package:pravinhonda/utility/boxes.dart';
 import 'package:pravinhonda/utility/custom.dart';
@@ -867,7 +869,7 @@ class _AvailableState extends State<Available> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => Viewform(
+                            MaterialPageRoute(builder: (context) => ViewBookingyes(
                               enquiryid: data['enquiry_id'] ?? 0,
                               apiResponse: data,
                               )
@@ -1107,7 +1109,7 @@ class _WaitingState extends State<Waiting> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => Viewform(
+                            MaterialPageRoute(builder: (context) => ViewBookingNO(
                               enquiryid: data['enquiry_id'] ?? 0,
                               apiResponse: data,
                               )
