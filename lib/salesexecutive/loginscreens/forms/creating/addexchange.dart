@@ -22,7 +22,7 @@ class Addexchange extends StatefulWidget {
 }
 
 class DealerField {
-  TextEditingController nameController = TextEditingController();
+  String? selectedDealer;
   TextEditingController priceController = TextEditingController();
 }
 
@@ -34,10 +34,9 @@ class _AddexchangeState extends State<Addexchange> {
   TextEditingController expectedprice = TextEditingController();
   TextEditingController assessedby = TextEditingController();
 
-  TextEditingController dealername1 = TextEditingController();
   TextEditingController price1 = TextEditingController();
 
-  TextEditingController finalizeddealer = TextEditingController();
+  String? finalizeddealer;
   TextEditingController finalizedprice = TextEditingController();
 
   String vehiclemodale = '';
@@ -57,7 +56,7 @@ class _AddexchangeState extends State<Addexchange> {
 
     for (int i = 0; i < dealers.length; i++) {
       data['dealer_name${i + 1}'] =
-          dealers[i].nameController.text.trim();
+          dealers[i].selectedDealer;
       data['price${i + 1}'] =
           dealers[i].priceController.text.trim();
     }
@@ -79,20 +78,20 @@ class _AddexchangeState extends State<Addexchange> {
           'Authorization': 'Bearer $token'
         },
         body: jsonEncode({
-          // 'vehicle_model': vehiclemodal.text,
-          // 'vehicle_year': vehiclemodalyr.text,
-          // 'no_of_owners' : noofowners.text,
-          // 'expected_price': expectedprice.text,
+          'vehicle_model': vehiclemodal.text,
+          'vehicle_year': vehiclemodalyr.text,
+          'no_of_owners' : noofowners.text,
+          'expected_price': expectedprice.text,
           
           'assessed_by': assessedby.text,
 
-          'finalized_dealer': finalizeddealer.text,
+          'finalized_dealer': finalizeddealer,
           'finalized_price': finalizedprice.text,
 
-          'vehicle_model': 'asda',
-          'vehicle_year': '2018',
-          'no_of_owners' : '1',
-          'expected_price': '50000',
+          // 'vehicle_model': 'asda',
+          // 'vehicle_year': '2018',
+          // 'no_of_owners' : '1',
+          // 'expected_price': '50000',
 
           ...buildDealerApiData(),
 
@@ -209,10 +208,14 @@ class _AddexchangeState extends State<Addexchange> {
                           children: [
                             Column(
                               children: [
-                                textfieldy(
-                                  'Dealer ${index + 1}',
-                                  dealers[index].nameController,
-                                  star: false
+                                Dealerdropdown(
+                                  title: 'Dealer ${index + 1}',
+                                  selectedDealer: dealers[index].selectedDealer,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      dealers[index].selectedDealer = value;
+                                    });
+                                  },
                                 ),
                                 textfieldy(
                                   'Price ${index + 1}',
@@ -271,10 +274,14 @@ class _AddexchangeState extends State<Addexchange> {
                   ),
                 ],
               ),
-              textfieldy(
-                'Finalised Dealer',
-                finalizeddealer,
-                star: false
+              Dealerdropdown(
+                title: 'Finalized Dealer',
+                selectedDealer: finalizeddealer,
+                onChanged: (value) {
+                  setState(() {
+                    finalizeddealer = value;
+                  });
+                },
               ),
               if(finalizeddealere.isNotEmpty)
               errormessage(finalizeddealere),

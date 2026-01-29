@@ -27,14 +27,13 @@ class EditexchangeMB extends StatefulWidget {
 }
 
 class DealerField {
-  TextEditingController nameController;
+  String? selectedDealer;
   TextEditingController priceController;
 
   DealerField({
-    String name = '',
+    this.selectedDealer,
     String price = '',
-  })  : nameController = TextEditingController(text: name),
-        priceController = TextEditingController(text: price);
+  }) : priceController = TextEditingController(text: price);
 }
 
 class _EditexchangeMBState extends State<EditexchangeMB> {
@@ -43,7 +42,9 @@ class _EditexchangeMBState extends State<EditexchangeMB> {
   late TextEditingController noofowners;
   late TextEditingController expectedprice;
   late TextEditingController assessedby;
-  late TextEditingController finalizeddealer;
+
+  String? finalizeddealer;
+
   late TextEditingController finalizedprice;
 
   String vehiclemodale = '';
@@ -62,8 +63,7 @@ class _EditexchangeMBState extends State<EditexchangeMB> {
     final Map<String, dynamic> data = {};
 
     for (int i = 0; i < dealers.length; i++) {
-      data['dealer_name${i + 1}'] =
-          dealers[i].nameController.text.trim();
+      data['dealer_name${i + 1}'] = dealers[i].selectedDealer;
       data['price${i + 1}'] =
           dealers[i].priceController.text.trim();
     }
@@ -90,7 +90,7 @@ class _EditexchangeMBState extends State<EditexchangeMB> {
     noofowners = TextEditingController(text: (enquiry['no_of_owners'] ?? '').toString());
     expectedprice = TextEditingController(text: (enquiry['expected_price'] ?? '').toString());
     assessedby = TextEditingController(text: (enquiry['assessed_by'] ?? '').toString());
-    finalizeddealer = TextEditingController(text: (enquiry['finalized_dealer'] ?? '').toString());
+    finalizeddealer = enquiry['finalized_dealer'].toString();
     finalizedprice = TextEditingController(text: (enquiry['finalized_price'] ?? '').toString());
 
     dealers.clear();
@@ -103,7 +103,7 @@ class _EditexchangeMBState extends State<EditexchangeMB> {
           enquiry[dealerNameKey].toString().isNotEmpty) {
         dealers.add(
           DealerField(
-            name: enquiry[dealerNameKey].toString(),
+            selectedDealer: enquiry[dealerNameKey].toString(),
             price: (enquiry[priceKey] ?? '').toString(),
           ),
         );
@@ -124,7 +124,7 @@ class _EditexchangeMBState extends State<EditexchangeMB> {
       noofowners.text != (originalEnquiry['no_of_owners'] ?? '') ||
       expectedprice.text != (originalEnquiry['expected_price'] ?? '') ||
       assessedby.text != (originalEnquiry['assessed_by'] ?? '') ||
-      finalizeddealer.text != (originalEnquiry['finalized_dealer'] ?? '') ||
+      finalizeddealer != (originalEnquiry['finalized_dealer'] ?? '') ||
       finalizedprice.text != (originalEnquiry['finalized_price'] ?? '');
   }
 
@@ -149,7 +149,7 @@ class _EditexchangeMBState extends State<EditexchangeMB> {
           
           'assessed_by': assessedby.text,
 
-          'finalized_dealer': finalizeddealer.text,
+          'finalized_dealer': finalizeddealer,
           'finalized_price': finalizedprice.text,
 
           ...buildDealerApiData(),
@@ -267,11 +267,15 @@ class _EditexchangeMBState extends State<EditexchangeMB> {
                       children: [
                         Column(
                           children: [
-                            textfieldy(
-                              'Dealer ${index + 1}',
-                              dealers[index].nameController,
-                              star: false,
-                              readonly: widget.edit
+                            Dealerdropdown(
+                              title: 'Dealer ${index + 1}',
+                              selectedDealer: dealers[index].selectedDealer,
+                              onChanged: (value) {
+                                setState(() {
+                                  dealers[index].selectedDealer = value;
+                                });
+                              },
+                              readonly: widget.edit,
                             ),
                             textfieldy(
                               'Price ${index + 1}',
@@ -333,11 +337,15 @@ class _EditexchangeMBState extends State<EditexchangeMB> {
               ),
             ],
           ),
-          textfieldy(
-            'Finalised Dealer',
-            finalizeddealer,
+          Dealerdropdown(
+            title: 'Finalized Dealer',
+            selectedDealer: finalizeddealer,
+            onChanged: (value) {
+              setState(() {
+                finalizeddealer = value;
+              });
+            },
             readonly: widget.edit,
-            star: false
           ),
           if(finalizeddealere.isNotEmpty)
           errormessage(finalizeddealere),

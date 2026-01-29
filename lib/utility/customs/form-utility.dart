@@ -1,4 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
+import 'package:pravinhonda/bloc/auth_cubit.dart';
+import 'package:pravinhonda/salesexecutive/namevariantcolor.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
@@ -1234,6 +1240,97 @@ class _EditExtrafittingsState extends State<EditExtrafittings> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class Dealerdropdown extends StatefulWidget {
+  final String title;
+  final bool star;
+  final String? selectedDealer;
+  final Function(String?) onChanged;
+  final bool readonly;
+  const Dealerdropdown({
+    super.key,
+    required this.title,
+    this.star = false,
+    required this.selectedDealer,
+    required this.onChanged,
+    this.readonly = false
+  });
+
+  @override
+  State<Dealerdropdown> createState() => _DealerdropdownState();
+}
+
+class _DealerdropdownState extends State<Dealerdropdown> {
+
+  String? selecteddealeritems;
+
+  List<Map<String, String>> dealeritems = [];
+
+  @override
+  void initState () {
+    super.initState();
+    fetchdealer();
+  }
+
+  Future<void> fetchdealer() async {
+    final url = Uri.parse('https://app.pravinhonda.com/api/second-hand-dealers');
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+        final List<dynamic> dataList = responseData['data'] ?? [];
+
+        final items = dataList.map<Map<String, String>>((item) {
+          return {
+            'id': item['id'].toString(),
+            'name': item['dealer_name'].toString(),
+          };
+        }).toList();
+
+        setState(() {
+          dealeritems = items;
+
+          if (widget.selectedDealer != null &&
+              items.any((e) => e['name'] == widget.selectedDealer)) {
+            selecteddealeritems = widget.selectedDealer;
+          } else {
+            selecteddealeritems = null;
+          }
+        });
+      }
+    } catch (e) {
+      debugPrint('Error: $e');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomNVCDropdown(
+      title: widget.title,
+      star: widget.star,
+      selectedCustomDropdown: selecteddealeritems,
+      customDropdownItems: dealeritems,
+      onChanged: (newValue) {
+        setState(() {
+          selecteddealeritems = newValue;
+        });
+
+        widget.onChanged(newValue);
+      },
+      readOnly: widget.readonly,
     );
   }
 }

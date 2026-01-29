@@ -15,14 +15,13 @@ class Viewexchange extends StatefulWidget {
 }
 
 class DealerField {
-  TextEditingController nameController;
+  String? selectedDealer;
   TextEditingController priceController;
 
   DealerField({
-    String name = '',
+    this.selectedDealer,
     String price = '',
-  })  : nameController = TextEditingController(text: name),
-        priceController = TextEditingController(text: price);
+  }) : priceController = TextEditingController(text: price);
 }
 
 class _ViewexchangeState extends State<Viewexchange> {
@@ -31,7 +30,9 @@ class _ViewexchangeState extends State<Viewexchange> {
   late TextEditingController noofowners;
   late TextEditingController expectedprice;
   late TextEditingController assessedby;
-  late TextEditingController finalizeddealer;
+  
+  String? finalizeddealer;
+
   late TextEditingController finalizedprice;
 
   String vehiclemodale = '';
@@ -50,8 +51,7 @@ class _ViewexchangeState extends State<Viewexchange> {
     final Map<String, dynamic> data = {};
 
     for (int i = 0; i < dealers.length; i++) {
-      data['dealer_name${i + 1}'] =
-          dealers[i].nameController.text.trim();
+      data['dealer_name${i + 1}'] = dealers[i].selectedDealer;
       data['price${i + 1}'] =
           dealers[i].priceController.text.trim();
     }
@@ -76,7 +76,7 @@ class _ViewexchangeState extends State<Viewexchange> {
     noofowners = TextEditingController(text: (enquiry['no_of_owners'] ?? '').toString());
     expectedprice = TextEditingController(text: (enquiry['expected_price'] ?? '').toString());
     assessedby = TextEditingController(text: (enquiry['assessed_by'] ?? '').toString());
-    finalizeddealer = TextEditingController(text: (enquiry['finalized_dealer'] ?? '').toString());
+    finalizeddealer = enquiry['finalized_dealer'].toString();
     finalizedprice = TextEditingController(text: (enquiry['finalized_price'] ?? '').toString());
 
     dealers.clear();
@@ -89,7 +89,7 @@ class _ViewexchangeState extends State<Viewexchange> {
           enquiry[dealerNameKey].toString().isNotEmpty) {
         dealers.add(
           DealerField(
-            name: enquiry[dealerNameKey].toString(),
+            selectedDealer: enquiry[dealerNameKey].toString(),
             price: (enquiry[priceKey] ?? '').toString(),
           ),
         );
@@ -159,11 +159,15 @@ class _ViewexchangeState extends State<Viewexchange> {
                       children: [
                         Column(
                           children: [
-                            textfieldy(
-                              'Dealer ${index + 1}',
-                              dealers[index].nameController,
-                              star: false,
-                              readonly: readonly
+                            Dealerdropdown(
+                              title: 'Dealer ${index + 1}',
+                              selectedDealer: dealers[index].selectedDealer,
+                              onChanged: (value) {
+                                setState(() {
+                                  dealers[index].selectedDealer = value;
+                                });
+                              },
+                              readonly: readonly,
                             ),
                             textfieldy(
                               'Price ${index + 1}',
@@ -225,11 +229,15 @@ class _ViewexchangeState extends State<Viewexchange> {
               ),
             ],
           ),
-          textfieldy(
-            'Finalised Dealer',
-            finalizeddealer,
+          Dealerdropdown(
+            title: 'Finalized Dealer',
+            selectedDealer: finalizeddealer,
+            onChanged: (value) {
+              setState(() {
+                finalizeddealer = value;
+              });
+            },
             readonly: readonly,
-            star: false
           ),
           if(finalizeddealere.isNotEmpty)
           errormessage(finalizeddealere),
