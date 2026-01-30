@@ -75,7 +75,7 @@ class _ViewenquirydeliveryState extends State<Viewenquirydelivery> {
   List<dynamic> efproducts = [];
   List<dynamic> efprice = [];
 
-  String? minimumPackageAnswer;
+  String minimumPackageAnswer = 'no';
   List<String> extraFittingsSelected = [];
 
   String baseUrl = 'https://app.pravinhonda.com/';
@@ -122,9 +122,14 @@ class _ViewenquirydeliveryState extends State<Viewenquirydelivery> {
     datecontroller = TextEditingController(text: enquiry['dob'] ?? '');
     followupdatecontroller = TextEditingController(text: enquiry['follow_up_date'] ?? '');
     customerremarks = TextEditingController(text: enquiry['customers_remarks'] ?? '');
-    minimumPackageAnswer = enquiry['minimum_package']?.toString();
     extraFittingsSelected = List<String>.from(enquiry['extra_package'] ?? []);
     deliveryPhoto = enquiry['delivery_photo'] ?? '';
+
+    final List<dynamic> minPkg = enquiry['minimum_package'] as List<dynamic>? ?? [];
+
+    setState(() {
+      minimumPackageAnswer = minPkg.isNotEmpty ? 'yes' : 'no';
+    });
   }
 
   String wingsenquirye = '';
@@ -498,6 +503,7 @@ class _ViewenquirydeliveryState extends State<Viewenquirydelivery> {
                 minimumPackageAnswer = value;
               });
             },
+            answer: minimumPackageAnswer.isEmpty ? 'no' : minimumPackageAnswer,
             readonly: readonly,
           ),
           if(minimumpackagee.isNotEmpty)

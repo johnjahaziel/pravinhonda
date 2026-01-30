@@ -58,7 +58,7 @@ class _SimpleviewState extends State<Simpleview> {
   List<dynamic> efproducts = [];
   List<dynamic> efprice = [];
 
-  String? minimumPackageAnswer;
+  String minimumPackageAnswer = 'no';
   List<String> extraFittingsSelected = [];
 
   String districte = '';
@@ -92,8 +92,13 @@ class _SimpleviewState extends State<Simpleview> {
     customername = TextEditingController(text: enquiry['customer_name'] ?? '');
     pincode = TextEditingController(text: enquiry['pincode'].toString());
     customerremarks = TextEditingController(text: enquiry['customers_remarks'] ?? '');
-    minimumPackageAnswer = enquiry['minimum_package']?.toString();
     extraFittingsSelected = List<String>.from(enquiry['extra_package'] ?? []);
+
+    final List<dynamic> minPkg = enquiry['minimum_package'] as List<dynamic>? ?? [];
+
+    setState(() {
+      minimumPackageAnswer = minPkg.isNotEmpty ? 'yes' : 'no';
+    });
 
     chassisno = TextEditingController(text: enquiry['chassis_no']?.toString() ?? '');
     engineno = TextEditingController(text: enquiry['engine_no']?.toString() ?? '');
@@ -324,6 +329,7 @@ class _SimpleviewState extends State<Simpleview> {
                 });
               },
               readonly: readonly,
+              answer: minimumPackageAnswer.isEmpty ? 'no' : minimumPackageAnswer,
             ),
             EditExtrafittings(
               title: 'Extra Fittings',

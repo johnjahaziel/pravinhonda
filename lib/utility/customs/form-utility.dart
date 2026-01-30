@@ -759,6 +759,7 @@ class EditMinimumpackage extends StatefulWidget {
   final List<dynamic> price;
   final String total;
   final void Function(String answer) onChanged;
+  final String answer;
   final bool readonly;
   const EditMinimumpackage({
     super.key,
@@ -767,6 +768,7 @@ class EditMinimumpackage extends StatefulWidget {
     required this.price,
     required this.total,
     required this.onChanged,
+    required this.answer,
     this.readonly = false,
   });
 
@@ -780,30 +782,19 @@ class _EditMinimumpackageState extends State<EditMinimumpackage> {
   @override
   void initState() {
     super.initState();
-    _setAnswerFromPackage();
+    selectedAnswer = widget.answer;
+    print('Answerrrrr ${widget.answer}');
   }
 
   @override
   void didUpdateWidget(covariant EditMinimumpackage oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (oldWidget.product != widget.product) {
-      _setAnswerFromPackage();
+    if (oldWidget.answer != widget.answer) {
+      setState(() {
+        selectedAnswer = widget.answer;
+      });
     }
-  }
-
-  void _setAnswerFromPackage() {
-    final newAnswer = widget.product.isNotEmpty ? 'yes' : 'no';
-
-    if (selectedAnswer == newAnswer) return;
-
-    selectedAnswer = newAnswer;
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        widget.onChanged(newAnswer);
-      }
-    });
   }
 
   @override
@@ -834,7 +825,7 @@ class _EditMinimumpackageState extends State<EditMinimumpackage> {
                   )
                 ),
                 padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(10), vertical: SizeConfig.h(10)),
-                child: (widget.product.isEmpty || widget.price.isEmpty || widget.total.isEmpty)
+                child: widget.product.isEmpty || widget.price.isEmpty
               ? Padding(
                   padding: EdgeInsets.symmetric(vertical: SizeConfig.h(30)),
                   child: Center(

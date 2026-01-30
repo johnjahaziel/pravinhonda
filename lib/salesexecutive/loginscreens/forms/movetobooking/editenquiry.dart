@@ -88,7 +88,7 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
   List<dynamic> efproducts = [];
   List<dynamic> efprice = [];
 
-  String? minimumPackageAnswer;
+  String minimumPackageAnswer = 'no';
   List<String> extraFittingsSelected = [];
 
   @override
@@ -137,8 +137,13 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
     datecontroller = TextEditingController(text: enquiry['dob'] ?? '');
     followupdatecontroller = TextEditingController(text: enquiry['follow_up_date'] ?? '');
     customerremarks = TextEditingController(text: enquiry['customers_remarks'] ?? '');
-    minimumPackageAnswer = enquiry['minimum_package']?.toString();
     extraFittingsSelected = List<String>.from(enquiry['extra_package'] ?? []);
+
+    final List<dynamic> minPkg = enquiry['minimum_package'] as List<dynamic>? ?? [];
+
+    setState(() {
+      minimumPackageAnswer = minPkg.isNotEmpty ? 'yes' : 'no';
+    });
   }
 
   String wingsenquirye = '';
@@ -691,6 +696,7 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
               });
             },
             readonly: widget.edit,
+            answer: minimumPackageAnswer.isEmpty ? 'no' : minimumPackageAnswer,
           ),
           if(minimumpackagee.isNotEmpty)
           errormessage(minimumpackagee),
