@@ -104,7 +104,7 @@ class _ViewenquiryState extends State<Viewenquiry> {
     selectedenquirytypeitems = enquiry['enquiry_type'];
     selectedenquirysourceitems = enquiry['enquiry_source'];
     selectedmodelnameitems = enquiry['model_name'];
-    selectedmodelvariantitems = enquiry['model_variant'];
+    // selectedmodelvariantitems = enquiry['model_variant'];
     selectedmodelcoloritems = enquiry['model_color'];
     selectedpurchasetypeitems = enquiry['purchase_type'];
     selectedexchangeflagitems = enquiry['exchange_flag'];
@@ -401,11 +401,11 @@ class _ViewenquiryState extends State<Viewenquiry> {
           errormessage(enquirysourcee),
           Namevariantcolor(
             modelnamee: modelnamee,
-            modelvariante: modelvariante,
+            // modelvariante: modelvariante,
             modelcolore: modelcolore,
             
             selectedname: selectedmodelnameitems,
-            selectedvariant: selectedmodelvariantitems,
+            // selectedvariant: selectedmodelvariantitems,
             selectedcolor: selectedmodelcoloritems,
             onNameChanged: (value) {
               setState(() {
@@ -427,12 +427,12 @@ class _ViewenquiryState extends State<Viewenquiry> {
                 fetchextrafitting(value);
               }
             },
-            onVariantChanged: (value) {
-              setState(() {
-                selectedmodelvariantitems = value;
-                selectedmodelcoloritems = null;
-              });
-            },
+            // onVariantChanged: (value) {
+            //   setState(() {
+            //     selectedmodelvariantitems = value;
+            //     selectedmodelcoloritems = null;
+            //   });
+            // },
             onColorChanged: (value) {
               setState(() {
                 selectedmodelcoloritems = value;

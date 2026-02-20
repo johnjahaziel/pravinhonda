@@ -405,11 +405,11 @@ class _ViewenquirydeliveryState extends State<Viewenquirydelivery> {
           errormessage(enquirysourcee),
           Namevariantcolor(
             modelnamee: modelnamee,
-            modelvariante: modelvariante,
+            // modelvariante: modelvariante,
             modelcolore: modelcolore,
             
             selectedname: selectedmodelnameitems,
-            selectedvariant: selectedmodelvariantitems,
+            // selectedvariant: selectedmodelvariantitems,
             selectedcolor: selectedmodelcoloritems,
             onNameChanged: (value) {
               setState(() {
@@ -431,12 +431,12 @@ class _ViewenquirydeliveryState extends State<Viewenquirydelivery> {
                 fetchextrafitting(value);
               }
             },
-            onVariantChanged: (value) {
-              setState(() {
-                selectedmodelvariantitems = value;
-                selectedmodelcoloritems = null;
-              });
-            },
+            // onVariantChanged: (value) {
+            //   setState(() {
+            //     selectedmodelvariantitems = value;
+            //     selectedmodelcoloritems = null;
+            //   });
+            // },
             onColorChanged: (value) {
               setState(() {
                 selectedmodelcoloritems = value;

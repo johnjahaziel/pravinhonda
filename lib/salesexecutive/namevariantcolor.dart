@@ -15,28 +15,28 @@ class Namevariantcolor extends StatefulWidget {
   final bool edit;
 
   final String modelnamee;
-  final String modelvariante;
+  // final String modelvariante;
   final String modelcolore;
 
   final String? selectedname;
-  final String? selectedvariant;
+  // final String? selectedvariant;
   final String? selectedcolor;
 
   final void Function(String?) onNameChanged;
-  final void Function(String?) onVariantChanged;
+  // final void Function(String?) onVariantChanged;
   final void Function(String?) onColorChanged;
 
   const Namevariantcolor({
     super.key,
     this.edit = false,
     required this.modelnamee,
-    required this.modelvariante,
+    // required this.modelvariante,
     required this.modelcolore,
     required this.selectedname,
-    required this.selectedvariant,
+    // required this.selectedvariant,
     required this.selectedcolor,
     required this.onNameChanged,
-    required this.onVariantChanged,
+    // required this.onVariantChanged,
     required this.onColorChanged,
   });
 
@@ -46,11 +46,11 @@ class Namevariantcolor extends StatefulWidget {
 
 class _NamevariantcolorState extends State<Namevariantcolor> {
   List<Map<String, String>> modelnameitems = [];
-  List<Map<String, String>> modelvariantitems = [];
+  // List<Map<String, String>> modelvariantitems = [];
   List<Map<String, String>> modelcoloritems = [];
 
   String? selectedmodelnameitems;
-  String? selectedmodelvariantitems;
+  // String? selectedmodelvariantitems;
   String? selectedmodelcoloritems;
 
   @override
@@ -58,7 +58,7 @@ class _NamevariantcolorState extends State<Namevariantcolor> {
     super.initState();
 
     selectedmodelnameitems = widget.selectedname;
-    selectedmodelvariantitems = widget.selectedvariant;
+    // selectedmodelvariantitems = widget.selectedvariant;
     selectedmodelcoloritems = widget.selectedcolor;
 
     fetchName().then((_) {
@@ -69,21 +69,8 @@ class _NamevariantcolorState extends State<Namevariantcolor> {
         );
 
         if (name.isNotEmpty && name['id'] != null) {
-          fetchVariant(name['id']!).then((_) {
-            if (selectedmodelvariantitems != null) {
-              final variant = modelvariantitems.firstWhere(
-                (item) => item['name'] == selectedmodelvariantitems,
-                orElse: () => <String, String>{},
-              );
-
-              if (variant.isNotEmpty && variant['id'] != null) {
-                fetchColor(
-                  name['id']!,
-                  variant['id']!,
-                );
-              }
-            }
-          });
+          // Directly fetch color using model id
+          fetchColor(name['id']!);
         }
       }
     });
@@ -145,61 +132,61 @@ class _NamevariantcolorState extends State<Namevariantcolor> {
     }
   }
 
-  Future<void> fetchVariant(String nameCode) async {
-    final variantUrl = Uri.parse('https://app.pravinhonda.com/api/variants/$nameCode');
+  // Future<void> fetchVariant(String nameCode) async {
+  //   final variantUrl = Uri.parse('https://app.pravinhonda.com/api/variants/$nameCode');
 
-    final token = BlocProvider.of<AuthCubit>(context).state.token;
+  //   final token = BlocProvider.of<AuthCubit>(context).state.token;
 
-    try {
-      final response = await http.get(
-        variantUrl,
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer $token'
-        },
-      );
+  //   try {
+  //     final response = await http.get(
+  //       variantUrl,
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Accept': 'application/json',
+  //         'Authorization': 'Bearer $token'
+  //       },
+  //     );
 
-      final Map<String, dynamic> data = jsonDecode(response.body);
+  //     final Map<String, dynamic> data = jsonDecode(response.body);
 
-      if (response.statusCode == 200) {
-        final List<dynamic> variants = data['data'];
+  //     if (response.statusCode == 200) {
+  //       final List<dynamic> variants = data['data'];
 
-        setState(() {
-          modelvariantitems = variants.map((item) {
-            return {
-              'id': item['variant_id'].toString(),
-              'name': item['variant'].toString(),
-            };
-          }).toList();
-        });
-      } else if(data['message'] == 'Token has expired') {
-        final prefs = await SharedPreferences.getInstance();
-        prefs.remove('token');
+  //       setState(() {
+  //         modelvariantitems = variants.map((item) {
+  //           return {
+  //             'id': item['variant_id'].toString(),
+  //             'name': item['variant'].toString(),
+  //           };
+  //         }).toList();
+  //       });
+  //     } else if(data['message'] == 'Token has expired') {
+  //       final prefs = await SharedPreferences.getInstance();
+  //       prefs.remove('token');
 
-        BlocProvider.of<AuthCubit>(context).cleartoken();
+  //       BlocProvider.of<AuthCubit>(context).cleartoken();
 
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (_) => Login()),
-          (route) => false,
-        );
+  //       Navigator.pushAndRemoveUntil(
+  //         context,
+  //         MaterialPageRoute(builder: (_) => Login()),
+  //         (route) => false,
+  //       );
 
-        Fluttertoast.showToast(msg: data['message']);
-      } else if(response.statusCode == 404) {
+  //       Fluttertoast.showToast(msg: data['message']);
+  //     } else if(response.statusCode == 404) {
 
-        Fluttertoast.showToast(msg: data['message']);
+  //       Fluttertoast.showToast(msg: data['message']);
 
-      } else {
-        print("Failed to load variants. Status code: ${response.statusCode}");
-      }
-    } catch (e) {
-      print("Variant fetch error: $e");
-    }
-  }
+  //     } else {
+  //       print("Failed to load variants. Status code: ${response.statusCode}");
+  //     }
+  //   } catch (e) {
+  //     print("Variant fetch error: $e");
+  //   }
+  // }
 
-  Future<void> fetchColor(String modelCode, String variantCode) async {
-    final colorUrl = Uri.parse('https://app.pravinhonda.com/api/colors/$modelCode/$variantCode');
+  Future<void> fetchColor(String modelCode) async {
+    final colorUrl = Uri.parse('https://app.pravinhonda.com/api/colors/$modelCode');
 
     final token = BlocProvider.of<AuthCubit>(context).state.token;
 
@@ -264,7 +251,7 @@ class _NamevariantcolorState extends State<Namevariantcolor> {
             if (newValue != null) {
               setState(() {
                 selectedmodelnameitems = newValue;
-                selectedmodelvariantitems = null;
+                // selectedmodelvariantitems = null;
                 selectedmodelcoloritems = null;
               });
               widget.onNameChanged(newValue);
@@ -275,7 +262,7 @@ class _NamevariantcolorState extends State<Namevariantcolor> {
 
               final nameCode = name['id'];
               if (nameCode != null) {
-                fetchVariant(nameCode);
+                fetchColor(nameCode);
               }
             }
           },
@@ -283,38 +270,38 @@ class _NamevariantcolorState extends State<Namevariantcolor> {
         ),
         if(widget.modelnamee.isNotEmpty)
         errormessage(widget.modelnamee),
-        CustomNVCDropdown(
-          title: 'Model Variant',
-          selectedCustomDropdown: selectedmodelvariantitems,
-          customDropdownItems: modelvariantitems,
-          onChanged: (newValue) {
-            if (newValue != null) {
-              setState(() {
-                selectedmodelvariantitems = newValue;
-                selectedmodelcoloritems = null;
-              });
-              widget.onVariantChanged(newValue);
-              final variant = modelvariantitems.firstWhere(
-                (item) => item['name'] == newValue,
-                orElse: () => {},
-              );
+        // CustomNVCDropdown(
+        //   title: 'Model Variant',
+        //   selectedCustomDropdown: selectedmodelvariantitems,
+        //   customDropdownItems: modelvariantitems,
+        //   onChanged: (newValue) {
+        //     if (newValue != null) {
+        //       setState(() {
+        //         selectedmodelvariantitems = newValue;
+        //         selectedmodelcoloritems = null;
+        //       });
+        //       widget.onVariantChanged(newValue);
+        //       final variant = modelvariantitems.firstWhere(
+        //         (item) => item['name'] == newValue,
+        //         orElse: () => {},
+        //       );
 
-              final variantCode = variant['id'];
-              final name = modelnameitems.firstWhere(
-                (item) => item['name'] == widget.selectedname,
-                orElse: () => {},
-              );
+        //       final variantCode = variant['id'];
+        //       final name = modelnameitems.firstWhere(
+        //         (item) => item['name'] == widget.selectedname,
+        //         orElse: () => {},
+        //       );
 
-              final nameCode = name['id'];
-              if (variantCode != null && nameCode != null) {
-                fetchColor(nameCode, variantCode);
-              }
-            }
-          },
-          readOnly: widget.edit,
-        ),
-        if(widget.modelvariante.isNotEmpty)
-        errormessage(widget.modelvariante),
+        //       final nameCode = name['id'];
+        //       if (variantCode != null && nameCode != null) {
+        //         fetchColor(nameCode, variantCode);
+        //       }
+        //     }
+        //   },
+        //   readOnly: widget.edit,
+        // ),
+        // if(widget.modelvariante.isNotEmpty)
+        // errormessage(widget.modelvariante),
         CustomNVCDropdown(
           title: 'Model Color',
           selectedCustomDropdown: selectedmodelcoloritems,

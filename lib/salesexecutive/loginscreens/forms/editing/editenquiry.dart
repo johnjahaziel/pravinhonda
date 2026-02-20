@@ -116,7 +116,7 @@ class _EditenquiryState extends State<Editenquiry> {
     selectedenquirytypeitems = enquiry['enquiry_type'];
     selectedenquirysourceitems = enquiry['enquiry_source'];
     selectedmodelnameitems = enquiry['model_name'];
-    selectedmodelvariantitems = enquiry['model_variant'];
+    // selectedmodelvariantitems = enquiry['model_variant'];
     selectedmodelcoloritems = enquiry['model_color'];
     selectedpurchasetypeitems = enquiry['purchase_type'];
     selectedexchangeflagitems = enquiry['exchange_flag'];
@@ -197,7 +197,7 @@ class _EditenquiryState extends State<Editenquiry> {
           'enquiry_type': selectedenquirytypeitems?.toString(),
           'enquiry_source': selectedenquirysourceitems?.toString(),
           'model_name': selectedmodelnameitems?.toString(),
-          'model_variant': selectedmodelvariantitems?.toString(),
+          // 'model_variant': selectedmodelvariantitems?.toString(),
           'model_color': selectedmodelcoloritems?.toString(),
           'purchase_type': selectedpurchasetypeitems?.toString(),
           'exchange_flag': selectedexchangeflagitems?.toString(),
@@ -278,7 +278,7 @@ class _EditenquiryState extends State<Editenquiry> {
           enquirytypee = errors['enquiry_type']?.toString() ?? '';
           enquirysourcee = errors['enquiry_source']?.toString() ?? '';
           modelnamee = errors['model_name']?.toString() ?? '';
-          modelvariante = errors['model_variant']?.toString() ?? '';
+          // modelvariante = errors['model_variant']?.toString() ?? '';
           modelcolore = errors['model_color']?.toString() ?? '';
           districte = errors['district']?.toString() ?? '';
           citye = errors['city']?.toString() ?? '';
@@ -557,11 +557,11 @@ class _EditenquiryState extends State<Editenquiry> {
               errormessage(enquirysourcee),
               Namevariantcolor(
                 modelnamee: modelnamee,
-                modelvariante: modelvariante,
+                // modelvariante: modelvariante,
                 modelcolore: modelcolore,
                 
                 selectedname: selectedmodelnameitems,
-                selectedvariant: selectedmodelvariantitems,
+                // selectedvariant: selectedmodelvariantitems,
                 selectedcolor: selectedmodelcoloritems,
                 onNameChanged: (value) {
                   setState(() {
@@ -583,12 +583,12 @@ class _EditenquiryState extends State<Editenquiry> {
                     fetchextrafitting(value);
                   }
                 },
-                onVariantChanged: (value) {
-                  setState(() {
-                    selectedmodelvariantitems = value;
-                    selectedmodelcoloritems = null;
-                  });
-                },
+                // onVariantChanged: (value) {
+                //   setState(() {
+                //     selectedmodelvariantitems = value;
+                //     selectedmodelcoloritems = null;
+                //   });
+                // },
                 onColorChanged: (value) {
                   setState(() {
                     selectedmodelcoloritems = value;

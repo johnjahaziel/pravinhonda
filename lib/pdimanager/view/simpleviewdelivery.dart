@@ -236,11 +236,11 @@ class _SimpleviewdeliveryState extends State<Simpleviewdelivery> {
             
             Namevariantcolor(
               modelnamee: modelnamee,
-              modelvariante: modelvariante,
+              // modelvariante: modelvariante,
               modelcolore: modelcolore,
               
               selectedname: selectedmodelnameitems,
-              selectedvariant: selectedmodelvariantitems,
+              // selectedvariant: selectedmodelvariantitems,
               selectedcolor: selectedmodelcoloritems,
               onNameChanged: (value) {
                 setState(() {
@@ -262,12 +262,12 @@ class _SimpleviewdeliveryState extends State<Simpleviewdelivery> {
                   fetchextrafitting(value);
                 }
               },
-              onVariantChanged: (value) {
-                setState(() {
-                  selectedmodelvariantitems = value;
-                  selectedmodelcoloritems = null;
-                });
-              },
+              // onVariantChanged: (value) {
+              //   setState(() {
+              //     selectedmodelvariantitems = value;
+              //     selectedmodelcoloritems = null;
+              //   });
+              // },
               onColorChanged: (value) {
                 setState(() {
                   selectedmodelcoloritems = value;
