@@ -356,7 +356,7 @@ class _CompletedlistState extends State<Completedlist> {
                             );
                           },
                           model: data['model_name']?.toString() ?? '',
-                          variant: data['model_variant']?.toString() ?? '',
+                          // variant: data['model_variant']?.toString() ?? '',
                           color: data['model_color']?.toString() ?? '',
                         );
                       },
@@ -611,7 +611,7 @@ class _PdilistState extends State<Pdilist> {
                             );
                           },
                           model: data['model_name']?.toString() ?? '',
-                          variant: data['model_variant']?.toString() ?? '',
+                          // variant: data['model_variant']?.toString() ?? '',
                           color: data['model_color']?.toString() ?? '',
                         );
                       },

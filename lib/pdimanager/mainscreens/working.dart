@@ -263,7 +263,7 @@ class _WorkingState extends State<Working> {
                                       );
                                     },
                                     model: data['model_name']?.toString() ?? '',
-                                    variant: data['model_variant']?.toString() ?? '',
+                                    // variant: data['model_variant']?.toString() ?? '',
                                     color: data['model_color']?.toString() ?? '',
                                   );
                                 },

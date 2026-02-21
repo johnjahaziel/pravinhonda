@@ -265,7 +265,7 @@ class _CompletedState extends State<Completed> {
                                       );
                                     },
                                     model: data['model_name']?.toString() ?? '',
-                                    variant: data['model_variant']?.toString() ?? '',
+                                    // variant: data['model_variant']?.toString() ?? '',
                                     color: data['model_color']?.toString() ?? '',
                                   );
                                 },

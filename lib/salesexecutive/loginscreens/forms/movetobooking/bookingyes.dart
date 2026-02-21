@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/salesexecutive/loginscreens/Navigation.dart';
+import 'package:pravinhonda/salesexecutive/namevariantcolor.dart';
 import 'package:pravinhonda/utility/customs/customappBar.dart';
 import 'package:pravinhonda/utility/customs/customdatefield.dart';
 import 'package:pravinhonda/utility/customs/customdrawer.dart';
@@ -16,9 +17,11 @@ import 'package:pravinhonda/utility/styles.dart';
 
 class BookingformYes extends StatefulWidget {
   final int enquiryid;
+  final Map<String, dynamic> apiResponse;
   const BookingformYes({
     super.key,
-    required this.enquiryid
+    required this.enquiryid,
+    required this.apiResponse
   });
 
   @override
@@ -28,9 +31,9 @@ class BookingformYes extends StatefulWidget {
 class _BookingformYesState extends State<BookingformYes> {
 
   final TextEditingController bookingamount = TextEditingController();
-  final TextEditingController bookingreceiptno = TextEditingController();
-  final TextEditingController vehiclename = TextEditingController();
-  final TextEditingController vehiclecolour = TextEditingController();
+  // final TextEditingController bookingreceiptno = TextEditingController();
+  late TextEditingController vehiclename;
+  late TextEditingController vehiclecolour;
   final TextEditingController chassisno = TextEditingController();
   final TextEditingController engineno = TextEditingController();
   final TextEditingController keyno = TextEditingController();
@@ -38,8 +41,8 @@ class _BookingformYesState extends State<BookingformYes> {
   final TextEditingController tyremake = TextEditingController();
   final TextEditingController rrtyreno = TextEditingController();
   final TextEditingController fttyreno = TextEditingController();
-  final TextEditingController addapprovedname = TextEditingController();
-  final TextEditingController allotedby = TextEditingController();
+  // final TextEditingController addapprovedname = TextEditingController();
+  // final TextEditingController allotedby = TextEditingController();
   final TextEditingController deliverydate = TextEditingController();
   final TextEditingController deliverytime = TextEditingController();
 
@@ -59,6 +62,20 @@ class _BookingformYesState extends State<BookingformYes> {
   String deliverydatee = '';
   String deliverytimee = '';
 
+  @override
+  void initState() {
+    super.initState();
+    _initControllersFromResponse(widget.apiResponse);
+    fetchChasisino();
+  }
+
+  void _initControllersFromResponse(Map<String, dynamic> resp) {
+    final enquiry = resp;
+
+    vehiclename = TextEditingController(text: enquiry['model_name']);
+    vehiclecolour = TextEditingController(text: enquiry['model_color']);
+  }
+
   Future<void> movetobooking() async {
     final url = Uri.parse('https://app.pravinhonda.com/api/${widget.enquiryid}/move-to-booking/full');
 
@@ -74,18 +91,18 @@ class _BookingformYesState extends State<BookingformYes> {
         },
         body: jsonEncode({
           'booking_amount': bookingamount.text.toString(),
-          'booking_receipt_no': bookingreceiptno.text.toString(),
-          'vehicle_name': vehiclename.text.toString(),
-          'vehicle_colour': vehiclecolour.text.toString(),
-          'chassis_no': chassisno.text.toString(),
-          'engine_no': engineno.text.toString(),
-          'key_no': keyno.text.toString(),
-          'battery_no': batteryno.text.toString(),
-          'tyre_make': tyremake.text.toString(),
-          'RR_tyre_no': rrtyreno.text.toString(),
-          'FT_tyre_no': fttyreno.text.toString(),
-          'add_approved_name': addapprovedname.text.toString(),
-          'alloted_by': allotedby.text.toString(),
+          // 'booking_receipt_no': bookingreceiptno.text.toString(),
+          'model_name': vehiclename.text.toString(),
+          'model_color': vehiclecolour.text.toString(),
+          'chassis_no': selectedchasisnoitems,
+          // 'engine_no': engineno.text.toString(),
+          // 'key_no': keyno.text.toString(),
+          // 'battery_no': batteryno.text.toString(),
+          // 'tyre_make': tyremake.text.toString(),
+          // 'RR_tyre_no': rrtyreno.text.toString(),
+          // 'FT_tyre_no': fttyreno.text.toString(),
+          // 'add_approved_name': addapprovedname.text.toString(),
+          // 'alloted_by': allotedby.text.toString(),
           'delivery_date' : deliverydate.text.toString(),
           'delivery_time' : deliverytime.text.toString()
         }),
@@ -96,7 +113,7 @@ class _BookingformYesState extends State<BookingformYes> {
       if (response.statusCode == 200) {
         print('response data: $responseData');
 
-        showMessagePopup(
+        showMessageBookingPopup(
           context,
           responseData['message'],
           () {
@@ -107,7 +124,14 @@ class _BookingformYesState extends State<BookingformYes> {
                 builder: (context) => Navigation(initialIndex: 1),
               ),
             );
-          }
+          },
+
+          engineno: TextEditingController(text: responseData['data']['engine_no']),
+          keyno: TextEditingController(text: responseData['data']['key_no']),
+          batteryno: TextEditingController(text: responseData['data']['battery_no']),
+          tyremake: TextEditingController(text: responseData['data']['tyre_make']),
+          rrtyreno: TextEditingController(text: responseData['data']['RR_tyre_no']),
+          fttyreno: TextEditingController(text: responseData['data']['FT_tyre_no']),
         );
 
       } else if (response.statusCode == 422) {
@@ -153,6 +177,52 @@ class _BookingformYesState extends State<BookingformYes> {
       print('Error: $e');
     }
   }
+
+  String? selectedchasisnoitems;
+
+  List<Map<String, String>> chasisnoitems = [];
+
+  Future<void> fetchChasisino() async {
+    final url = Uri.parse('https://app.pravinhonda.com/api/get-chassis');
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'model_name' : vehiclename.text,
+          'model_color' : vehiclecolour.text
+        })
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+
+        final List<dynamic> chassisList =
+            responseData['data']?['chassis_no'] ?? [];
+
+        setState(() {
+          chasisnoitems = chassisList.map((item) {
+            return {
+              'id': item.toString(),
+              'name': item.toString(),
+            };
+          }).toList();
+        });
+
+        print(chasisnoitems);
+      } else {
+        print('Failed to fetch chassis. Status Code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -184,79 +254,39 @@ class _BookingformYesState extends State<BookingformYes> {
                     ),
                     if(bookingamounte.isNotEmpty)
                     errormessage(bookingamounte),
-                    textfieldy(
-                      'Booking Receipt No',
-                      bookingreceiptno,
-                      star: false
-                    ),
-                    if(bookingreceiptnoe.isNotEmpty)
-                    errormessage(bookingreceiptnoe),
+                    // textfieldy(
+                    //   'Booking Receipt No',
+                    //   bookingreceiptno,
+                    //   star: false
+                    // ),
+                    // if(bookingreceiptnoe.isNotEmpty)
+                    // errormessage(bookingreceiptnoe),
                     textfieldy(
                       'Vehicle Name',
                       vehiclename,
+                      readonly: true
                     ),
                     if(vehiclenamee.isNotEmpty)
                     errormessage(vehiclenamee),
                     textfieldy(
                       'Vehicle Colour',
                       vehiclecolour,
+                      readonly: true
                     ),
                     if(vehiclecoloure.isNotEmpty)
                     errormessage(vehiclecoloure),
-                    textfieldy(
-                      'Chassis No',
-                      chassisno,
+                    CustomNVCDropdown(
+                      title: 'Choose the Chasis No',
+                      selectedCustomDropdown: selectedchasisnoitems,
+                      customDropdownItems: chasisnoitems,
+                      onChanged: (newValue) {
+                        setState(() {
+                          selectedchasisnoitems = newValue;
+                        });
+                      },
                     ),
                     if(chassisnoe.isNotEmpty)
                     errormessage(chassisnoe),
-                    textfieldy(
-                      'Engine No',
-                      engineno,
-                    ),
-                    if(enginenoe.isNotEmpty)
-                    errormessage(enginenoe),
-                    textfieldy(
-                      'Key No',
-                      keyno,
-                    ),
-                    if(keynoe.isNotEmpty)
-                    errormessage(keynoe),
-                    textfieldy(
-                      'Battery No',
-                      batteryno,
-                    ),
-                    if(batterynoe.isNotEmpty)
-                    errormessage(batterynoe),
-                    textfieldy(
-                      'Tyre Make',
-                      tyremake,
-                    ),
-                    if(tyremakee.isNotEmpty)
-                    errormessage(tyremakee),
-                    textfieldy(
-                      'RR Tyre No',
-                      rrtyreno,
-                    ),
-                    if(rrtyrenoe.isNotEmpty)
-                    errormessage(rrtyrenoe),
-                    textfieldy(
-                      'FT Tyre No',
-                      fttyreno,
-                    ),
-                    if(fttyrenoe.isNotEmpty)
-                    errormessage(fttyrenoe),
-                    textfieldy(
-                      'Add Approved Name',
-                      addapprovedname,
-                    ),
-                    if(addapprovednamee.isNotEmpty)
-                    errormessage(addapprovednamee),
-                    textfieldy(
-                      'Alloted By',
-                      allotedby,
-                    ),
-                    if(allotedbye.isNotEmpty)
-                    errormessage(allotedbye),
                     Followupdate(
                       title: 'Estimated Delivery Date',
                       datecontroller: deliverydate,
@@ -269,15 +299,35 @@ class _BookingformYesState extends State<BookingformYes> {
                     ),
                     if(deliverytimee.isNotEmpty)
                     errormessage(deliverytimee),
+                    SizedBox(height: SizeConfig.h(10)),
+                    button(
+                      'Move to Booking',
+                      () {
+                        movetobooking();
+                      }
+                    ),
+                    SizedBox(height: SizeConfig.h(20)),
+                    // textfieldy(
+                    //   'Add Approved Name',
+                    //   addapprovedname,
+                    // ),
+                    // if(addapprovednamee.isNotEmpty)
+                    // errormessage(addapprovednamee),
+                    // textfieldy(
+                    //   'Alloted By',
+                    //   allotedby,
+                    // ),
+                    // if(allotedbye.isNotEmpty)
+                    // errormessage(allotedbye),
                   ],
                 ),
-                SizedBox(height: SizeConfig.h(20)),
-                button(
-                  'Move to Booking',
-                  () {
-                    movetobooking();
-                  }
-                ),
+                // SizedBox(height: SizeConfig.h(20)),
+                // button(
+                //   'Move to Booking',
+                //   () {
+                //     movetobooking();
+                //   }
+                // ),
                 
                 SizedBox(height: SizeConfig.h(40)),
               ],
@@ -287,4 +337,79 @@ class _BookingformYesState extends State<BookingformYes> {
       ),
     );
   }
+}
+
+Future<void> showMessageBookingPopup(
+  BuildContext context,
+  String message,
+  VoidCallback onTap, {
+  String nextpage = '',
+
+  required TextEditingController engineno,
+  required TextEditingController keyno,
+  required TextEditingController batteryno,
+  required TextEditingController tyremake,
+  required TextEditingController rrtyreno,
+  required TextEditingController fttyreno
+}) async {
+  return showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) {
+      return Dialog(
+        backgroundColor: Colors.transparent, // important
+        insetPadding: EdgeInsets.zero, // removes default margin
+        child: Container(
+          width: double.infinity, // full width
+          margin: EdgeInsets.symmetric(
+            horizontal: SizeConfig.w(20), // 👈 your padding control
+          ),
+          padding: EdgeInsets.all(SizeConfig.w(20)),
+          decoration: BoxDecoration(
+            color: kwhite,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: fs14),
+                ),
+
+                SizedBox(height: SizeConfig.h(20)),
+
+                textfieldy('Engine No', engineno, readonly: true),
+                textfieldy('Key No', keyno, readonly: true),
+                textfieldy('Battery No', batteryno, readonly: true),
+                textfieldy('Tyre Make', tyremake, readonly: true),
+                textfieldy('RR Tyre No', rrtyreno, readonly: true),
+                textfieldy('FT Tyre No', fttyreno, readonly: true),
+
+                SizedBox(height: SizeConfig.h(20)),
+
+                SizedBox(
+                  width: double.infinity, // full width button
+                  child: ElevatedButton(
+                    onPressed: onTap,
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Text(
+                      "OK",
+                      style: customtext(fs12, kred, FontWeight.w500),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    },
+  );
 }

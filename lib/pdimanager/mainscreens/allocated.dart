@@ -265,7 +265,7 @@ class _AllocatedState extends State<Allocated> {
                                       );
                                     },
                                     model: data['model_name']?.toString() ?? '',
-                                    variant: data['model_variant']?.toString() ?? '',
+                                    // variant: data['model_variant']?.toString() ?? '',
                                     color: data['model_color']?.toString() ?? '',
                                   );
                                 },

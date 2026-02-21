@@ -263,7 +263,7 @@ class _SparedeptState extends State<Sparedept> {
                                       );
                                     },
                                     model: data['model_name']?.toString() ?? '',
-                                    variant: data['model_variant']?.toString() ?? '',
+                                    // variant: data['model_variant']?.toString() ?? '',
                                     color: data['model_color']?.toString() ?? '',
                                   );
                                 },

@@ -1,4 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
+import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/salesexecutive/loginscreens/Navigation.dart';
 import 'package:pravinhonda/salesexecutive/loginscreens/forms/movetobooking/bookingno.dart';
 import 'package:pravinhonda/salesexecutive/loginscreens/forms/movetobooking/bookingyes.dart';
@@ -48,6 +54,9 @@ class _MovetobookingState extends State<Movetobooking> {
     }
   }
 
+  late String modelName;
+  late String modelColor;
+
   @override
   void initState() {
     super.initState();
@@ -56,6 +65,12 @@ class _MovetobookingState extends State<Movetobooking> {
 
   void _initControllersFromResponse(Map<String, dynamic> resp) {
     final enquiry = resp;
+
+    modelName = enquiry['model_name'];
+    modelColor = enquiry['model_color'];
+
+    print(modelName);
+    print(modelColor);
 
     if(enquiry['purchase_type'] == 'finance' && enquiry['exchange_flag'] == 'yes') {
         financetrue = true;
@@ -69,6 +84,64 @@ class _MovetobookingState extends State<Movetobooking> {
     } else {
         financetrue = false;
         exchangetrue = false;
+    }
+  }
+
+  Future<void> vehicleStockCheckUp() async {
+    final url = Uri.parse('https://app.pravinhonda.com/api/check-stock');
+
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({
+          'model_name' : modelName,
+          'model_color' : modelColor
+        })
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if(response.statusCode == 200) {
+        if(responseData['message'] == 'Stock available') {
+          Fluttertoast.showToast(msg: responseData['message']);
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => BookingformYes(
+              enquiryid: widget.enquiryid,
+              apiResponse: widget.apiResponse,
+              )
+            )
+          );
+
+        } else if (responseData['message'] == 'No stock available') {
+          Fluttertoast.showToast(msg: responseData['message']);
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => BookingformNo(
+              enquiryid: widget.enquiryid
+              )
+            )
+          );
+
+        } else {
+          Fluttertoast.showToast(msg: responseData['message']);
+        }
+        
+      } else {
+        Fluttertoast.showToast(msg: responseData['message']);
+      }
+
+    } catch (e) {
+      print('Error: $e');
     }
   }
 
@@ -312,7 +385,8 @@ class _MovetobookingState extends State<Movetobooking> {
                   button(
                     'Move to Booking',
                     () {
-                      showVehicleStockPopup(context);
+                      // showVehicleStockPopup(context);
+                      vehicleStockCheckUp();
                     }
                   )
                 ],
@@ -365,79 +439,79 @@ class _MovetobookingState extends State<Movetobooking> {
     );
   }
 
-  void showVehicleStockPopup(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 24,
-            vertical: 20,
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                'Vehicle In Stock?',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 20),
+  // void showVehicleStockPopup(BuildContext context) {
+  //   showDialog(
+  //     context: context,
+  //     barrierDismissible: false,
+  //     builder: (context) {
+  //       return AlertDialog(
+  //         shape: RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.circular(12),
+  //         ),
+  //         contentPadding: const EdgeInsets.symmetric(
+  //           horizontal: 24,
+  //           vertical: 20,
+  //         ),
+  //         content: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             const Text(
+  //               'Vehicle In Stock?',
+  //               textAlign: TextAlign.center,
+  //               style: TextStyle(
+  //                 fontFamily: 'Poppins',
+  //                 fontSize: 16,
+  //                 fontWeight: FontWeight.w600,
+  //               ),
+  //             ),
+  //             const SizedBox(height: 20),
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  OutlinedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => BookingformNo(
-                          enquiryid: widget.enquiryid
-                          )
-                        )
-                      );
-                    },
-                    child: Text(
-                      'No',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: kred
-                      ),
-                    ),
-                  ),
+  //             Row(
+  //               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //               children: [
+  //                 OutlinedButton(
+  //                   onPressed: () {
+  //                     Navigator.push(
+  //                       context,
+  //                       MaterialPageRoute(builder: (context) => BookingformNo(
+  //                         enquiryid: widget.enquiryid
+  //                         )
+  //                       )
+  //                     );
+  //                   },
+  //                   child: Text(
+  //                     'No',
+  //                     style: TextStyle(
+  //                       fontFamily: 'Poppins',
+  //                       color: kred
+  //                     ),
+  //                   ),
+  //                 ),
 
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => BookingformYes(
-                          enquiryid: widget.enquiryid
-                          )
-                        )
-                      );
-                    },
-                    child: Text(
-                      'Yes',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: kred
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+  //                 ElevatedButton(
+  //                   onPressed: () {
+  //                     Navigator.push(
+  //                       context,
+  //                       MaterialPageRoute(builder: (context) => BookingformYes(
+  //                         enquiryid: widget.enquiryid
+  //                         )
+  //                       )
+  //                     );
+  //                   },
+  //                   child: Text(
+  //                     'Yes',
+  //                     style: TextStyle(
+  //                       fontFamily: 'Poppins',
+  //                       color: kred
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 }

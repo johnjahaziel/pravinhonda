@@ -234,7 +234,7 @@ class Pdiinchargebox extends StatefulWidget {
   final String customername;
   final String highrisenumber;
   final String model;
-  final String variant;
+  // final String variant;
   final String color;
   final String deliverydate;
   final String deliverytime;
@@ -253,7 +253,7 @@ class Pdiinchargebox extends StatefulWidget {
     required this.deliverydate,
     required this.deliverytime,
     required this.model,
-    required this.variant,
+    // required this.variant,
     required this.color,
     required this.status,
     this.cashfinance = 'no',
@@ -344,7 +344,7 @@ class _PdiinchargeboxState extends State<Pdiinchargebox> {
               /// 🔹 DETAILS WITH ICONS
               infoRow(Icons.person_outline, widget.customername),
               infoRow(Icons.directions_bike_outlined, widget.model),
-              infoRow(Icons.layers_outlined, widget.variant),
+              // infoRow(Icons.layers_outlined, widget.variant),
               infoRow(Icons.palette_outlined, widget.color),
               
               Row(
