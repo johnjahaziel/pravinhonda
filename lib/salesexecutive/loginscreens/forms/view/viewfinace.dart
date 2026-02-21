@@ -123,11 +123,11 @@ class _ViewfinaceState extends State<Viewfinace> {
             modalname,
             readonly: readonly
           ),
-          textfieldy(
-            'Model Variant',
-            modalvariant,
-            readonly: readonly
-          ),
+          // textfieldy(
+          //   'Model Variant',
+          //   modalvariant,
+          //   readonly: readonly
+          // ),
           textfieldy(
             'Model Color',
             modalcolor,

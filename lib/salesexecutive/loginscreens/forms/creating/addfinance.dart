@@ -329,11 +329,11 @@ class _AddfinanceState extends State<Addfinance> {
                 modalname,
                 readonly: true
               ),
-              textfieldy(
-                'Model Variant',
-                modalvariant,
-                readonly: true
-              ),
+              // textfieldy(
+              //   'Model Variant',
+              //   modalvariant,
+              //   readonly: true
+              // ),
               textfieldy(
                 'Model Color',
                 modalcolor,

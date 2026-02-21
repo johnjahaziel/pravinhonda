@@ -352,11 +352,11 @@ class _EditfinanceState extends State<Editfinance> {
                 modalname,
                 readonly: true
               ),
-              textfieldy(
-                'Model Variant',
-                modalvariant,
-                readonly: true
-              ),
+              // textfieldy(
+              //   'Model Variant',
+              //   modalvariant,
+              //   readonly: true
+              // ),
               textfieldy(
                 'Model Color',
                 modalcolor,

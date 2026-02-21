@@ -111,9 +111,19 @@ class _BookingformYesState extends State<BookingformYes> {
       final responseData = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        print('response data: $responseData');
+        final responseData = jsonDecode(response.body);
+        final vehicleData = responseData['data'];
 
-        showMessageBookingPopup(
+        if (vehicleData != null) {
+          engineno.text = vehicleData['engine_no'] ?? '';
+          keyno.text = vehicleData['key_no'] ?? '';
+          batteryno.text = vehicleData['battery_no'] ?? '';
+          tyremake.text = vehicleData['tyre_make'] ?? '';
+          rrtyreno.text = vehicleData['RR_tyre_no'] ?? '';
+          fttyreno.text = vehicleData['FT_tyre_no'] ?? '';
+        }
+
+        await showMessageBookingPopup(
           context,
           responseData['message'],
           () {
@@ -126,14 +136,15 @@ class _BookingformYesState extends State<BookingformYes> {
             );
           },
 
-          engineno: TextEditingController(text: responseData['data']['engine_no']),
-          keyno: TextEditingController(text: responseData['data']['key_no']),
-          batteryno: TextEditingController(text: responseData['data']['battery_no']),
-          tyremake: TextEditingController(text: responseData['data']['tyre_make']),
-          rrtyreno: TextEditingController(text: responseData['data']['RR_tyre_no']),
-          fttyreno: TextEditingController(text: responseData['data']['FT_tyre_no']),
-        );
+          hasVehicleData: vehicleData != null,
 
+          engineno: engineno,
+          keyno: keyno,
+          batteryno: batteryno,
+          tyremake: tyremake,
+          rrtyreno: rrtyreno,
+          fttyreno: fttyreno,
+        );
       } else if (response.statusCode == 422) {
         final errors = responseData['errors'] ?? {};
 
@@ -344,6 +355,7 @@ Future<void> showMessageBookingPopup(
   String message,
   VoidCallback onTap, {
   String nextpage = '',
+  required bool hasVehicleData,
 
   required TextEditingController engineno,
   required TextEditingController keyno,
@@ -380,13 +392,17 @@ Future<void> showMessageBookingPopup(
                 ),
 
                 SizedBox(height: SizeConfig.h(20)),
-
-                textfieldy('Engine No', engineno, readonly: true),
-                textfieldy('Key No', keyno, readonly: true),
-                textfieldy('Battery No', batteryno, readonly: true),
-                textfieldy('Tyre Make', tyremake, readonly: true),
-                textfieldy('RR Tyre No', rrtyreno, readonly: true),
-                textfieldy('FT Tyre No', fttyreno, readonly: true),
+                if (hasVehicleData ==  true)
+                Column(
+                  children: [
+                    textfieldy('Engine No', engineno, readonly: true),
+                    textfieldy('Key No', keyno, readonly: true),
+                    textfieldy('Battery No', batteryno, readonly: true),
+                    textfieldy('Tyre Make', tyremake, readonly: true),
+                    textfieldy('RR Tyre No', rrtyreno, readonly: true),
+                    textfieldy('FT Tyre No', fttyreno, readonly: true),
+                  ],
+                ),
 
                 SizedBox(height: SizeConfig.h(20)),
 
