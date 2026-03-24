@@ -43,7 +43,7 @@ class _ViewfinaceState extends State<Viewfinace> {
 
   String nextpagelocal = '';
 
-  int enquiryid = 0;
+  String enquiryid = '';
 
   bool readonly = true;
 

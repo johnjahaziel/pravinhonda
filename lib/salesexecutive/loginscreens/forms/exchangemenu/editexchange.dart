@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
+import 'package:pravinhonda/salesexecutive/loginscreens/forms/editing/createquotation.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
@@ -158,7 +159,7 @@ class _EditexchangeMBState extends State<EditexchangeMB> {
   }
 
   Future<void> exchangeform() async {
-    final url = Uri.parse('https://app.pravinhonda.com/api/update-exchange/${widget.enquiryid}');
+    final url = Uri.parse('https://app.pravinhonda.com/api/enquiries/${widget.enquiryid}');
 
     final token = BlocProvider.of<AuthCubit>(context).state.token;
 
@@ -201,7 +202,17 @@ class _EditexchangeMBState extends State<EditexchangeMB> {
           responseData['message'],
           () {
             Navigator.pop(context);
-          }
+            showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (_) => QuotationSuccessPopup(
+                  name: '${responseData['data']['customer_name']}',
+                  number: '${responseData['data']['customer_contact_number']}',
+                  enquiryid: responseData['data']['enquiry_id'],
+                ),
+              );
+          },
+          nextpage: 'Quotation'
         );
 
       } else if (response.statusCode == 422) {

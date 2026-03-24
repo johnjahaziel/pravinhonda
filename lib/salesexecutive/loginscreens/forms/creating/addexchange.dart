@@ -11,7 +11,7 @@ import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
 class Addexchange extends StatefulWidget {
-  final int enquiryid;
+  final String enquiryid;
   const Addexchange({
     super.key,
     required this.enquiryid,
@@ -28,22 +28,36 @@ class DealerField {
 
 class _AddexchangeState extends State<Addexchange> {
 
-  TextEditingController vehiclemodal = TextEditingController();
-  TextEditingController vehiclemodalyr = TextEditingController();
+  // TextEditingController vehiclemodal = TextEditingController(); 
+  TextEditingController vehicleownername = TextEditingController();
+  TextEditingController vehicleowneraddress = TextEditingController();
+  TextEditingController vehicleownerphone = TextEditingController();
+  TextEditingController presentmodelowned = TextEditingController();
   TextEditingController noofowners = TextEditingController();
+  TextEditingController colour = TextEditingController();
+  TextEditingController regno = TextEditingController();
+  TextEditingController kmrun = TextEditingController();
+  TextEditingController yearofpurchase = TextEditingController();
+  // TextEditingController vehicleyear = TextEditingController();
   TextEditingController expectedprice = TextEditingController();
-  TextEditingController assessedby = TextEditingController();
 
   TextEditingController price1 = TextEditingController();
 
   String? finalizeddealer;
   TextEditingController finalizedprice = TextEditingController();
 
-  String vehiclemodale = '';
-  String vehiclemodalyre = '';
+  // String vehiclemodale = '';
+  String vehicleownernamee = '';
+  String vehicleowneraddresse = '';
+  String vehicleownerphonee = '';
+  String presentmodelownede = '';
   String noofownerse = '';
+  String coloure = '';
+  String regnoe = '';
+  String kmrune = '';
+  String yearofpurchasee = '';
+  // String vehicleyeare = '';
   String expectedpricee = '';
-  String assessedbye = '';
 
   String finalizeddealere = '';
   String finalizedpricee = '';
@@ -78,12 +92,18 @@ class _AddexchangeState extends State<Addexchange> {
           'Authorization': 'Bearer $token'
         },
         body: jsonEncode({
-          'vehicle_model': vehiclemodal.text,
-          'vehicle_year': vehiclemodalyr.text,
-          'no_of_owners' : noofowners.text,
-          'expected_price': expectedprice.text,
-          
-          'assessed_by': assessedby.text,
+          // "vehicle_model": vehiclemodal.text,
+          "vehicle_owner_name": vehicleownername.text,
+          "vehicle_owner_address": vehicleowneraddress.text,
+          "vehicle_owner_phone": vehicleownerphone.text,
+          "present_model_owned": presentmodelowned.text,
+          "colour": colour.text,
+          "reg_no": regno.text,
+          "km_run": kmrun.text,
+          "year_of_purchase": yearofpurchase.text,
+          "no_of_owners": noofowners.text,
+          // "vehicle_year": vehicleyear.text,
+          "expected_price": expectedprice.text,
 
           'finalized_dealer': finalizeddealer,
           'finalized_price': finalizedprice.text,
@@ -125,12 +145,18 @@ class _AddexchangeState extends State<Addexchange> {
         final errors = responseData['errors'] ?? {};
 
         setState(() {
-          vehiclemodale = errors['vehicle_model']?.toString() ?? '';
-          vehiclemodalyre = errors['vehicle_year']?.toString() ?? '';
-          noofownerse = errors['no_of_owners']?.toString() ?? '';
+          // vehiclemodale = errors['vehicle_model']?.toString() ?? '';
+          vehicleownernamee = errors['vehicle_owner_name']?.toString() ?? '';
+          vehicleowneraddresse = errors['vehicle_owner_address']?.toString() ?? '';
+          vehicleownerphonee = errors['vehicle_owner_phone']?.toString() ?? '';
+          presentmodelownede = errors['present_model_owned']?.toString() ?? '';
+          noofownerse = errors['colour']?.toString() ?? '';
+          coloure = errors['reg_no']?.toString() ?? '';
+          regnoe = errors['km_run']?.toString() ?? '';
+          kmrune = errors['year_of_purchase']?.toString() ?? '';
+          yearofpurchasee = errors['no_of_owners']?.toString() ?? '';
+          // vehicleyeare = errors['vehicle_year']?.toString() ?? '';
           expectedpricee = errors['expected_price']?.toString() ?? '';
-
-          assessedbye = errors['assessed_by']?.toString() ?? '';
 
           finalizeddealere = errors['finalized_dealer']?.toString() ?? '';
           finalizedpricee = errors['finalized_price']?.toString() ?? '';
@@ -163,37 +189,81 @@ class _AddexchangeState extends State<Addexchange> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // textfieldy(
+              //   'Vehicle Modal',
+              //   vehiclemodal
+              // ),
+              // if(vehiclemodale.isNotEmpty)
+              // errormessage(vehiclemodale),
               textfieldy(
-                'Vehicle Modal',
-                vehiclemodal
+                'Vehicle Owner Name',
+                vehicleownername
               ),
-              if(vehiclemodale.isNotEmpty)
-              errormessage(vehiclemodale),
+              if(vehicleownernamee.isNotEmpty)
+              errormessage(vehicleownernamee),
               textfieldy(
-                'Vehicle Year',
-                vehiclemodalyr
+                'Vehicle Owner Address',
+                vehicleowneraddress
               ),
-              if(vehiclemodalyre.isNotEmpty)
-              errormessage(vehiclemodalyre),
+              if(vehicleowneraddresse.isNotEmpty)
+              errormessage(vehicleowneraddresse),
+              textfieldy(
+                'Vehicle Owner Phone',
+                vehicleownerphone,
+                numpad: true
+              ),
+              if(vehicleownerphonee.isNotEmpty)
+              errormessage(vehicleownerphonee),
+              textfieldy(
+                'Present Model Owned',
+                presentmodelowned
+              ),
+              if(presentmodelownede.isNotEmpty)
+              errormessage(presentmodelownede),
+              textfieldy(
+                'Colour',
+                colour
+              ),
+              if(coloure.isNotEmpty)
+              errormessage(coloure),
+              textfieldy(
+                'Reg No',
+                regno
+              ),
+              if(regnoe.isNotEmpty)
+              errormessage(regnoe),
+              textfieldy(
+                'KM Run',
+                kmrun
+              ),
+              if(kmrune.isNotEmpty)
+              errormessage(kmrune),
+              textfieldy(
+                'Year Of Purchase',
+                yearofpurchase
+              ),
+              if(yearofpurchasee.isNotEmpty)
+              errormessage(yearofpurchasee),
               textfieldy(
                 'No of Owners',
                 noofowners
               ),
               if(noofownerse.isNotEmpty)
               errormessage(noofownerse),
+              // textfieldy(
+              //   'Vehicle Year',
+              //   vehicleyear
+              // ),
+              // if(vehicleyeare.isNotEmpty)
+              // errormessage(vehicleyeare),
               textfieldy(
                 'Expected Price',
                 expectedprice
               ),
               if(expectedpricee.isNotEmpty)
               errormessage(expectedpricee),
-              textfieldy(
-                'Assessed By',
-                assessedby,
-                star: false
-              ),
-              if(assessedbye.isNotEmpty)
-              errormessage(assessedbye),
+              
+              
 
               Column(
                 children: [

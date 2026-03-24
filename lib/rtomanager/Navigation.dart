@@ -10,18 +10,18 @@ import 'package:pravinhonda/utility/customs/customappBar.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
-class NavigationPdi extends StatefulWidget {
+class NavigationRTO extends StatefulWidget {
   final int initialIndex;
-  const NavigationPdi({
+  const NavigationRTO({
     super.key,
     this.initialIndex = 0,
   });
 
   @override
-  State<NavigationPdi> createState() => _NavigationPdiState();
+  State<NavigationRTO> createState() => _NavigationRTOState();
 }
 
-class _NavigationPdiState extends State<NavigationPdi> {
+class _NavigationRTOState extends State<NavigationRTO> {
   late PageController pageController;
   int currentIndex = 0;
 

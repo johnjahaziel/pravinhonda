@@ -20,7 +20,7 @@ import 'package:pravinhonda/utility/styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Createquotation extends StatefulWidget {
-  final int enquiryid;
+  final String enquiryid;
   final Map<String, dynamic> apiResponse;
   const Createquotation({
     super.key,
@@ -350,7 +350,7 @@ class _CreatequotationState extends State<Createquotation> {
 class QuotationSuccessPopup extends StatefulWidget {
   final String name;
   final String number;
-  final int enquiryid;
+  final String enquiryid;
 
   const QuotationSuccessPopup({
     super.key,
@@ -462,6 +462,10 @@ class _QuotationSuccessPopupState extends State<QuotationSuccessPopup> {
                     ),
                     Text(
                       "Number : ${widget.number}",
+                      style: textmedium12,
+                    ),
+                    Text(
+                      "ENQ ID : ${widget.enquiryid}",
                       style: textmedium12,
                     ),
                   ],

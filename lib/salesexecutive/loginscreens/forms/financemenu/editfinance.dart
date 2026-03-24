@@ -11,7 +11,7 @@ import 'package:pravinhonda/salesexecutive/namevariantcolor.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 
-class Editfinance extends StatefulWidget {
+class EditfinanceMB extends StatefulWidget {
   final String? exchangeflag;
   final String enquiryid;
   final VoidCallback exchangeselected;
@@ -19,7 +19,7 @@ class Editfinance extends StatefulWidget {
   final Map<String, dynamic> apiResponse;
 
   final bool edit;
-  const Editfinance({
+  const EditfinanceMB({
     super.key,
     required this.exchangeflag,
     required this.enquiryid,
@@ -31,10 +31,10 @@ class Editfinance extends StatefulWidget {
   });
 
   @override
-  State<Editfinance> createState() => _EditfinanceState();
+  State<EditfinanceMB> createState() => _EditfinanceMBState();
 }
 
-class _EditfinanceState extends State<Editfinance> {
+class _EditfinanceMBState extends State<EditfinanceMB> {
   List<Map<String, String>> financeitems = [];
   List<Map<String, String>> loanperioditems = [];
 
@@ -91,16 +91,29 @@ class _EditfinanceState extends State<Editfinance> {
     fetchfinance();
   }
 
+  Map<String, dynamic> originalEnquiry = {};
+
+  bool isEdited() {
+    return
+      selectedfinanceitems != originalEnquiry['finance'] ||
+      selectedloanperioditems != originalEnquiry['loan_period'].toString() ||
+      vehiclecost.text != (originalEnquiry['vehicle_cost'] ?? '') ||
+      loanamount.text != (originalEnquiry['loan_amount'] ?? '') ||
+      emi.text != (originalEnquiry['emi'] ?? '') ||
+      loaninterest.text != (originalEnquiry['loan_interest'] ?? '');
+  }
+
   void oldapiexchange(Map<String, dynamic> resp) {
-    final enquiry = resp['data'] ?? {};
+    final enquiry = resp;
     oldexchange = enquiry['exchange_flag'];
   }
 
   void initControllersFromResponse(Map<String, dynamic> resp) {
-    final enquiry = resp['data'] ?? {};
+    final enquiry = resp;
+
+    originalEnquiry = Map<String, dynamic>.from(enquiry);
 
     selectedfinanceitems  = enquiry['finance']?.toString();
-    print('selectedfinanceitems: $selectedfinanceitems');
     financepreview(selectedfinanceitems ?? '');
 
     selectedloanperioditems = enquiry['loan_period']?.toString();
@@ -109,6 +122,8 @@ class _EditfinanceState extends State<Editfinance> {
     loaninterest = TextEditingController(text: (enquiry['loan_interest'] ?? '').toString());
     loanamount = TextEditingController(text: (enquiry['loan_amount'] ?? '').toString());
     emi = TextEditingController(text: (enquiry['emi'] ?? '').toString());
+
+    minimumdownpayment = TextEditingController(text: (enquiry['emi'] ?? '').toString());
 
     modalname = TextEditingController(text: enquiry['model_name']);
     modalvariant = TextEditingController(text: enquiry['model_variant']);
@@ -135,6 +150,10 @@ class _EditfinanceState extends State<Editfinance> {
         })
       );
 
+      print(modalname.text);
+      print(modalvariant.text);
+      print('Color: ${modalcolor.text}');
+
       final Map<String, dynamic> data = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
@@ -152,7 +171,8 @@ class _EditfinanceState extends State<Editfinance> {
         Fluttertoast.showToast(msg: data['message']);
 
       } else {
-        print("Failed to load citys. Status code: ${response.statusCode}");
+        print("Failed to load Finance. Status code: ${response.statusCode}");
+        print(response.body);
       }
     } catch (e) {
       print("City fetch error: $e");
@@ -199,7 +219,7 @@ class _EditfinanceState extends State<Editfinance> {
 
           final resp = widget.apiResponse;
 
-          final enquiryLoanPeriod = resp['data']['loan_period']?.toString();
+          final enquiryLoanPeriod = resp['loan_period']?.toString();
 
           selectedloanperioditems = enquiryLoanPeriod;
         });
@@ -296,6 +316,49 @@ class _EditfinanceState extends State<Editfinance> {
     }
   }
 
+  Future<void> updatefinance() async{
+    final url = Uri.parse('https://app.pravinhonda.com/api/update-finance/${widget.enquiryid}');
+
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({
+          'finance': selectedfinanceitems,
+          'user_down_payment' : loanamount.text,
+          'loan_period' : selectedloanperioditems
+        })
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if(response.statusCode == 200) {
+
+        showMessagePopup(
+          context,
+          responseData['message'],
+          () {
+            Navigator.pop(context);
+          }
+        );
+
+        print(responseData);
+
+      } else {
+        Fluttertoast.showToast(msg: responseData['message']);
+        print(responseData);
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
   void submit() {
     if (_financeResponse == null) {
       Fluttertoast.showToast(msg: 'Please save finance details first.');
@@ -306,8 +369,9 @@ class _EditfinanceState extends State<Editfinance> {
     final Map<String, dynamic> api = BlocProvider.of<ApiresponseCubit>(context).state.apiresponse ?? {};
 
     final resp = widget.apiResponse;
+    print(resp);
 
-    final String exchange = resp['data']["exchange_flag"];
+    final String exchange = resp["exchange_flag"];
     print('exchange: $exchange');
 
     if (exchange == 'yes'  && oldexchange == 'no') {
@@ -341,121 +405,122 @@ class _EditfinanceState extends State<Editfinance> {
   
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(20)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            textfieldy(
-                'Model Name',
-                modalname,
-                readonly: true
-              ),
-              // textfieldy(
-              //   'Model Variant',
-              //   modalvariant,
-              //   readonly: true
-              // ),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(20)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          textfieldy(
+            'Model Name',
+            modalname,
+            readonly: true
+          ),
+          // textfieldy(
+          //   'Model Variant',
+          //   modalvariant,
+          //   readonly: true
+          // ),
+          textfieldy(
+            'Model Color',
+            modalcolor,
+            readonly: true
+          ),
+          CustomNVCDropdown(
+            title: 'Finance',
+            selectedCustomDropdown: selectedfinanceitems,
+            customDropdownItems: financeitems,
+            onChanged:(newValue) {
+              setState(() {
+                selectedfinanceitems = newValue;
+                financepreview(selectedfinanceitems ?? '');
+              });
+            },
+            readOnly: widget.edit,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
               textfieldy(
-                'Model Color',
-                modalcolor,
+                'On Road Price',
+                vehiclecost,
                 readonly: true
               ),
+              textfieldy(
+                'Max Loan Percentage',
+                maxloanpercentage,
+                readonly: true
+              ),
+              textfieldy(
+                'Max Loan Amount',
+                maxloanamount,
+                readonly: true
+              ),
+              textfieldy(
+                'Total Document Charge',
+                totaldocumentcharge,
+                readonly: true
+              ),
+              textfieldy(
+                'Minimum Down Payment',
+                minimumdownpayment,
+                readonly: true
+              ),
+
+              textfieldy(
+                'Customer Down Payment',
+                loanamount,
+                onChanged: (value) {
+                  validateDownPayment();
+                },
+                readonly: widget.edit
+              ),
+              if(loanamounte.isNotEmpty)
+              errormessage(loanamounte),
               CustomNVCDropdown(
-                title: 'Finance',
-                selectedCustomDropdown: selectedfinanceitems,
-                customDropdownItems: financeitems,
+                title: 'Loan Period (Months)',
+                selectedCustomDropdown: selectedloanperioditems,
+                customDropdownItems: loanperioditems,
                 onChanged:(newValue) {
                   setState(() {
-                    selectedfinanceitems = newValue;
-                    financepreview(selectedfinanceitems ?? '');
+                    selectedloanperioditems = newValue;
                   });
                 },
-                readOnly: widget.edit,
+                readOnly: widget.edit
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  textfieldy(
-                    'On Road Price',
-                    vehiclecost,
-                    readonly: true
-                  ),
-                  textfieldy(
-                    'Max Loan Percentage',
-                    maxloanpercentage,
-                    readonly: true
-                  ),
-                  textfieldy(
-                    'Max Loan Amount',
-                    maxloanamount,
-                    readonly: true
-                  ),
-                  textfieldy(
-                    'Total Document Charge',
-                    totaldocumentcharge,
-                    readonly: true
-                  ),
-                  textfieldy(
-                    'Minimum Down Payment',
-                    minimumdownpayment,
-                    readonly: true
-                  ),
-
-                  textfieldy(
-                    'Customer Down Payment',
-                    loanamount,
-                    onChanged: (value) {
-                      validateDownPayment();
-                    },
-                    readonly: widget.edit
-                  ),
-                  if(loanamounte.isNotEmpty)
-                  errormessage(loanamounte),
-                  CustomNVCDropdown(
-                    title: 'Loan Period (Months)',
-                    selectedCustomDropdown: selectedloanperioditems,
-                    customDropdownItems: loanperioditems,
-                    onChanged:(newValue) {
-                      setState(() {
-                        selectedloanperioditems = newValue;
-                      });
-                    },
-                    readOnly: widget.edit
-                  ),
-                  if(loanperioditemse.isNotEmpty)
-                  errormessage(loanperioditemse),
-                ],
-              ),
-              SizedBox(height: SizeConfig.h(10)),
-              button(
-                'Calculate',
-                () {
-                  finance();
-                  print('Selected Loan Perod: $selectedloanperioditems');
-                }
-              ),
-              textfieldy(
-                'EMI',
-                emi,
-                readonly: true
-              ),
-              textfieldy(
-                'Loan Interest',
-                loaninterest,
-                readonly: true
-              ),
-              SizedBox(height: SizeConfig.h(25)),
-              button(
-                'Create Quotation',
-                () {
-                  submit();
-                }
-              ),
-              SizedBox(height: SizeConfig.h(30)),
-          ],
-        ),
+              if(loanperioditemse.isNotEmpty)
+              errormessage(loanperioditemse),
+            ],
+          ),
+          SizedBox(height: SizeConfig.h(10)),
+          button(
+            'Calculate',
+            () {
+              finance();
+              print('Selected Loan Perod: $selectedloanperioditems');
+            }
+          ),
+          textfieldy(
+            'EMI',
+            emi,
+            readonly: true
+          ),
+          textfieldy(
+            'Loan Interest',
+            loaninterest,
+            readonly: true
+          ),
+          if(isEdited() == true)
+          SizedBox(height: SizeConfig.h(25)),
+          if(isEdited() == true)
+          button(
+            'Update Finacne',
+            () {
+              // submit();
+              updatefinance();
+            }
+          ),
+          SizedBox(height: SizeConfig.h(30)),
+        ],
       ),
     );
   }

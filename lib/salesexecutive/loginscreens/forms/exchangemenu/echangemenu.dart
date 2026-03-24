@@ -1,37 +1,31 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart' as http;
-import 'package:pravinhonda/bloc/auth_cubit.dart';
-import 'package:pravinhonda/pdimanager/Navigation.dart';
-import 'package:pravinhonda/salesexecutive/loginscreens/forms/view/viewenquiry.dart';
-import 'package:pravinhonda/salesexecutive/loginscreens/forms/view/viewexchange.dart';
-import 'package:pravinhonda/salesexecutive/loginscreens/forms/view/viewfinace.dart';
+import 'package:pravinhonda/salesexecutive/loginscreens/Navigation.dart';
+import 'package:pravinhonda/salesexecutive/loginscreens/forms/movetobooking/editenquiry.dart';
+import 'package:pravinhonda/salesexecutive/loginscreens/forms/movetobooking/editexchange.dart';
+import 'package:pravinhonda/salesexecutive/loginscreens/forms/movetobooking/editfinance.dart';
 import 'package:pravinhonda/utility/customs/customappBar.dart';
 import 'package:pravinhonda/utility/customs/customdrawer.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
-class Movetoaccept extends StatefulWidget {
-  final int enquiryid;
+class ExchangeMenuUpdate extends StatefulWidget {
+  final String enquiryid;
   final Map<String, dynamic> apiResponse;
-  const Movetoaccept({
+  const ExchangeMenuUpdate({
     super.key,
     required this.enquiryid,
     required this.apiResponse
   });
 
   @override
-  State<Movetoaccept> createState() => _MovetoacceptState();
+  State<ExchangeMenuUpdate> createState() => _ExchangeMenuUpdateState();
 }
 
-class _MovetoacceptState extends State<Movetoaccept> {
-  bool createenquiry = true;
+class _ExchangeMenuUpdateState extends State<ExchangeMenuUpdate> {
+  bool createenquiry = false;
   bool finance = false;
-  bool exchange = false;
+  bool exchange = true;
 
   bool bookingtrue = true;
 
@@ -40,17 +34,8 @@ class _MovetoacceptState extends State<Movetoaccept> {
 
   String previousTab = 'enquiry';
 
-  bool isEdited = false;
-
-  bool onEditpressed = false;
-
-  bool edit() {
-    if(onEditpressed == true) {
-      return false;
-    } else {
-      return true;
-    }
-  }
+  late String modelName;
+  late String modelColor;
 
   @override
   void initState() {
@@ -60,6 +45,12 @@ class _MovetoacceptState extends State<Movetoaccept> {
 
   void _initControllersFromResponse(Map<String, dynamic> resp) {
     final enquiry = resp;
+
+    modelName = enquiry['model_name'];
+    modelColor = enquiry['model_color'];
+
+    print(modelName);
+    print(modelColor);
 
     if(enquiry['purchase_type'] == 'finance' && enquiry['exchange_flag'] == 'yes') {
         financetrue = true;
@@ -76,49 +67,9 @@ class _MovetoacceptState extends State<Movetoaccept> {
     }
   }
 
-  Future<void> movetoaccept() async {
-    final url = Uri.parse('https://app.pravinhonda.com/api/accept/${widget.enquiryid}');
-
-    final token = BlocProvider.of<AuthCubit>(context).state.token;
-
-    try {
-      final response = await http.post(
-        url,
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-      );
-
-      final responseData = jsonDecode(response.body);
-
-      if (response.statusCode == 200) {
-        print(responseData);
-        Fluttertoast.showToast(msg: responseData['message']);
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => NavigationPdi(
-              initialIndex: 0,
-            ),
-          ),
-        );
-
-      } else {
-
-        print(responseData);
-        Fluttertoast.showToast(msg: responseData['message']);
-
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    // final apiresponseLocal = BlocProvider.of<ApiresponseCubit>(context).state.apiresponse;
     SizeConfig.init(context);
     return SafeArea(
       child: PopScope(
@@ -161,10 +112,10 @@ class _MovetoacceptState extends State<Movetoaccept> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: SizeConfig.h(10)),
-                  back(context, NavigationPdi(initialIndex: 0)),
+                  back(context, Navigation(initialIndex: 1)),
                   Center(
                     child: Text(
-                      'View Details',
+                      'Finance Update',
                       style: customtext(
                         fs18,
                         kred,
@@ -297,27 +248,61 @@ class _MovetoacceptState extends State<Movetoaccept> {
                       child: Column(
                         children: [
                           if(createenquiry == true)
-                          Viewenquiry(
+                          EditenquiryMB(
+                            financeselected: () {
+                              setState(() {
+                                previousTab = 'enquiry';
+                                financetrue = true;
+                                createenquiry = false;
+                                finance = true;
+                                exchange = false;
+                              });
+                            },
+                            exchangeselected: () {
+                              setState(() {
+                                previousTab = 'enquiry';
+                                exchangetrue = true;
+                                createenquiry = false;
+                                finance = false;
+                                exchange = true;
+                              });
+                            },
+                            enquiryid: widget.enquiryid,
                             apiResponse: widget.apiResponse,
+                            edit: true,
+                            isEditedform: () {
+                              setState(() {
+                                bookingtrue = false;
+                              });
+                            },
                           ),
                           if(finance == true)
-                          Viewfinace(
+                          EditfinanceMB(
+                            exchangeflag: 'Yes',
+                            enquiryid: widget.enquiryid,
+                            exchangeselected: () {
+                              setState(() {
+                                previousTab = 'finance';
+                                exchangetrue = true;
+                                createenquiry = false;
+                                finance = false;
+                                exchange = true;
+                              });
+                            },
+                            edit: true,
+                            oldapiResponse: widget.apiResponse,
                             apiResponse: widget.apiResponse,
                           ),
                           if(exchange == true)
-                          Viewexchange(
+                          EditexchangeMB(
+                            enquiryid: widget.enquiryid,
                             apiResponse: widget.apiResponse,
+                            edit: false,
                           )
                         ],
                       ),
                     ),
                   ),
-                  button(
-                    'Move to Accept',
-                    () {
-                      movetoaccept();
-                    }
-                  )
                 ],
               ),
             ],
@@ -326,4 +311,80 @@ class _MovetoacceptState extends State<Movetoaccept> {
       ),
     );
   }
+
+  // void showVehicleStockPopup(BuildContext context) {
+  //   showDialog(
+  //     context: context,
+  //     barrierDismissible: false,
+  //     builder: (context) {
+  //       return AlertDialog(
+  //         shape: RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.circular(12),
+  //         ),
+  //         contentPadding: const EdgeInsets.symmetric(
+  //           horizontal: 24,
+  //           vertical: 20,
+  //         ),
+  //         content: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             const Text(
+  //               'Vehicle In Stock?',
+  //               textAlign: TextAlign.center,
+  //               style: TextStyle(
+  //                 fontFamily: 'Poppins',
+  //                 fontSize: 16,
+  //                 fontWeight: FontWeight.w600,
+  //               ),
+  //             ),
+  //             const SizedBox(height: 20),
+
+  //             Row(
+  //               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //               children: [
+  //                 OutlinedButton(
+  //                   onPressed: () {
+  //                     Navigator.push(
+  //                       context,
+  //                       MaterialPageRoute(builder: (context) => BookingformNo(
+  //                         enquiryid: widget.enquiryid
+  //                         )
+  //                       )
+  //                     );
+  //                   },
+  //                   child: Text(
+  //                     'No',
+  //                     style: TextStyle(
+  //                       fontFamily: 'Poppins',
+  //                       color: kred
+  //                     ),
+  //                   ),
+  //                 ),
+
+  //                 ElevatedButton(
+  //                   onPressed: () {
+  //                     Navigator.push(
+  //                       context,
+  //                       MaterialPageRoute(builder: (context) => BookingformYes(
+  //                         enquiryid: widget.enquiryid
+  //                         )
+  //                       )
+  //                     );
+  //                   },
+  //                   child: Text(
+  //                     'Yes',
+  //                     style: TextStyle(
+  //                       fontFamily: 'Poppins',
+  //                       color: kred
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 }

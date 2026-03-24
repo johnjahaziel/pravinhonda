@@ -13,7 +13,7 @@ import 'package:pravinhonda/utility/size_config.dart';
 
 class Addfinance extends StatefulWidget {
   final String? exchangeflag;
-  final int enquiryid;
+  final String enquiryid;
   final VoidCallback exchangeselected;
   const Addfinance({
     super.key,

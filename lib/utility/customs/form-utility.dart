@@ -76,14 +76,6 @@ const List<Map<String, String>> testrideTypeItems = [
   {'label': 'No', 'value': 'no'},
 ];
 
-const List<Map<String, String>> financeTypeItems = [
-  {'label': 'Personal Loan', 'value': 'Personal Loan'},
-];
-
-const List<Map<String, String>> loanperiodTypeItems = [
-  {'label': '12', 'value': '12'},
-];
-
 textfieldy(String title, TextEditingController controller, {bool star = true, bool readonly = false, bool numpad = false, Function(String)? onChanged}) => Padding(
   padding: const EdgeInsets.only(top: 15),
   child: Opacity(

@@ -132,7 +132,7 @@ class _AllLostcustomerState extends State<AllLostcustomer> {
                   itemBuilder: (context, index) {
                     final data = alldata[index];
                     return Hondabox(
-                      enquiryid: 0,
+                      enquiryid: data['enquiry_id']?.toString() ?? '',
                       id: data['enquiry_id']?.toString() ?? '',
                       customername: data['customer_name']?.toString() ?? '',
                       contactnumber: data['phone_number']?.toString() ?? '',

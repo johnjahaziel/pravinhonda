@@ -15,7 +15,7 @@ import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
 class Movetoallocated extends StatefulWidget {
-  final int enquiryid;
+  final String enquiryid;
   final Map<String, dynamic> apiResponse;
   const Movetoallocated({
     super.key,

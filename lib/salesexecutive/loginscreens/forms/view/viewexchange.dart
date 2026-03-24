@@ -25,21 +25,35 @@ class DealerField {
 }
 
 class _ViewexchangeState extends State<Viewexchange> {
-  late TextEditingController vehiclemodal;
-  late TextEditingController vehiclemodalyr;
+  // late TextEditingController vehiclemodal; 
+  late TextEditingController vehicleownername;
+  late TextEditingController vehicleowneraddress;
+  late TextEditingController vehicleownerphone;
+  late TextEditingController presentmodelowned;
   late TextEditingController noofowners;
+  late TextEditingController colour;
+  late TextEditingController regno;
+  late TextEditingController kmrun;
+  late TextEditingController yearofpurchase;
+  // late TextEditingController vehicleyear;
   late TextEditingController expectedprice;
-  late TextEditingController assessedby;
   
   String? finalizeddealer;
 
   late TextEditingController finalizedprice;
 
-  String vehiclemodale = '';
-  String vehiclemodalyre = '';
+  // String vehiclemodale = '';
+  String vehicleownernamee = '';
+  String vehicleowneraddresse = '';
+  String vehicleownerphonee = '';
+  String presentmodelownede = '';
   String noofownerse = '';
+  String coloure = '';
+  String regnoe = '';
+  String kmrune = '';
+  String yearofpurchasee = '';
+  // String vehicleyeare = '';
   String expectedpricee = '';
-  String assessedbye = '';
 
   String finalizeddealere = '';
   String finalizedpricee = '';
@@ -71,11 +85,19 @@ class _ViewexchangeState extends State<Viewexchange> {
   void initControllersFromResponse(Map<String, dynamic> resp) {
     final enquiry = resp;
 
-    vehiclemodal = TextEditingController(text: (enquiry['vehicle_model'] ?? '').toString());
-    vehiclemodalyr = TextEditingController(text: (enquiry['vehicle_year'] ?? '').toString());
-    noofowners = TextEditingController(text: (enquiry['no_of_owners'] ?? '').toString());
+    // vehiclemodal = TextEditingController(text: (enquiry['vehicle_model'] ?? '').toString());
+    vehicleownername = TextEditingController(text: (enquiry['vehicle_owner_name'] ?? '').toString());
+    vehicleowneraddress = TextEditingController(text: (enquiry['vehicle_owner_address'] ?? '').toString());
+    vehicleownerphone = TextEditingController(text: (enquiry['vehicle_owner_phone'] ?? '').toString());
+    presentmodelowned = TextEditingController(text: (enquiry['present_model_owned'] ?? '').toString());
+    noofowners = TextEditingController(text: (enquiry['colour'] ?? '').toString());
+    colour = TextEditingController(text: (enquiry['reg_no'] ?? '').toString());
+    regno = TextEditingController(text: (enquiry['km_run'] ?? '').toString());
+    kmrun = TextEditingController(text: (enquiry['year_of_purchase'] ?? '').toString());
+    yearofpurchase = TextEditingController(text: (enquiry['no_of_owners'] ?? '').toString());
+    // vehicleyear = TextEditingController(text: (enquiry['vehicle_year'] ?? '').toString());
     expectedprice = TextEditingController(text: (enquiry['expected_price'] ?? '').toString());
-    assessedby = TextEditingController(text: (enquiry['assessed_by'] ?? '').toString());
+
     finalizeddealer = enquiry['finalized_dealer'].toString();
     finalizedprice = TextEditingController(text: (enquiry['finalized_price'] ?? '').toString());
 
@@ -109,20 +131,70 @@ class _ViewexchangeState extends State<Viewexchange> {
       padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(20)),
       child: Column(
         children: [
+          // textfieldy(
+          //   'Vehicle Modal',
+          //   vehiclemodal,
+          //   readonly: readonly
+          // ),
+          // if(vehiclemodale.isNotEmpty)
+          // errormessage(vehiclemodale),
           textfieldy(
-            'Vehicle Modal',
-            vehiclemodal,
+            'Vehicle Owner Name',
+            vehicleownername,
             readonly: readonly
           ),
-          if(vehiclemodale.isNotEmpty)
-          errormessage(vehiclemodale),
+          if(vehicleownernamee.isNotEmpty)
+          errormessage(vehicleownernamee),
           textfieldy(
-            'Vehicle Year',
-            vehiclemodalyr,
+            'Vehicle Owner Address',
+            vehicleowneraddress,
             readonly: readonly
           ),
-          if(vehiclemodalyre.isNotEmpty)
-          errormessage(vehiclemodalyre),
+          if(vehicleowneraddresse.isNotEmpty)
+          errormessage(vehicleowneraddresse),
+          textfieldy(
+            'Vehicle Owner Phone',
+            vehicleownerphone,
+            numpad: true,
+            readonly: readonly
+          ),
+          if(vehicleownerphonee.isNotEmpty)
+          errormessage(vehicleownerphonee),
+          textfieldy(
+            'Present Model Owned',
+            presentmodelowned,
+            readonly: readonly
+          ),
+          if(presentmodelownede.isNotEmpty)
+          errormessage(presentmodelownede),
+          textfieldy(
+            'Colour',
+            colour,
+            readonly: readonly
+          ),
+          if(coloure.isNotEmpty)
+          errormessage(coloure),
+          textfieldy(
+            'Reg No',
+            regno,
+            readonly: readonly
+          ),
+          if(regnoe.isNotEmpty)
+          errormessage(regnoe),
+          textfieldy(
+            'KM Run',
+            kmrun,
+            readonly: readonly
+          ),
+          if(kmrune.isNotEmpty)
+          errormessage(kmrune),
+          textfieldy(
+            'Year Of Purchase',
+            yearofpurchase,
+            readonly: readonly
+          ),
+          if(yearofpurchasee.isNotEmpty)
+          errormessage(yearofpurchasee),
           textfieldy(
             'No of Owners',
             noofowners,
@@ -130,6 +202,13 @@ class _ViewexchangeState extends State<Viewexchange> {
           ),
           if(noofownerse.isNotEmpty)
           errormessage(noofownerse),
+          // textfieldy(
+          //   'Vehicle Year',
+          //   vehicleyear,
+          //   readonly: readonly
+          // ),
+          // if(vehicleyeare.isNotEmpty)
+          // errormessage(vehicleyeare),
           textfieldy(
             'Expected Price',
             expectedprice,
@@ -137,14 +216,7 @@ class _ViewexchangeState extends State<Viewexchange> {
           ),
           if(expectedpricee.isNotEmpty)
           errormessage(expectedpricee),
-          textfieldy(
-            'Assessed By',
-            assessedby,
-            star: false,
-            readonly: readonly
-          ),
-          if(assessedbye.isNotEmpty)
-          errormessage(assessedbye),
+
 
           Column(
             children: [

@@ -80,7 +80,7 @@ class _WaitingforacceptState extends State<Waitingforaccept> {
 
   Future<void> _fetchPage({String? url}) async {
     try {
-      final Uri uri = Uri.parse(url ?? 'https://app.pravinhonda.com/api/booking');
+      final Uri uri = Uri.parse(url ?? 'https://app.pravinhonda.com/api/sales-pdi-approval');
 
       if (_allData.isEmpty && !isLoading) {
         setState(() {

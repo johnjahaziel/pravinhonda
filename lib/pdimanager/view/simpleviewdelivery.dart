@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/salesexecutive/districtcity.dart';
 import 'package:pravinhonda/salesexecutive/loginscreens/forms/viewenquirydelivey.dart';
@@ -12,9 +14,10 @@ import 'package:pravinhonda/utility/customs/customtimefield.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
+import 'package:share_plus/share_plus.dart';
 
 class Simpleviewdelivery extends StatefulWidget {
-  final int enquiryid;
+  final String enquiryid;
   final Map<String, dynamic> apiResponse;
   const Simpleviewdelivery({
     super.key,
@@ -180,6 +183,21 @@ class _SimpleviewdeliveryState extends State<Simpleviewdelivery> {
 
     } catch (e) {
       print('Fetching Minimum Package: $e');
+    }
+  }
+
+  Future<void> shareImage(String imageUrl) async {
+    try {
+      final response = await http.get(Uri.parse(imageUrl));
+
+      final tempDir = await getTemporaryDirectory();
+      final file = File('${tempDir.path}/shared_image.jpg');
+
+      await file.writeAsBytes(response.bodyBytes);
+
+      await Share.shareXFiles([XFile(file.path)], text: 'Check this image');
+    } catch (e) {
+      print("Share error: $e");
     }
   }
 
@@ -353,7 +371,13 @@ class _SimpleviewdeliveryState extends State<Simpleviewdelivery> {
             SizedBox(height: SizeConfig.h(20)),
             RawMaterialButton(
               onPressed: () {
-                showImagePopup(context, baseUrl + deliveryPhoto);
+                showImagePopup(
+                  context,
+                  baseUrl + deliveryPhoto,
+                  () {
+                    shareImage(baseUrl + deliveryPhoto);
+                  }
+                );
               },
               constraints: BoxConstraints.tightFor(
                 height: SizeConfig.h(180),

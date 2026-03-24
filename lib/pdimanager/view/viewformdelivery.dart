@@ -9,7 +9,7 @@ import 'package:pravinhonda/utility/styles.dart';
 
 class ViewformPdidelivery extends StatefulWidget {
   final String pagename;
-  final int enquiryid;
+  final String enquiryid;
   final Map<String, dynamic> apiResponse;
   final int initialIndex;
   const ViewformPdidelivery({

@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/salesexecutive/districtcity.dart';
 import 'package:pravinhonda/salesexecutive/namevariantcolor.dart';
@@ -11,6 +13,7 @@ import 'package:pravinhonda/utility/customs/customdropdown.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
+import 'package:share_plus/share_plus.dart';
 
 class Viewenquirydelivery extends StatefulWidget {
   final Map<String, dynamic> apiResponse;
@@ -218,6 +221,21 @@ class _ViewenquirydeliveryState extends State<Viewenquirydelivery> {
 
     } catch (e) {
       print('Fetching Minimum Package: $e');
+    }
+  }
+
+  Future<void> shareImage(String imageUrl) async {
+    try {
+      final response = await http.get(Uri.parse(imageUrl));
+
+      final tempDir = await getTemporaryDirectory();
+      final file = File('${tempDir.path}/shared_image.jpg');
+
+      await file.writeAsBytes(response.bodyBytes);
+
+      await Share.shareXFiles([XFile(file.path)], text: 'Check this image');
+    } catch (e) {
+      print("Share error: $e");
     }
   }
 
@@ -525,7 +543,13 @@ class _ViewenquirydeliveryState extends State<Viewenquirydelivery> {
           SizedBox(height: SizeConfig.h(20)),
           RawMaterialButton(
             onPressed: () {
-              showImagePopup(context, baseUrl + deliveryPhoto);
+              showImagePopup(
+                context,
+                baseUrl + deliveryPhoto,
+                () {
+                  shareImage(baseUrl + deliveryPhoto);
+                }
+              );
             },
             constraints: BoxConstraints.tightFor(
               height: SizeConfig.h(180),
@@ -561,7 +585,7 @@ class _ViewenquirydeliveryState extends State<Viewenquirydelivery> {
   }
 }
 
-void showImagePopup(BuildContext context, String imageUrl) {
+void showImagePopup(BuildContext context, String imageUrl, VoidCallback onTap) {
   showDialog(
     context: context,
     barrierDismissible: true,
@@ -599,6 +623,19 @@ void showImagePopup(BuildContext context, String imageUrl) {
                   radius: 14,
                   backgroundColor: Colors.black54,
                   child: Icon(Icons.close, size: 16, color: Colors.white),
+                ),
+              ),
+            ),
+
+            Positioned(
+              top: 8,
+              left: 8,
+              child: GestureDetector(
+                onTap: onTap,
+                child: const CircleAvatar(
+                  radius: 14,
+                  backgroundColor: Colors.black54,
+                  child: Icon(Icons.share, size: 16, color: Colors.white),
                 ),
               ),
             )

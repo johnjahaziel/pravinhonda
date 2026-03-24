@@ -133,7 +133,7 @@ class _UpdatehrnState extends State<Updatehrn> {
                   itemBuilder: (context, index) {
                     final data = alldata[index];
                     return Hondabox(
-                      enquiryid: 0,
+                      enquiryid: data['enquiry_id']?.toString() ?? '',
                       id: data['enquiry_id']?.toString() ?? '',
                       customername: data['customer_name']?.toString() ?? '',
                       contactnumber: data['customer_contact_number']?.toString() ?? '',

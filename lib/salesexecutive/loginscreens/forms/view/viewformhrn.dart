@@ -16,7 +16,7 @@ import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
 class Viewformhrn extends StatefulWidget {
-  final int enquiryid;
+  final String enquiryid;
   final Map<String, dynamic> apiResponse;
   const Viewformhrn({
     super.key,
@@ -313,7 +313,7 @@ class _ViewformhrnState extends State<Viewformhrn> {
 }
 
 class Updatehrnpopup extends StatefulWidget {
-  final int enquiryid;
+  final String enquiryid;
   const Updatehrnpopup({
     super.key,
     required this.enquiryid

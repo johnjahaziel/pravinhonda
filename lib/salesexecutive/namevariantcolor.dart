@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -22,6 +23,8 @@ class Namevariantcolor extends StatefulWidget {
   // final String? selectedvariant;
   final String? selectedcolor;
 
+  final bool star;
+
   final void Function(String?) onNameChanged;
   // final void Function(String?) onVariantChanged;
   final void Function(String?) onColorChanged;
@@ -38,6 +41,7 @@ class Namevariantcolor extends StatefulWidget {
     required this.onNameChanged,
     // required this.onVariantChanged,
     required this.onColorChanged,
+    this.star = false
   });
 
   @override
@@ -267,6 +271,7 @@ class _NamevariantcolorState extends State<Namevariantcolor> {
             }
           },
           readOnly: widget.edit,
+          star: widget.star,
         ),
         if(widget.modelnamee.isNotEmpty)
         errormessage(widget.modelnamee),
@@ -313,6 +318,7 @@ class _NamevariantcolorState extends State<Namevariantcolor> {
             widget.onColorChanged(newValue);
           },
           readOnly: widget.edit,
+          star: widget.star,
         ),
         if(widget.modelcolore.isNotEmpty)
         errormessage(widget.modelcolore),
@@ -344,6 +350,8 @@ class CustomNVCDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController searchController = TextEditingController();
+
     return Padding(
       padding: padding == true ? EdgeInsets.symmetric(horizontal: SizeConfig.w(30)) : EdgeInsetsGeometry.zero,
       child: Opacity(
@@ -378,49 +386,77 @@ class CustomNVCDropdown extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 5),
-                child: Container(
-                  height: 58,
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: Color(0xff919EAB)
-                    )
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: selectedCustomDropdown,
-                      hint: Padding(
-                        padding: EdgeInsets.only(top: 5),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton2<String>(
+                    isExpanded: true,
+                    hint: Padding(
+                      padding: const EdgeInsets.only(top: 5),
+                      child: Text(
+                        title,
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          color: Color(0xff919EAB),
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                    value: selectedCustomDropdown,
+                    items: customDropdownItems.map((item) {
+                      return DropdownMenuItem<String>(
+                        value: item['name'],
                         child: Text(
-                          title,
-                          style: TextStyle(
+                          item['name']!,
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
-                            color: Color.fromARGB(255, 137, 137, 137),
-                            fontSize: 12,
+                            fontSize: 14,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                
+                    onChanged: onChanged,
+                
+                    buttonStyleData: ButtonStyleData(
+                      height: 58,
+                      padding: EdgeInsets.only(right: SizeConfig.w(12)),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: const Color(0xff919EAB)),
+                      ),
+                    ),
+                
+                    dropdownStyleData: DropdownStyleData(
+                      maxHeight: 400,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
+                      ),
+                    ),
+                
+                    iconStyleData: const IconStyleData(
+                      icon: Icon(Icons.arrow_drop_down),
+                    ),
+                
+                    dropdownSearchData: DropdownSearchData(
+                      searchController: searchController,
+                      searchInnerWidgetHeight: 50,
+                      searchInnerWidget: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: TextField(
+                          controller: searchController,
+                          decoration: InputDecoration(
+                            hintText: 'Search...',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                           ),
                         ),
                       ),
-                      dropdownColor: Colors.white,
-                      isExpanded: true,
-                      borderRadius: BorderRadius.circular(10),
-                      icon: const Padding(
-                        padding: EdgeInsets.only(top: 5),
-                        child: Icon(Icons.arrow_drop_down),
-                      ),
-                      items: customDropdownItems.map((item) {
-                        return DropdownMenuItem<String>(
-                          value: item['name'],
-                          child: Text(
-                            item['name']!,
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 14,
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: onChanged,
+                      searchMatchFn: (item, searchValue) {
+                        return item.value!
+                            .toLowerCase()
+                            .contains(searchValue.toLowerCase());
+                      },
                     ),
                   ),
                 ),

@@ -14,7 +14,7 @@ import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
 class LostcustomerReason extends StatefulWidget {
-  final int enquiryId;
+  final String enquiryId;
   const LostcustomerReason({
     super.key,
     required this.enquiryId,

@@ -14,7 +14,7 @@ import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
 class BookingformNo extends StatefulWidget {
-  final int enquiryid;
+  final String enquiryid;
   const BookingformNo({
     super.key,
     required this.enquiryid

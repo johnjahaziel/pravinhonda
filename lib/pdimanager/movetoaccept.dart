@@ -14,7 +14,7 @@ import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
 class Movetoaccept extends StatefulWidget {
-  final int enquiryid;
+  final String enquiryid;
   final Map<String, dynamic> apiResponse;
   const Movetoaccept({
     super.key,

@@ -20,6 +20,7 @@ class Districtcity extends StatefulWidget {
   final String citye;
 
   final bool edit;
+  final bool star;
 
   final void Function(String?) ondistrictChanged;
   final void Function(String?) oncityChanged;
@@ -33,6 +34,7 @@ class Districtcity extends StatefulWidget {
     required this.selectedcity,
     required this.ondistrictChanged,
     required this.oncityChanged,
+    this.star = false
   });
 
   @override
@@ -207,6 +209,7 @@ class _DistrictcityState extends State<Districtcity> {
             widget.ondistrictChanged(newValue);
           },
           readOnly: widget.edit,
+          star: widget.star,
         ),
         if(widget.districte.isNotEmpty)
         errormessage(widget.districte),
@@ -221,6 +224,7 @@ class _DistrictcityState extends State<Districtcity> {
             widget.oncityChanged(newValue);
           },
           readOnly: widget.edit,
+          star: widget.star,
         ),
         if(widget.citye.isNotEmpty)
         errormessage(widget.citye),

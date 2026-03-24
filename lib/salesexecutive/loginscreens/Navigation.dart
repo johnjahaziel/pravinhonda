@@ -132,7 +132,7 @@ class _NavigationState extends State<Navigation> {
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.trolley),
-                label: 'Delivery',
+                label: 'Delivered',
               ),
             ],
           ),
@@ -305,7 +305,7 @@ class _MobileResponseState extends State<MobileResponse> {
   String attendedBy = '';
   String branchName = '';
 
-  int enquiryId = 0;
+  String enquiryId = '';
   String customerName = '';
   String modelName = '';
   String variant = '';

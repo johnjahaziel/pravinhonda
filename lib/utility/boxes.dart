@@ -15,7 +15,7 @@ import 'package:pravinhonda/utility/styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Hondabox extends StatefulWidget {
-  final int enquiryid;
+  final String enquiryid;
   final String id;
   final String customername;
   final String contactnumber;
@@ -68,7 +68,7 @@ class _HondaboxState extends State<Hondabox> {
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(
+            border: Border.all( 
               color: kgrey
             )
           ),
@@ -229,7 +229,7 @@ class _HondaboxState extends State<Hondabox> {
 }
 
 class Pdiinchargebox extends StatefulWidget {
-  final int enquiryid;
+  final String enquiryid;
   final String id;
   final String customername;
   final String highrisenumber;
@@ -466,10 +466,245 @@ class _PdiinchargeboxState extends State<Pdiinchargebox> {
   }
 }
 
+class FinanceMenu extends StatefulWidget {
+  final String enquiryid;
+  final String id;
+  final String customername;
+  final String highrisenumber;
+  final String model;
+  // final String variant;
+  final String color;
+  final String finance;
+  final VoidCallback onTap;
+
+  const FinanceMenu({
+    super.key,
+    required this.enquiryid,
+    required this.id,
+    required this.customername,
+    required this.highrisenumber,
+    required this.finance,
+    required this.model,
+    // required this.variant,
+    required this.color,
+    required this.onTap,
+  });
+
+  @override
+  State<FinanceMenu> createState() => _FinanceMenuState();
+}
+
+class _FinanceMenuState extends State<FinanceMenu> {
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        vertical: SizeConfig.h(5),
+      ),
+      child: RawMaterialButton(
+        onPressed: widget.onTap,
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: kgrey),
+          ),
+          padding: EdgeInsets.symmetric(
+            horizontal: SizeConfig.w(10),
+            vertical: SizeConfig.h(10),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+
+              /// 🔹 ENQUIRY ID (TOP)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Enquiry ID : ${widget.id}',
+                    style: textbold12,
+                  ),
+                  // Text(
+                  //   'HRN : ${widget.highrisenumber}',
+                  //   style: textbold12,
+                  // ),
+                ],
+              ),
+
+              SizedBox(height: SizeConfig.h(8)),
+
+              /// 🔹 DETAILS WITH ICONS
+              infoRow(Icons.person_outline, widget.customername),
+              infoRow(Icons.directions_bike_outlined, widget.model),
+              // infoRow(Icons.layers_outlined, widget.variant),
+              infoRow(Icons.palette_outlined, widget.color),
+              infoRow(Icons.cases, widget.finance),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Widget _tag(String text, Color color) {
+  //   return Padding(
+  //     padding: EdgeInsets.only(right: SizeConfig.w(4)),
+  //     child: Container(
+  //       padding: EdgeInsets.symmetric(
+  //         horizontal: SizeConfig.w(6),
+  //         vertical: SizeConfig.h(2),
+  //       ),
+  //       decoration: BoxDecoration(
+  //         color: color,
+  //         borderRadius: BorderRadius.circular(5),
+  //       ),
+  //       child: Text(text, style: textmedium8),
+  //     ),
+  //   );
+  // }
+
+  Widget infoRow(IconData icon, String text) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: SizeConfig.h(4)),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 14, color: kgrey),
+          SizedBox(width: SizeConfig.w(6)),
+          Expanded(
+            child: Text(
+              text,
+              style: textmedium12,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ExchangeMenu extends StatefulWidget {
+  final String enquiryid;
+  final String id;
+  final String customername;
+  final String presentmodelowned;
+  final String expectedprice;
+  final VoidCallback onTap;
+
+  const ExchangeMenu({
+    super.key,
+    required this.enquiryid,
+    required this.id,
+    required this.customername,
+    required this.presentmodelowned,
+    required this.expectedprice,
+    required this.onTap,
+  });
+
+  @override
+  State<ExchangeMenu> createState() => _ExchangeMenuState();
+}
+
+class _ExchangeMenuState extends State<ExchangeMenu> {
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        vertical: SizeConfig.h(5),
+      ),
+      child: RawMaterialButton(
+        onPressed: widget.onTap,
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: kgrey),
+          ),
+          padding: EdgeInsets.symmetric(
+            horizontal: SizeConfig.w(10),
+            vertical: SizeConfig.h(10),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+
+              /// 🔹 ENQUIRY ID (TOP)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Enquiry ID : ${widget.id}',
+                    style: textbold12,
+                  ),
+                  // Text(
+                  //   'HRN : ${widget.highrisenumber}',
+                  //   style: textbold12,
+                  // ),
+                ],
+              ),
+
+              SizedBox(height: SizeConfig.h(8)),
+
+              /// 🔹 DETAILS WITH ICONS
+              infoRow(Icons.person_outline, widget.customername),
+              infoRow(Icons.directions_bike_outlined, widget.presentmodelowned),
+              // infoRow(Icons.layers_outlined, widget.variant),
+              infoRow(Icons.palette_outlined, widget.expectedprice),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Widget _tag(String text, Color color) {
+  //   return Padding(
+  //     padding: EdgeInsets.only(right: SizeConfig.w(4)),
+  //     child: Container(
+  //       padding: EdgeInsets.symmetric(
+  //         horizontal: SizeConfig.w(6),
+  //         vertical: SizeConfig.h(2),
+  //       ),
+  //       decoration: BoxDecoration(
+  //         color: color,
+  //         borderRadius: BorderRadius.circular(5),
+  //       ),
+  //       child: Text(text, style: textmedium8),
+  //     ),
+  //   );
+  // }
+
+  Widget infoRow(IconData icon, String text) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: SizeConfig.h(4)),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 14, color: kgrey),
+          SizedBox(width: SizeConfig.w(6)),
+          Expanded(
+            child: Text(
+              text,
+              style: textmedium12,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class ReviewBoxes extends StatefulWidget {
   final String name;
   final String number;
-  final int enquiryid;
+  final String enquiryid;
 
   const ReviewBoxes({
     super.key,
@@ -629,7 +864,7 @@ class _ReviewBoxesState extends State<ReviewBoxes> {
 class Lostcustomer extends StatefulWidget {
   final String name;
   final String number;
-  final int enquiryId;
+  final String enquiryId;
   const Lostcustomer({
     super.key,
     required this.name,

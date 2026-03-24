@@ -11,7 +11,7 @@ import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
 
 class Editexchange extends StatefulWidget {
-  final int enquiryid;
+  final String enquiryid;
   final Map<String, dynamic> apiResponse;
 
   final bool edit;
@@ -37,21 +37,35 @@ class DealerField {
 }
 
 class _EditexchangeState extends State<Editexchange> {
-  late TextEditingController vehiclemodal;
-  late TextEditingController vehiclemodalyr;
+  // late TextEditingController vehiclemodal; 
+  late TextEditingController vehicleownername;
+  late TextEditingController vehicleowneraddress;
+  late TextEditingController vehicleownerphone;
+  late TextEditingController presentmodelowned;
   late TextEditingController noofowners;
+  late TextEditingController colour;
+  late TextEditingController regno;
+  late TextEditingController kmrun;
+  late TextEditingController yearofpurchase;
+  // late TextEditingController vehicleyear;
   late TextEditingController expectedprice;
-  late TextEditingController assessedby;
 
   String? finalizeddealer;
 
   late TextEditingController finalizedprice;
 
   String vehiclemodale = '';
-  String vehiclemodalyre = '';
+  String vehicleownernamee = '';
+  String vehicleowneraddresse = '';
+  String vehicleownerphonee = '';
+  String presentmodelownede = '';
   String noofownerse = '';
+  String coloure = '';
+  String regnoe = '';
+  String kmrune = '';
+  String yearofpurchasee = '';
+  String vehicleyeare = '';
   String expectedpricee = '';
-  String assessedbye = '';
 
   String finalizeddealere = '';
   String finalizedpricee = '';
@@ -81,11 +95,19 @@ class _EditexchangeState extends State<Editexchange> {
   void initControllersFromResponse(Map<String, dynamic> resp) {
     final enquiry = resp['data'] ?? {};
 
-    vehiclemodal = TextEditingController(text: (enquiry['vehicle_model'] ?? '').toString());
-    vehiclemodalyr = TextEditingController(text: (enquiry['vehicle_year'] ?? '').toString());
-    noofowners = TextEditingController(text: (enquiry['no_of_owners'] ?? '').toString());
+    // vehiclemodal = TextEditingController(text: (enquiry['vehicle_model'] ?? '').toString());
+    vehicleownername = TextEditingController(text: (enquiry['vehicle_owner_name'] ?? '').toString());
+    vehicleowneraddress = TextEditingController(text: (enquiry['vehicle_owner_address'] ?? '').toString());
+    vehicleownerphone = TextEditingController(text: (enquiry['vehicle_owner_phone'] ?? '').toString());
+    presentmodelowned = TextEditingController(text: (enquiry['present_model_owned'] ?? '').toString());
+    noofowners = TextEditingController(text: (enquiry['colour'] ?? '').toString());
+    colour = TextEditingController(text: (enquiry['reg_no'] ?? '').toString());
+    regno = TextEditingController(text: (enquiry['km_run'] ?? '').toString());
+    kmrun = TextEditingController(text: (enquiry['year_of_purchase'] ?? '').toString());
+    yearofpurchase = TextEditingController(text: (enquiry['no_of_owners'] ?? '').toString());
+    // vehicleyear = TextEditingController(text: (enquiry['vehicle_year'] ?? '').toString());
     expectedprice = TextEditingController(text: (enquiry['expected_price'] ?? '').toString());
-    assessedby = TextEditingController(text: (enquiry['assessed_by'] ?? '').toString());
+
     finalizeddealer = enquiry['finalized_dealer'].toString();
     finalizedprice = TextEditingController(text: (enquiry['finalized_price'] ?? '').toString());
 
@@ -127,12 +149,18 @@ class _EditexchangeState extends State<Editexchange> {
           'Authorization': 'Bearer $token'
         },
         body: jsonEncode({
-          'vehicle_model': vehiclemodal.text,
-          'vehicle_year': vehiclemodalyr.text,
-          'no_of_owners' : noofowners.text,
-          'expected_price': expectedprice.text,
-          
-          'assessed_by': assessedby.text,
+          // "vehicle_model": vehiclemodal.text,
+          "vehicle_owner_name": vehicleownername.text,
+          "vehicle_owner_address": vehicleowneraddress.text,
+          "vehicle_owner_phone": vehicleownerphone.text,
+          "present_model_owned": presentmodelowned.text,
+          "colour": colour.text,
+          "reg_no": regno.text,
+          "km_run": kmrun.text,
+          "year_of_purchase": yearofpurchase.text,
+          "no_of_owners": noofowners.text,
+          // "vehicle_year": vehicleyear.text,
+          "expected_price": expectedprice.text,
 
           'finalized_dealer': finalizeddealer,
           'finalized_price': finalizedprice.text,
@@ -169,11 +197,17 @@ class _EditexchangeState extends State<Editexchange> {
 
         setState(() {
           vehiclemodale = errors['vehicle_model']?.toString() ?? '';
-          vehiclemodalyre = errors['vehicle_year']?.toString() ?? '';
-          noofownerse = errors['no_of_owners']?.toString() ?? '';
+          vehicleownernamee = errors['vehicle_owner_name']?.toString() ?? '';
+          vehicleowneraddresse = errors['vehicle_owner_address']?.toString() ?? '';
+          vehicleownerphonee = errors['vehicle_owner_phone']?.toString() ?? '';
+          presentmodelownede = errors['present_model_owned']?.toString() ?? '';
+          noofownerse = errors['colour']?.toString() ?? '';
+          coloure = errors['reg_no']?.toString() ?? '';
+          regnoe = errors['km_run']?.toString() ?? '';
+          kmrune = errors['year_of_purchase']?.toString() ?? '';
+          yearofpurchasee = errors['no_of_owners']?.toString() ?? '';
+          vehicleyeare = errors['vehicle_year']?.toString() ?? '';
           expectedpricee = errors['expected_price']?.toString() ?? '';
-
-          assessedbye = errors['assessed_by']?.toString() ?? '';
 
           finalizeddealere = errors['finalized_dealer']?.toString() ?? '';
           finalizedpricee = errors['finalized_price']?.toString() ?? '';
@@ -204,20 +238,70 @@ class _EditexchangeState extends State<Editexchange> {
           padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(20)),
           child: Column(
             children: [
+              // textfieldy(
+              //   'Vehicle Modal',
+              //   vehiclemodal,
+              //   readonly: widget.edit
+              // ),
+              // if(vehiclemodale.isNotEmpty)
+              // errormessage(vehiclemodale),
               textfieldy(
-                'Vehicle Modal',
-                vehiclemodal,
+                'Vehicle Owner Name',
+                vehicleownername,
                 readonly: widget.edit
               ),
-              if(vehiclemodale.isNotEmpty)
-              errormessage(vehiclemodale),
+              if(vehicleownernamee.isNotEmpty)
+              errormessage(vehicleownernamee),
               textfieldy(
-                'Vehicle Year',
-                vehiclemodalyr,
+                'Vehicle Owner Address',
+                vehicleowneraddress,
                 readonly: widget.edit
               ),
-              if(vehiclemodalyre.isNotEmpty)
-              errormessage(vehiclemodalyre),
+              if(vehicleowneraddresse.isNotEmpty)
+              errormessage(vehicleowneraddresse),
+              textfieldy(
+                'Vehicle Owner Phone',
+                vehicleownerphone,
+                numpad: true,
+                readonly: widget.edit
+              ),
+              if(vehicleownerphonee.isNotEmpty)
+              errormessage(vehicleownerphonee),
+              textfieldy(
+                'Present Model Owned',
+                presentmodelowned,
+                readonly: widget.edit
+              ),
+              if(presentmodelownede.isNotEmpty)
+              errormessage(presentmodelownede),
+              textfieldy(
+                'Colour',
+                colour,
+                readonly: widget.edit
+              ),
+              if(coloure.isNotEmpty)
+              errormessage(coloure),
+              textfieldy(
+                'Reg No',
+                regno,
+                readonly: widget.edit
+              ),
+              if(regnoe.isNotEmpty)
+              errormessage(regnoe),
+              textfieldy(
+                'KM Run',
+                kmrun,
+                readonly: widget.edit
+              ),
+              if(kmrune.isNotEmpty)
+              errormessage(kmrune),
+              textfieldy(
+                'Year Of Purchase',
+                yearofpurchase,
+                readonly: widget.edit
+              ),
+              if(yearofpurchasee.isNotEmpty)
+              errormessage(yearofpurchasee),
               textfieldy(
                 'No of Owners',
                 noofowners,
@@ -225,6 +309,13 @@ class _EditexchangeState extends State<Editexchange> {
               ),
               if(noofownerse.isNotEmpty)
               errormessage(noofownerse),
+              // textfieldy(
+              //   'Vehicle Year',
+              //   vehicleyear,
+              //   readonly: widget.edit
+              // ),
+              // if(vehicleyeare.isNotEmpty)
+              // errormessage(vehicleyeare),
               textfieldy(
                 'Expected Price',
                 expectedprice,
@@ -232,14 +323,6 @@ class _EditexchangeState extends State<Editexchange> {
               ),
               if(expectedpricee.isNotEmpty)
               errormessage(expectedpricee),
-              textfieldy(
-                'Assessed By',
-                assessedby,
-                star: false,
-                readonly: widget.edit
-              ),
-              if(assessedbye.isNotEmpty)
-              errormessage(assessedbye),
 
               Column(
                 children: [

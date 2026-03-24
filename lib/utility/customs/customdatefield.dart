@@ -287,6 +287,146 @@ class _FollowupdateState extends State<Followupdate> {
   }
 }
 
+class TaskUp extends StatefulWidget {
+  final String title;
+  final TextEditingController datecontroller;
+  final bool padding;
+  final bool star;
+  final bool readOnly;
+
+  const TaskUp({
+    super.key,
+    required this.title,
+    required this.datecontroller,
+    this.padding = false,
+    this.star = true,
+    this.readOnly = false,
+  });
+
+  @override
+  State<TaskUp> createState() => _TaskUpState();
+}
+
+class _TaskUpState extends State<TaskUp> {
+
+  Future<void> _selectDate() async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+
+      // Allow ANY date
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: kred,
+              onPrimary: Colors.white,
+              onSurface: Colors.black,
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: kred,
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (pickedDate != null) {
+      String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+      widget.datecontroller.text = formattedDate;
+    }
+  }
+  
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: widget.padding
+          ? EdgeInsets.symmetric(horizontal: SizeConfig.w(20))
+          : EdgeInsets.zero,
+      child: Opacity(
+        opacity: widget.readOnly ? 0.6 : 1,
+        child: IgnorePointer(
+          ignoring: widget.readOnly,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 15),
+                child: Row(
+                  children: [
+                    Text(
+                      widget.title,
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        color: Color(0xff919EAB),
+                      ),
+                    ),
+                    if (widget.star)
+                      Text(
+                        '*',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: kred,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 5),
+                child: TextField(
+                  controller: widget.datecontroller,
+                  keyboardType: TextInputType.datetime,
+                  maxLines: 1,
+                  inputFormatters: [
+                    DateInputFormatter(),
+                  ],
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: kgrey),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: kgrey),
+                    ),
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.date_range),
+                      onPressed: _selectDate,
+                    ),
+                    hintText: "dd-mm-yyyy",
+                    hintStyle: TextStyle(fontSize: fs10),
+                  ),
+
+                  // Only validate format
+                  onChanged: (value) {
+                    if (value.length == 10) {
+                      try {
+                        DateFormat("dd-MM-yyyy").parseStrict(value);
+                      } catch (e) {
+                        Fluttertoast.showToast(
+                            msg: "Invalid date format or value");
+                        widget.datecontroller.clear();
+                      }
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class DateInputFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(

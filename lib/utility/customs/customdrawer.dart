@@ -5,7 +5,10 @@ import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/login.dart';
 import 'package:pravinhonda/salesexecutive/MenuScreen/alllostcustomer.dart';
 import 'package:pravinhonda/salesexecutive/MenuScreen/emicalculator.dart';
+import 'package:pravinhonda/salesexecutive/MenuScreen/exchangemenu.dart';
+import 'package:pravinhonda/salesexecutive/MenuScreen/financemenu.dart';
 import 'package:pravinhonda/salesexecutive/MenuScreen/searchcustomer.dart';
+import 'package:pravinhonda/salesexecutive/MenuScreen/taskmenu.dart';
 import 'package:pravinhonda/salesexecutive/MenuScreen/updatehrn.dart';
 import 'package:pravinhonda/salesexecutive/loginscreens/Navigation.dart';
 import 'package:pravinhonda/utility/size_config.dart';
@@ -123,7 +126,12 @@ class _CustomdrawerState extends State<Customdrawer> {
                   menuicontitle(
                     Icons.edit_square,
                     'Task',
-                    () {},
+                    () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Taskmenu())
+                      );
+                    },
                   ),
                   _buildDivider(),
                   menuicontitle(
@@ -139,8 +147,24 @@ class _CustomdrawerState extends State<Customdrawer> {
                   _buildDivider(),
                   menuicontitle(
                     Icons.change_circle_outlined,
+                    'Finance',
+                    () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Financemenu())
+                      );
+                    },
+                  ),
+                  _buildDivider(),
+                  menuicontitle(
+                    Icons.change_circle_outlined,
                     'Exchange',
-                    () {},
+                    () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Exchangemenu())
+                      );
+                    },
                   ),
                   _buildDivider(),
                   menuicontitle(
