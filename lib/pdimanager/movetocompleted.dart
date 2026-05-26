@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
-import 'package:pravinhonda/pdimanager/Navigation.dart';
+import 'package:pravinhonda/pdimanager/NavigationPdi.dart';
 import 'package:pravinhonda/pdimanager/view/simpleview.dart';
 import 'package:pravinhonda/utility/customs/customappBar.dart';
 import 'package:pravinhonda/utility/customs/customdrawer.dart';

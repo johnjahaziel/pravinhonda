@@ -47,14 +47,12 @@ class _HondaboxState extends State<Hondabox> {
 
   void callNumber(String number) async {
     final Uri url = Uri(scheme: 'tel', path: number);
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url);
-    }
+    await launchUrl(url);
   }
 
   void openWhatsApp(String number) async {
     final whatsappUrl = Uri.parse('https://wa.me/91${number}');
-    
+
     launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
   }
 
@@ -270,9 +268,7 @@ class _PdiinchargeboxState extends State<Pdiinchargebox> {
 
   void callNumber(String number) async {
     final Uri url = Uri(scheme: 'tel', path: number);
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url);
-    }
+    await launchUrl(url);
   }
 
   void openWhatsApp(String number) async {

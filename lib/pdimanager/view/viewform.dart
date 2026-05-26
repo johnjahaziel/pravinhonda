@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pravinhonda/pdimanager/Navigation.dart';
+import 'package:pravinhonda/pdimanager/NavigationPdi.dart';
 import 'package:pravinhonda/pdimanager/view/simpleview.dart';
 import 'package:pravinhonda/utility/customs/customappBar.dart';
 import 'package:pravinhonda/utility/customs/customdrawer.dart';

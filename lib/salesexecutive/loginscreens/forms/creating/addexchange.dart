@@ -234,19 +234,22 @@ class _AddexchangeState extends State<Addexchange> {
               errormessage(regnoe),
               textfieldy(
                 'KM Run',
-                kmrun
+                kmrun,
+                numpad: true,
               ),
               if(kmrune.isNotEmpty)
               errormessage(kmrune),
               textfieldy(
                 'Year Of Purchase',
-                yearofpurchase
+                yearofpurchase,
+                numpad: true,
               ),
               if(yearofpurchasee.isNotEmpty)
               errormessage(yearofpurchasee),
               textfieldy(
                 'No of Owners',
-                noofowners
+                noofowners,
+                numpad: true,
               ),
               if(noofownerse.isNotEmpty)
               errormessage(noofownerse),
@@ -258,7 +261,8 @@ class _AddexchangeState extends State<Addexchange> {
               // errormessage(vehicleyeare),
               textfieldy(
                 'Expected Price',
-                expectedprice
+                expectedprice,
+                numpad: true,
               ),
               if(expectedpricee.isNotEmpty)
               errormessage(expectedpricee),

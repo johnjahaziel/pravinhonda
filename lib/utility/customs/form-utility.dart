@@ -71,6 +71,16 @@ const List<Map<String, String>> exchangeflagTypeItems = [
   {'label': 'No', 'value': 'no'},
 ];
 
+const List<Map<String, String>> register = [
+  {'label': 'Yes', 'value': 'yes'},
+  {'label': 'No', 'value': 'no'},
+];
+
+const List<Map<String, String>> fancyno = [
+  {'label': 'Yes', 'value': 'yes'},
+  {'label': 'No', 'value': 'no'},
+];
+
 const List<Map<String, String>> testrideTypeItems = [
   {'label': 'Yes', 'value': 'yes'},
   {'label': 'No', 'value': 'no'},

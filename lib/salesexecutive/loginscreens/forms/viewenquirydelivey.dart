@@ -40,6 +40,8 @@ class _ViewenquirydeliveryState extends State<Viewenquirydelivery> {
   final purchasetypeitems = purchaseTypeItems;
   final exchangeflagitems = exchangeflagTypeItems;
   final testrideitems = testrideTypeItems;
+  final registeritems = register;
+  final fancynoitems = fancyno;
 
   String? selectedcustomercategoryitems;
   String? selectedenquirycategoryitems;
@@ -58,6 +60,9 @@ class _ViewenquirydeliveryState extends State<Viewenquirydelivery> {
 
   String? selecteddistrictitems;
   String? selectedcityitems;
+
+  String? selectedregisteritems;
+  String? selectedfancynoitems;
 
   late TextEditingController enquiryid;
   late TextEditingController wingsenquiry;
@@ -116,6 +121,8 @@ class _ViewenquirydeliveryState extends State<Viewenquirydelivery> {
     selectedpurchasetypeitems = enquiry['purchase_type'];
     selectedexchangeflagitems = enquiry['exchange_flag'];
     selectedtestrideitems = enquiry['test_ride'];
+    selectedregisteritems = enquiry['register'];
+    selectedfancynoitems = enquiry['fancy_no'];
     customername = TextEditingController(text: enquiry['customer_name'] ?? '');
     customercontactnumber = TextEditingController(text: enquiry['customer_contact_number'] ?? '');
     secondarycontactnumber = TextEditingController(text: enquiry['secondary_contact_number'] ?? '');
@@ -305,6 +312,7 @@ class _ViewenquirydeliveryState extends State<Viewenquirydelivery> {
             'Pincode',
             pincode,
             readonly: readonly,
+            numpad: true,
           ),
           if(pincodee.isNotEmpty)
           errormessage(pincodee),
@@ -349,7 +357,7 @@ class _ViewenquirydeliveryState extends State<Viewenquirydelivery> {
           if(emailide.isNotEmpty)
           errormessage(emailide),
           textfieldy(
-            'High Rise Number',
+            'Hirise Number',
             wingsenquiry,
             readonly: readonly,
             star: false
@@ -504,6 +512,28 @@ class _ViewenquirydeliveryState extends State<Viewenquirydelivery> {
               });
             },
             star: false,
+            readOnly: readonly,
+          ),
+          CustomDropdown(
+            title: 'Register',
+            selectedCustomDropdown: selectedregisteritems,
+            customDropdownItems: registeritems,
+            onChanged: (newValue) {
+              setState(() {
+                selectedregisteritems = newValue;
+              });
+            },
+            readOnly: readonly,
+          ),
+          CustomDropdown(
+            title: 'Fancy no',
+            selectedCustomDropdown: selectedfancynoitems,
+            customDropdownItems: fancynoitems,
+            onChanged: (newValue) {
+              setState(() {
+                selectedfancynoitems = newValue;
+              });
+            },
             readOnly: readonly,
           ),
           description(

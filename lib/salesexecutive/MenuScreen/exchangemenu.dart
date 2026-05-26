@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/salesexecutive/loginscreens/forms/exchangemenu/echangemenu.dart';
+import 'package:pravinhonda/salesexecutive/loginscreens/forms/view/viewform.dart';
 import 'package:pravinhonda/utility/boxes.dart';
 import 'package:pravinhonda/utility/custom.dart';
 import 'package:pravinhonda/utility/customs/customappBar.dart';
@@ -349,7 +350,7 @@ class _ExchangefinalizeState extends State<Exchangefinalize> {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => ExchangeMenuUpdate(
+                              MaterialPageRoute(builder: (context) => Viewform(
                                 enquiryid: data['enquiry_id'] ?? 0,
                                 apiResponse: data,
                                 )

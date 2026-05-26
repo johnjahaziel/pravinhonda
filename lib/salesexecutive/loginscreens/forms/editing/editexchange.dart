@@ -291,21 +291,24 @@ class _EditexchangeState extends State<Editexchange> {
               textfieldy(
                 'KM Run',
                 kmrun,
-                readonly: widget.edit
+                readonly: widget.edit,
+                numpad: true,
               ),
               if(kmrune.isNotEmpty)
               errormessage(kmrune),
               textfieldy(
                 'Year Of Purchase',
                 yearofpurchase,
-                readonly: widget.edit
+                readonly: widget.edit,
+                numpad: true,
               ),
               if(yearofpurchasee.isNotEmpty)
               errormessage(yearofpurchasee),
               textfieldy(
                 'No of Owners',
                 noofowners,
-                readonly: widget.edit
+                readonly: widget.edit,
+                numpad: true,
               ),
               if(noofownerse.isNotEmpty)
               errormessage(noofownerse),
@@ -319,7 +322,8 @@ class _EditexchangeState extends State<Editexchange> {
               textfieldy(
                 'Expected Price',
                 expectedprice,
-                readonly: widget.edit
+                readonly: widget.edit,
+                numpad: true,
               ),
               if(expectedpricee.isNotEmpty)
               errormessage(expectedpricee),

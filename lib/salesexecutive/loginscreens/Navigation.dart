@@ -18,6 +18,23 @@ import 'package:pravinhonda/utility/customs/customdrawer.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
 import 'package:pravinhonda/utility/size_config.dart';
 import 'package:pravinhonda/utility/styles.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class _NavEntry {
+  final String accessKey;
+  final Widget screen;
+  final IconData icon;
+  final String label;
+  const _NavEntry(this.accessKey, this.screen, this.icon, this.label);
+}
+
+const List<_NavEntry> _allNavEntries = [
+  _NavEntry('Home', Homescreen(), Icons.home_outlined, 'Home'),
+  _NavEntry('Enquiry', Enquiry(), Icons.request_quote_outlined, 'Enquiry'),
+  _NavEntry('Booking', Booking(), Icons.bookmark_add_outlined, 'Booking'),
+  _NavEntry('PDI', Pdi(), Icons.handyman_outlined, 'PDI'),
+  _NavEntry('Delivered', Delivery(), Icons.trolley, 'Delivered'),
+];
 
 class Navigation extends StatefulWidget {
   final int initialIndex;
@@ -33,12 +50,34 @@ class Navigation extends StatefulWidget {
 class _NavigationState extends State<Navigation> {
   late PageController pageController;
   int currentIndex = 0;
+  List<_NavEntry> entries = const [];
 
   @override
   void initState() {
     super.initState();
-    currentIndex = widget.initialIndex;
-    pageController = PageController(initialPage: currentIndex);
+    pageController = PageController(initialPage: 0);
+    _loadAccess();
+  }
+
+  Future<void> _loadAccess() async {
+    final prefs = await SharedPreferences.getInstance();
+    final access = prefs.getStringList('access_list');
+    if (!mounted) return;
+
+    final filtered = access == null
+        ? _allNavEntries
+        : _allNavEntries.where((e) => e.accessKey == 'Home' || access.contains(e.accessKey)).toList();
+
+    final list = filtered.isEmpty ? _allNavEntries : filtered;
+    final start = list.length == 1
+        ? 0
+        : widget.initialIndex.clamp(0, list.length - 1);
+
+    setState(() {
+      entries = list;
+      currentIndex = start;
+    });
+    pageController.jumpToPage(start);
   }
 
   @override
@@ -50,6 +89,16 @@ class _NavigationState extends State<Navigation> {
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
+
+    if (entries.isEmpty) {
+      return SafeArea(
+        child: Scaffold(
+          appBar: appBar(),
+          body: Center(child: CircularProgressIndicator(color: kred)),
+        ),
+      );
+    }
+
     return SafeArea(
       child: Scaffold(
         appBar: appBar(),
@@ -61,23 +110,13 @@ class _NavigationState extends State<Navigation> {
               currentIndex = index;
             });
           },
-          children: const [
-            Homescreen(),
-            Enquiry(),
-            Booking(),
-            Pdi(),
-            Delivery(),
-          ],
+          children: entries.map((e) => e.screen).toList(),
         ),
         floatingActionButton: SizedBox(
           height: SizeConfig.h(40),
           width: SizeConfig.w(40),
           child: FloatingActionButton(
             onPressed: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => Createenquiry())
-              // );
               showDialog(
                 context: context,
                 barrierDismissible: false,
@@ -102,7 +141,7 @@ class _NavigationState extends State<Navigation> {
             selectedItemColor: kred,
             unselectedItemColor: const Color.fromARGB(255, 50, 50, 50),
             selectedFontSize: fs10,
-            unselectedFontSize:fs8,
+            unselectedFontSize: fs8,
             backgroundColor: kwhite,
             unselectedLabelStyle: TextStyle(
               color: kblack,
@@ -113,28 +152,12 @@ class _NavigationState extends State<Navigation> {
                 pageController.jumpToPage(index);
               });
             },
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home_outlined),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.request_quote_outlined),
-                label: 'Enquiry',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.bookmark_add_outlined),
-                label: 'Booking',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.handyman_outlined),
-                label: 'PDI',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.trolley),
-                label: 'Delivered',
-              ),
-            ],
+            items: entries
+                .map((e) => BottomNavigationBarItem(
+                      icon: Icon(e.icon),
+                      label: e.label,
+                    ))
+                .toList(),
           ),
         ),
       ),

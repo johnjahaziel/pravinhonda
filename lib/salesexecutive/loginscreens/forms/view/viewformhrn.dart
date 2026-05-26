@@ -364,7 +364,7 @@ class _UpdatehrnpopupState extends State<Updatehrnpopup> {
         });
 
       } else {
-        print('Failed to update high rise number. Status code: ${response.statusCode}');
+        print('Failed to update hirise number. Status code: ${response.statusCode}');
 
         Fluttertoast.showToast(msg: responseData['message']);
 
@@ -381,7 +381,7 @@ class _UpdatehrnpopupState extends State<Updatehrnpopup> {
     return AlertDialog(
       backgroundColor: kwhite,
       title: Text(
-        'High Rise Number',
+        'Hirise Number',
         style: customtext(fs16, kblack, FontWeight.w600),
       ),
       content: Column(
@@ -389,13 +389,13 @@ class _UpdatehrnpopupState extends State<Updatehrnpopup> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Please enter high rise number.',
+            'Please enter hirise number.',
             style: customtext(fs14, kblack, FontWeight.w400),
           ),
           const SizedBox(height: 20),
 
           textfieldy(
-            'Enter High Rise Number',
+            'Enter Hirise Number',
             mobileController,
           ),
           if(mobilenumbere.isNotEmpty)

@@ -190,7 +190,7 @@ class _SimpleviewState extends State<Simpleview> {
               readonly: true,
             ),
             textfieldy(
-              'High Rise Number',
+              'Hirise Number',
               wingsenquiry,
               readonly: readonly,
               star: false
@@ -225,6 +225,7 @@ class _SimpleviewState extends State<Simpleview> {
               'Pincode',
               pincode,
               readonly: readonly,
+              numpad: true,
             ),
             
             Namevariantcolor(

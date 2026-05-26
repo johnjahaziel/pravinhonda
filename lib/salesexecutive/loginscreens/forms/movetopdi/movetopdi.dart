@@ -366,11 +366,6 @@ class _MovetopdiState extends State<Movetopdi> {
                             enquiryid: widget.enquiryid,
                             apiResponse: widget.apiResponse,
                             edit: edit(),
-                            isEditedform: () {
-                              setState(() {
-                                bookingtrue = false;
-                              });
-                            },
                           ),
                           if(finance == true)
                           EditfinanceMB(

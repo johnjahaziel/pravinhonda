@@ -41,6 +41,8 @@ class _AddenquiryState extends State<Addenquiry> {
   final purchasetypeitems = purchaseTypeItems;
   final exchangeflagitems = exchangeflagTypeItems;
   final testrideitems = testrideTypeItems;
+  final registeritems = register;
+  final fancynoitems = fancyno;
 
   String? selectedcustomercategoryitems;
   String? selectedenquirycategoryitems;
@@ -52,6 +54,8 @@ class _AddenquiryState extends State<Addenquiry> {
   String? selectedpurchasetypeitems;
   String? selectedexchangeflagitems;
   String? selectedtestrideitems;
+  String? selectedregisteritems;
+  String? selectedfancynoitems;
 
   TextEditingController wingsenquiry = TextEditingController();
   TextEditingController customercontactnumber = TextEditingController();
@@ -99,6 +103,8 @@ class _AddenquiryState extends State<Addenquiry> {
   String extrafittingse = '';
   String followupdatecontrollere = '';
   String testrideitemse = '';
+  String registeritemse = '';
+  String fancynoitemse = '';
 
   String? selectedmodelnameitems;
   String? selectedmodelvariantitems;
@@ -158,6 +164,8 @@ class _AddenquiryState extends State<Addenquiry> {
           'customers_remarks': customerremarks.text,
           "minimum_package": minimumPackageAnswer,
           "extra_fittings": extraFittingsSelected.join(','),
+          "register" : selectedregisteritems?.toString(),
+          "fancy_no" : selectedfancynoitems?.toString(),
 
           // 'high_rise_number': wingsenquiry.text,
           // 'customer_category': "Individual",
@@ -177,14 +185,14 @@ class _AddenquiryState extends State<Addenquiry> {
           // 'enquiry_type': "Walk-In",
           // 'enquiry_source': "Facebook",
           // 'model_name': selectedmodelnameitems?.toString(),
-          // 'model_variant': selectedmodelvariantitems?.toString(),
+          // // 'model_variant': selectedmodelvariantitems?.toString(),
           // 'model_color': selectedmodelcoloritems?.toString(),
-          // 'purchase_type': selectedpurchasetypeitems?.toString(),
-          // 'exchange_flag': selectedexchangeflagitems?.toString(),
-          // 'follow_up_date': followupdatecontroller.text,
-          // 'test_ride': selectedtestrideitems?.toString(),
+          // 'purchase_type': "cash",
+          // 'exchange_flag': "yes",
+          // 'follow_up_date': "25-04-2026",
+          // 'test_ride': "yes",
           // 'customers_remarks': "Interested in finance option",
-          // "minimum_package": minimumPackageAnswer,
+          // "minimum_package": "yes",
           // "extra_fittings": extraFittingsSelected.join(','),
         }),
       );
@@ -275,6 +283,8 @@ class _AddenquiryState extends State<Addenquiry> {
           extrafittingse = errors['extra_fittings']?.toString() ?? '';
           testrideitemse = errors['test_ride']?.toString() ?? '';
           followupdatecontrollere = errors['follow_up_date']?.toString() ?? '';
+          registeritemse = errors['register']?.toString() ?? '';
+          fancynoitemse = errors['fancy_no']?.toString() ?? '';
         });
 
         Fluttertoast.showToast(msg: responseData['message']);
@@ -415,7 +425,8 @@ class _AddenquiryState extends State<Addenquiry> {
               ),
               textfieldy(
                 'Pincode',
-                pincode
+                pincode,
+                numpad: true,
               ),
               if(pincodee.isNotEmpty)
               errormessage(pincodee),
@@ -456,7 +467,7 @@ class _AddenquiryState extends State<Addenquiry> {
               if(emailide.isNotEmpty)
               errormessage(emailide),
               textfieldy(
-                'High Rise Number',
+                'Hirise Number',
                 wingsenquiry,
                 star: false
               ),
@@ -606,6 +617,30 @@ class _AddenquiryState extends State<Addenquiry> {
               ),
               if(testrideitemse.isNotEmpty)
               errormessage(testrideitemse),
+              CustomDropdown(
+                title: 'Register',
+                selectedCustomDropdown: selectedregisteritems,
+                customDropdownItems: registeritems,
+                onChanged: (newValue) {
+                  setState(() {
+                    selectedregisteritems = newValue;
+                  });
+                },
+              ),
+              if(registeritemse.isNotEmpty)
+              errormessage(registeritemse),
+              CustomDropdown(
+                title: 'Fancy no',
+                selectedCustomDropdown: selectedfancynoitems,
+                customDropdownItems: fancynoitems,
+                onChanged: (newValue) {
+                  setState(() {
+                    selectedfancynoitems = newValue;
+                  });
+                },
+              ),
+              if(fancynoitemse.isNotEmpty)
+              errormessage(fancynoitemse),
               description(
                 'Customer Remarks',
                 customerremarks,

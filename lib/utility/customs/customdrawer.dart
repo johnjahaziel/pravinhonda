@@ -7,6 +7,7 @@ import 'package:pravinhonda/salesexecutive/MenuScreen/alllostcustomer.dart';
 import 'package:pravinhonda/salesexecutive/MenuScreen/emicalculator.dart';
 import 'package:pravinhonda/salesexecutive/MenuScreen/exchangemenu.dart';
 import 'package:pravinhonda/salesexecutive/MenuScreen/financemenu.dart';
+import 'package:pravinhonda/salesexecutive/MenuScreen/pendinglist.dart';
 import 'package:pravinhonda/salesexecutive/MenuScreen/searchcustomer.dart';
 import 'package:pravinhonda/salesexecutive/MenuScreen/taskmenu.dart';
 import 'package:pravinhonda/salesexecutive/MenuScreen/updatehrn.dart';
@@ -84,157 +85,170 @@ class _CustomdrawerState extends State<Customdrawer> {
                   ],
                 ),
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  menuicontitle(
-                    Icons.home_outlined,
-                    "Home",
-                    () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Navigation(initialIndex: 0,)
-                        )
-                      );
-                    },
-                  ),
-                  _buildDivider(),
-                  menuicontitle(
-                    Icons.groups_2_outlined,
-                    "About Pravin Honda",
-                    () {},
-                  ),
-                  _buildDivider(),
-                  menuicontitle(
-                    Icons.menu_book_sharp,
-                    'Catalog',
-                    () {},
-                  ),
-                  _buildDivider(),
-                  menuicontitle(
-                    Icons.calculate,
-                    'EMI Calculator',
-                    () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Emicalculator())
-                      );
-                    },
-                  ),
-                  _buildDivider(),
-                  menuicontitle(
-                    Icons.edit_square,
-                    'Task',
-                    () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Taskmenu())
-                      );
-                    },
-                  ),
-                  _buildDivider(),
-                  menuicontitle(
-                    Icons.person_search_outlined,
-                    'Search Customer',
-                    () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Searchcustomer())
-                      );
-                    },
-                  ),
-                  _buildDivider(),
-                  menuicontitle(
-                    Icons.change_circle_outlined,
-                    'Finance',
-                    () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Financemenu())
-                      );
-                    },
-                  ),
-                  _buildDivider(),
-                  menuicontitle(
-                    Icons.change_circle_outlined,
-                    'Exchange',
-                    () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Exchangemenu())
-                      );
-                    },
-                  ),
-                  _buildDivider(),
-                  menuicontitle(
-                    Icons.sentiment_dissatisfied_outlined,
-                    'Lost Customer',
-                    () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => AllLostcustomer())
-                      );
-                    },
-                  ),
-                  _buildDivider(),
-                  menuicontitle(
-                    Icons.numbers,
-                    'Update HRN',
-                    () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Updatehrn())
-                      );
-                    },
-                  ),
-                  _buildDivider(),
-                  ListTile(
-                    leading: Icon(
-                      Icons.logout,
-                      size: 24,
-                      color: kred,
-                    ),
-                    title: Text(
-                      'Logout',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: kred,
-                        fontSize: 16,
-                      ),
-                    ),
-                    onTap: () {
-                      logout();
-                    },
-                  ),
-                ],
-              ),
               Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 15,left: 10),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text(
-                        'Developed & Maintained By ',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: fs10
-                        ),
+                      menuicontitle(
+                        Icons.home_outlined,
+                        "Home",
+                        () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Navigation(initialIndex: 0,)
+                            )
+                          );
+                        },
                       ),
-                      GestureDetector(
-                        onTap: _launchWebsite,
-                        child: Text(
-                          'Bluon Tech',
+                      _buildDivider(),
+                      menuicontitle(
+                        Icons.groups_2_outlined,
+                        "About Pravin Honda",
+                        () {},
+                      ),
+                      _buildDivider(),
+                      menuicontitle(
+                        Icons.menu_book_sharp,
+                        'Catalog',
+                        () {},
+                      ),
+                      _buildDivider(),
+                      menuicontitle(
+                        Icons.pending_actions_outlined,
+                        'Pending List',
+                        () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Pendinglist())
+                          );
+                        },
+                      ),
+                      _buildDivider(),
+                      menuicontitle(
+                        Icons.calculate,
+                        'EMI Calculator',
+                        () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Emicalculator())
+                          );
+                        },
+                      ),
+                      _buildDivider(),
+                      menuicontitle(
+                        Icons.edit_square,
+                        'Task',
+                        () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Taskmenu())
+                          );
+                        },
+                      ),
+                      _buildDivider(),
+                      menuicontitle(
+                        Icons.person_search_outlined,
+                        'Search Customer',
+                        () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Searchcustomer())
+                          );
+                        },
+                      ),
+                      _buildDivider(),
+                      menuicontitle(
+                        Icons.change_circle_outlined,
+                        'Finance',
+                        () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Financemenu())
+                          );
+                        },
+                      ),
+                      _buildDivider(),
+                      menuicontitle(
+                        Icons.change_circle_outlined,
+                        'Exchange',
+                        () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Exchangemenu())
+                          );
+                        },
+                      ),
+                      _buildDivider(),
+                      menuicontitle(
+                        Icons.sentiment_dissatisfied_outlined,
+                        'Lost Customer',
+                        () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => AllLostcustomer())
+                          );
+                        },
+                      ),
+                      _buildDivider(),
+                      menuicontitle(
+                        Icons.numbers,
+                        'Update HRN',
+                        () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Updatehrn())
+                          );
+                        },
+                      ),
+                      _buildDivider(),
+                      ListTile(
+                        leading: Icon(
+                          Icons.logout,
+                          size: 24,
+                          color: kred,
+                        ),
+                        title: Text(
+                          'Logout',
                           style: TextStyle(
                             fontFamily: 'Poppins',
-                            fontSize: fs10,
-                            fontWeight: FontWeight.bold,
+                            color: kred,
+                            fontSize: 16,
                           ),
                         ),
+                        onTap: () {
+                          logout();
+                        },
                       ),
                     ],
                   ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 15,left: 10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      'Developed & Maintained By ',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: fs10
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: _launchWebsite,
+                      child: Text(
+                        'Bluon Tech',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: fs10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               )
             ],

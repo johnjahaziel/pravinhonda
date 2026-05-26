@@ -11,6 +11,7 @@ import 'package:pravinhonda/salesexecutive/loginscreens/forms/movetobooking/book
 import 'package:pravinhonda/salesexecutive/loginscreens/forms/movetobooking/editenquiry.dart';
 import 'package:pravinhonda/salesexecutive/loginscreens/forms/movetobooking/editexchange.dart';
 import 'package:pravinhonda/salesexecutive/loginscreens/forms/movetobooking/editfinance.dart';
+import 'package:pravinhonda/salesexecutive/loginscreens/forms/view/viewformhrn.dart';
 import 'package:pravinhonda/utility/customs/customappBar.dart';
 import 'package:pravinhonda/utility/customs/customdrawer.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
@@ -54,6 +55,14 @@ class _MovetobookingState extends State<Movetobooking> {
     }
   }
 
+  void _onChildEditedChanged(bool edited) {
+    if (isEdited != edited) {
+      setState(() {
+        isEdited = edited;
+      });
+    }
+  }
+
   late String modelName;
   late String modelColor;
 
@@ -84,6 +93,76 @@ class _MovetobookingState extends State<Movetobooking> {
     } else {
         financetrue = false;
         exchangetrue = false;
+    }
+  }
+
+  Future<void> _refreshPage() async {
+    final url = Uri.parse('https://app.pravinhonda.com/api/enquiries/${widget.enquiryid}');
+
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        final freshData = (responseData['data'] as Map<String, dynamic>?) ?? widget.apiResponse;
+        if (!mounted) return;
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => Movetobooking(
+              enquiryid: widget.enquiryid,
+              apiResponse: freshData,
+            ),
+          ),
+        );
+      } else {
+        Fluttertoast.showToast(msg: responseData['message']?.toString() ?? 'Error');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  Future<void> checkHighRiseAndProceed() async {
+    final url = Uri.parse('https://app.pravinhonda.com/api/check-high-rise/${widget.enquiryid}');
+
+    final token = BlocProvider.of<AuthCubit>(context).state.token;
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200 && responseData['message'] == "yes") {
+        await vehicleStockCheckUp();
+      } else if (response.statusCode == 200 && responseData['message'] == "no") {
+        await showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => Updatehrnpopup(enquiryid: widget.enquiryid),
+        );
+        if (!mounted) return;
+        await _refreshPage();
+      } else {
+        Fluttertoast.showToast(msg: responseData['message']?.toString() ?? 'Error');
+      }
+    } catch (e) {
+      print('Error: $e');
     }
   }
 
@@ -127,7 +206,8 @@ class _MovetobookingState extends State<Movetobooking> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => BookingformNo(
-              enquiryid: widget.enquiryid
+              enquiryid: widget.enquiryid,
+              apiResponse: widget.apiResponse,
               )
             )
           );
@@ -348,11 +428,7 @@ class _MovetobookingState extends State<Movetobooking> {
                             enquiryid: widget.enquiryid,
                             apiResponse: widget.apiResponse,
                             edit: edit(),
-                            isEditedform: () {
-                              setState(() {
-                                bookingtrue = false;
-                              });
-                            },
+                            onEditedChanged: _onChildEditedChanged,
                           ),
                           if(finance == true)
                           EditfinanceMB(
@@ -370,12 +446,14 @@ class _MovetobookingState extends State<Movetobooking> {
                             edit: edit(),
                             oldapiResponse: widget.apiResponse,
                             apiResponse: widget.apiResponse,
+                            onEditedChanged: _onChildEditedChanged,
                           ),
                           if(exchange == true)
                           EditexchangeMB(
                             enquiryid: widget.enquiryid,
                             apiResponse: widget.apiResponse,
                             edit: edit(),
+                            onEditedChanged: _onChildEditedChanged,
                           )
                         ],
                       ),
@@ -385,8 +463,7 @@ class _MovetobookingState extends State<Movetobooking> {
                   button(
                     'Move to Booking',
                     () {
-                      // showVehicleStockPopup(context);
-                      vehicleStockCheckUp();
+                      checkHighRiseAndProceed();
                     }
                   )
                 ],

@@ -13,11 +13,14 @@ class EditexchangeMB extends StatefulWidget {
   final String enquiryid;
   final Map<String, dynamic> apiResponse;
 
+  final ValueChanged<bool>? onEditedChanged;
+
   final bool edit;
   const EditexchangeMB({
     super.key,
     required this.enquiryid,
     required this.apiResponse,
+    this.onEditedChanged,
     required this.edit
   });
 
@@ -85,6 +88,19 @@ class _EditexchangeMBState extends State<EditexchangeMB> {
   }
 
   Map<String, dynamic> originalEnquiry = {};
+
+  bool? _lastReportedEdited;
+
+  void _reportEditedToParent() {
+    if (widget.onEditedChanged == null) return;
+    final current = isEdited();
+    if (current != _lastReportedEdited) {
+      _lastReportedEdited = current;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) widget.onEditedChanged?.call(current);
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -244,6 +260,7 @@ class _EditexchangeMBState extends State<EditexchangeMB> {
   
   @override
   Widget build(BuildContext context) {
+    _reportEditedToParent();
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(20)),
       child: Column(
@@ -301,21 +318,24 @@ class _EditexchangeMBState extends State<EditexchangeMB> {
           textfieldy(
             'KM Run',
             kmrun,
-            readonly: widget.edit
+            readonly: widget.edit,
+            numpad: true,
           ),
           if(kmrune.isNotEmpty)
           errormessage(kmrune),
           textfieldy(
             'Year Of Purchase',
             yearofpurchase,
-            readonly: widget.edit
+            readonly: widget.edit,
+            numpad: true,
           ),
           if(yearofpurchasee.isNotEmpty)
           errormessage(yearofpurchasee),
           textfieldy(
             'No of Owners',
             noofowners,
-            readonly: widget.edit
+            readonly: widget.edit,
+            numpad: true,
           ),
           if(noofownerse.isNotEmpty)
           errormessage(noofownerse),
@@ -329,7 +349,8 @@ class _EditexchangeMBState extends State<EditexchangeMB> {
           textfieldy(
             'Expected Price',
             expectedprice,
-            readonly: widget.edit
+            readonly: widget.edit,
+            numpad: true,
           ),
           if(expectedpricee.isNotEmpty)
           errormessage(expectedpricee),

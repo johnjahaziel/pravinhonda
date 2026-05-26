@@ -50,6 +50,8 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
   final purchasetypeitems = purchaseTypeItems;
   final exchangeflagitems = exchangeflagTypeItems;
   final testrideitems = testrideTypeItems;
+  final registeritems = register;
+  final fancynoitems = fancyno;
 
   String? selectedcustomercategoryitems;
   String? selectedenquirycategoryitems;
@@ -68,6 +70,9 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
 
   String? selecteddistrictitems;
   String? selectedcityitems;
+
+  String? selectedregisteritems;
+  String? selectedfancynoitems;
 
   late TextEditingController enquiryid;
   late TextEditingController wingsenquiry;
@@ -128,6 +133,8 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
     selectedpurchasetypeitems = enquiry['purchase_type'];
     selectedexchangeflagitems = enquiry['exchange_flag'];
     selectedtestrideitems = enquiry['test_ride'];
+    selectedregisteritems = enquiry['register'];
+    selectedfancynoitems = enquiry['fancy_no'];
     customername = TextEditingController(text: enquiry['customer_name'] ?? '');
     customercontactnumber = TextEditingController(text: enquiry['customer_contact_number'] ?? '');
     secondarycontactnumber = TextEditingController(text: enquiry['secondary_contact_number'] ?? '');
@@ -172,6 +179,9 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
   String followupdatecontrollere = '';
   String testrideitemse = '';
 
+  String registeritemse = '';
+  String fancynoitemse = '';
+
   String nextpagelocal = '';
 
   Map<String, dynamic> originalEnquiry = {};
@@ -202,7 +212,9 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
       address.text != (originalEnquiry['address'] ?? '') ||
       datecontroller.text != (originalEnquiry['dob'] ?? '') ||
       followupdatecontroller.text != (originalEnquiry['follow_up_date'] ?? '') ||
-      customerremarks.text != (originalEnquiry['customers_remarks'] ?? '');
+      customerremarks.text != (originalEnquiry['customers_remarks'] ?? '') ||
+      selectedregisteritems != originalEnquiry['register'] ||
+      selectedfancynoitems != originalEnquiry['fancy_no'];
   }
 
   Future<void> apiconnection() async {
@@ -246,6 +258,8 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
           'customers_remarks': customerremarks.text,
           'minimum_package': minimumPackageAnswer.toString(),
           "extra_fittings": extraFittingsSelected.join(','),
+          "register" : selectedregisteritems?.toString(),
+          "fancy_no" : selectedfancynoitems?.toString(),
         }),
       );
 
@@ -324,6 +338,8 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
           extrafittingse = errors['extra_fittings']?.toString() ?? '';
           testrideitemse = errors['test_ride']?.toString() ?? '';
           followupdatecontrollere = errors['follow_up_date']?.toString() ?? '';
+          registeritemse = errors['register']?.toString() ?? '';
+          fancynoitemse = errors['fancy_no']?.toString() ?? '';
         });
 
         Fluttertoast.showToast(msg: responseData['message']);
@@ -425,21 +441,21 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
           textfieldy(
             'Customer Name',
             customername,
-            readonly: widget.edit,
+            readonly: true,
           ),
           if(customernamee.isNotEmpty)
           errormessage(customernamee),
           textfieldy(
             'Customer Contact Number',
             customercontactnumber,
-            readonly: widget.edit,
+            readonly: true,
           ),
           if(customercontactnumbere.isNotEmpty)
           errormessage(customercontactnumbere),
           textfieldy(
             'Secondary Contact Number',
             secondarycontactnumber,
-            readonly: widget.edit,
+            readonly: true,
             star: false
           ),
           if(secondarycontactnumbere.isNotEmpty)
@@ -447,17 +463,17 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
           textfieldy(
             "Address",
             address,
-            readonly: widget.edit,
+            readonly: true,
           ),
           if(addresse.isNotEmpty)
           errormessage(addresse),
           Districtcity(
             districte: districte,
             citye: citye,
-        
+
             selecteddistrict: selecteddistrictitems,
             selectedcity: selectedcityitems,
-        
+
             ondistrictChanged: (value) {
               setState(() {
                 selecteddistrictitems = value;
@@ -469,13 +485,14 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
                 selectedcityitems = value;
               });
             },
-        
-            edit: widget.edit,
+
+            edit: true,
           ),
           textfieldy(
             'Pincode',
             pincode,
-            readonly: widget.edit,
+            readonly: true,
+            numpad: true,
           ),
           if(pincodee.isNotEmpty)
           errormessage(pincodee),
@@ -489,7 +506,7 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
               });
             },
             star: false,
-            readOnly: widget.edit,
+            readOnly: true,
           ),
           if(gendere.isNotEmpty)
           errormessage(gendere),
@@ -497,9 +514,9 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
             title: 'Date of Birth',
             datecontroller: datecontroller,
             star: false,
-            readOnly: widget.edit,
+            readOnly: true,
           ),
-        
+
           CustomDropdown(
             title: 'Marital Status',
             selectedCustomDropdown: selectedmartialstatusitems,
@@ -510,18 +527,18 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
               });
             },
             star: false,
-            readOnly: widget.edit,
+            readOnly: true,
           ),
           textfieldy(
             "Email ID",
             emailid,
             star: false,
-            readonly: widget.edit,
+            readonly: true,
           ),
           if(emailide.isNotEmpty)
           errormessage(emailide),
           textfieldy(
-            'High Rise Number',
+            'Hirise Number',
             wingsenquiry,
             readonly: widget.edit,
             star: false
@@ -680,6 +697,32 @@ class _EditenquiryMBState extends State<EditenquiryMB> {
           ),
           if(testrideitemse.isNotEmpty)
           errormessage(testrideitemse),
+          CustomDropdown(
+            title: 'Register',
+            selectedCustomDropdown: selectedregisteritems,
+            customDropdownItems: registeritems,
+            onChanged: (newValue) {
+              setState(() {
+                selectedregisteritems = newValue;
+              });
+            },
+            readOnly: widget.edit,
+          ),
+          if(registeritemse.isNotEmpty)
+          errormessage(registeritemse),
+          CustomDropdown(
+            title: 'Fancy no',
+            selectedCustomDropdown: selectedfancynoitems,
+            customDropdownItems: fancynoitems,
+            onChanged: (newValue) {
+              setState(() {
+                selectedfancynoitems = newValue;
+              });
+            },
+            readOnly: widget.edit,
+          ),
+          if(fancynoitemse.isNotEmpty)
+          errormessage(fancynoitemse),
           description(
             'Customer Remarks',
             customerremarks,

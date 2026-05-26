@@ -209,7 +209,7 @@ class _DistrictcityState extends State<Districtcity> {
             widget.ondistrictChanged(newValue);
           },
           readOnly: widget.edit,
-          star: widget.star,
+          star: true,
         ),
         if(widget.districte.isNotEmpty)
         errormessage(widget.districte),
@@ -224,7 +224,7 @@ class _DistrictcityState extends State<Districtcity> {
             widget.oncityChanged(newValue);
           },
           readOnly: widget.edit,
-          star: widget.star,
+          star: true,
         ),
         if(widget.citye.isNotEmpty)
         errormessage(widget.citye),

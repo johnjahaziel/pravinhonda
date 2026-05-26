@@ -262,6 +262,7 @@ class _BookingformYesState extends State<BookingformYes> {
                     textfieldy(
                       'Booking Amount',
                       bookingamount,
+                      numpad: true,
                     ),
                     if(bookingamounte.isNotEmpty)
                     errormessage(bookingamounte),

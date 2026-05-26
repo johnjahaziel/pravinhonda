@@ -18,6 +18,8 @@ class EditfinanceMB extends StatefulWidget {
   final Map<String, dynamic> oldapiResponse;
   final Map<String, dynamic> apiResponse;
 
+  final ValueChanged<bool>? onEditedChanged;
+
   final bool edit;
   const EditfinanceMB({
     super.key,
@@ -26,6 +28,7 @@ class EditfinanceMB extends StatefulWidget {
     required this.exchangeselected,
     required this.apiResponse,
     required this.oldapiResponse,
+    this.onEditedChanged,
 
     required this.edit
   });
@@ -92,6 +95,19 @@ class _EditfinanceMBState extends State<EditfinanceMB> {
   }
 
   Map<String, dynamic> originalEnquiry = {};
+
+  bool? _lastReportedEdited;
+
+  void _reportEditedToParent() {
+    if (widget.onEditedChanged == null) return;
+    final current = isEdited();
+    if (current != _lastReportedEdited) {
+      _lastReportedEdited = current;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) widget.onEditedChanged?.call(current);
+      });
+    }
+  }
 
   bool isEdited() {
     return
@@ -362,6 +378,7 @@ class _EditfinanceMBState extends State<EditfinanceMB> {
   
   @override
   Widget build(BuildContext context) {
+    _reportEditedToParent();
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(20)),
       child: Column(

@@ -8,7 +8,8 @@ import 'package:http/http.dart' as http;
 import 'package:pravinhonda/bloc/auth_cubit.dart';
 import 'package:pravinhonda/bloc/role_cubit.dart';
 import 'package:pravinhonda/bloc/username_cubit.dart';
-import 'package:pravinhonda/pdimanager/Navigation.dart';
+import 'package:pravinhonda/pdimanager/NavigationPdi.dart';
+import 'package:pravinhonda/rtomanager/NavigationRTo.dart';
 import 'package:pravinhonda/salesexecutive/loginscreens/Navigation.dart';
 import 'package:pravinhonda/utility/custom.dart';
 import 'package:pravinhonda/utility/customs/form-utility.dart';
@@ -27,8 +28,20 @@ class _LoginState extends State<Login> {
   bool isPassword = false;
   final TextEditingController useridcontroller = TextEditingController();
   final TextEditingController passwordcontroller = TextEditingController();
+  final TextEditingController pincontroller = TextEditingController();
+  // final TextEditingController lattitudecontroller = TextEditingController();
+  // final TextEditingController longitudecontroller = TextEditingController();
 
   Future<void> login() async {
+    final hour = DateTime.now().hour;
+    if (hour < 8 || hour >= 20) {
+      Fluttertoast.showToast(
+        msg: 'Login allowed only between 8 AM and 8 PM',
+        toastLength: Toast.LENGTH_LONG,
+      );
+      return;
+    }
+
     final url = Uri.parse('https://app.pravinhonda.com/api/login');
 
     try {
@@ -37,6 +50,13 @@ class _LoginState extends State<Login> {
         body: jsonEncode({
           'username': useridcontroller.text,
           'password': passwordcontroller.text,
+          'pin': pincontroller.text,
+          // 'latitude': lattitudecontroller.text,
+          // 'longitude': longitudecontroller.text,
+          // 'username': 'rto1@pravinhonda.com',
+          // 'password': "12345678",
+          // 'latitude': '9.1737612',
+          // 'longitude': '77.8626703',
         }),
         headers: {
           'Accept': 'application/json',
@@ -46,9 +66,9 @@ class _LoginState extends State<Login> {
 
       final responseData = json.decode(response.body);
 
-      if (response.statusCode == 200) {
+      print('Full response: $responseData');
 
-        print('Token: ${responseData['token']}');
+      if (response.statusCode == 200 && responseData['status'] == true) {
 
         final token = responseData['token'];
 
@@ -83,6 +103,22 @@ class _LoginState extends State<Login> {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('role', role);
 
+        final access = responseData['user']['access'];
+        String? accessKey;
+        if (role == 'Sales Representative') {
+          accessKey = 'sales';
+        } else if (role == 'PDI Incharge') {
+          accessKey = 'pdi';
+        } else if (role == 'RTO') {
+          accessKey = 'rto';
+        }
+        if (access is Map && accessKey != null && access[accessKey] is List) {
+          final roleAccess = (access[accessKey] as List).map((e) => e.toString()).toList();
+          await prefs.setStringList('access_list', roleAccess);
+        } else {
+          await prefs.remove('access_list');
+        }
+
         BlocProvider.of<RoleCubit>(context).setrole(role);
 
         if (role == 'Sales Representative') {
@@ -90,7 +126,7 @@ class _LoginState extends State<Login> {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (context) => Navigation(),
+              builder: (context) => Navigation(),       //Navigation
             ),
             ((route) => false)
           );
@@ -109,20 +145,79 @@ class _LoginState extends State<Login> {
 
           Fluttertoast.showToast(msg: responseData['message']);
 
+        } else if (role == 'RTO') {
+
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => NavigationRTO(),
+            ),
+            ((route) => false)
+          );
+
+          Fluttertoast.showToast(msg: responseData['message']);
+
         } else {
           Fluttertoast.showToast(msg: "Access denied");
         }
 
       } else {
         print('Server error: ${response.statusCode}');
-
         print(responseData);
-        Fluttertoast.showToast(msg: responseData['message']);
+        Fluttertoast.showToast(msg: responseData['message'] ?? 'Login failed');
       }
     } catch (e) {
       print('Error during login: $e');
     }
   }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     getLocation();
+  //   });
+  // }
+
+  // Future<void> getLocation() async {
+  //   bool serviceEnabled;
+  //   LocationPermission permission;
+
+  //   // 🔹 Check if location service is ON
+  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //   if (!serviceEnabled) {
+  //     Fluttertoast.showToast(msg: "Please turn on location services");
+  //     await Geolocator.openLocationSettings();
+  //     return;
+  //   }
+
+  //   // 🔹 Check permission
+  //   permission = await Geolocator.checkPermission();
+  //   if (permission == LocationPermission.denied) {
+  //     permission = await Geolocator.requestPermission();
+  //     if (permission == LocationPermission.denied) {
+  //       Fluttertoast.showToast(msg: "Location permission denied");
+  //       return;
+  //     }
+  //   }
+
+  //   if (permission == LocationPermission.deniedForever) {
+  //     Fluttertoast.showToast(msg: "Permission permanently denied");
+  //     await Geolocator.openAppSettings();
+  //     return;
+  //   }
+
+  //   // 🔹 Get location
+  //   Position position = await Geolocator.getCurrentPosition(
+  //     desiredAccuracy: LocationAccuracy.high,
+  //   );
+
+  //   setState(() {
+  //     lattitudecontroller.text = position.latitude.toString();
+  //     longitudecontroller.text = position.longitude.toString();
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -168,7 +263,55 @@ class _LoginState extends State<Login> {
                 isPassword,
                 passwordcontroller,
               ),
-              SizedBox(height: SizeConfig.h(60)),
+              SizedBox(height: SizeConfig.h(15)),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                child: textfieldy(
+                  'Pin',
+                  pincontroller,
+                  numpad: true,
+                ),
+              ),
+              // Column(
+              //   crossAxisAlignment: CrossAxisAlignment.end,
+              //   children: [
+              //     Padding(
+              //       padding: const EdgeInsets.symmetric(horizontal: 25),
+              //       child: Column(
+              //         children: [
+              //           SizedBox(height: SizeConfig.h(5)),
+              //           textfieldy(
+              //             'Lattitude',
+              //             lattitudecontroller,
+              //             readonly: true
+              //           ),
+              //           SizedBox(height: SizeConfig.h(5)),
+              //           textfieldy(
+              //             'Longitude',
+              //             longitudecontroller,
+              //             readonly: true
+              //           ),
+              //           SizedBox(height: SizeConfig.h(5)),
+              //         ],
+              //       ),
+              //     ),
+              //     Padding(
+              //       padding: const EdgeInsets.only(right: 15),
+              //       child: TextButton(
+              //         onPressed: () {
+              //           getLocation();
+              //         },
+              //         child: Text(
+              //           "Get Location",
+              //           style: TextStyle(
+              //             color: Colors.black
+              //           ),
+              //         ),
+              //       ),
+              //     )
+              //   ],
+              // ),
+              SizedBox(height: SizeConfig.h(40)),
               button(
                 "Login",
                 () {

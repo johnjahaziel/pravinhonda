@@ -15,9 +15,11 @@ import 'package:pravinhonda/utility/styles.dart';
 
 class BookingformNo extends StatefulWidget {
   final String enquiryid;
+  final Map<String, dynamic> apiResponse;
   const BookingformNo({
     super.key,
-    required this.enquiryid
+    required this.enquiryid,
+    required this.apiResponse
   });
 
   @override
@@ -28,8 +30,8 @@ class _BookingformNoState extends State<BookingformNo> {
 
   final TextEditingController bookingamount = TextEditingController();
   final TextEditingController bookingreceiptno = TextEditingController();
-  final TextEditingController vehiclename = TextEditingController();
-  final TextEditingController vehiclecolour = TextEditingController();
+  late TextEditingController vehiclename;
+  late TextEditingController vehiclecolour;
   final TextEditingController tyremake = TextEditingController();
   final TextEditingController deliverydate = TextEditingController();
 
@@ -39,6 +41,19 @@ class _BookingformNoState extends State<BookingformNo> {
   String vehiclecoloure = '';
   String tyremakee = '';
   String deliverydatee = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _initControllersFromResponse(widget.apiResponse);
+  }
+
+  void _initControllersFromResponse(Map<String, dynamic> resp) {
+    final enquiry = resp;
+
+    vehiclename = TextEditingController(text: enquiry['model_name']);
+    vehiclecolour = TextEditingController(text: enquiry['model_color']);
+  }
 
   Future<void> movetobooking() async {
     final url = Uri.parse('https://app.pravinhonda.com/api/${widget.enquiryid}/move-to-booking/simple');
@@ -55,10 +70,9 @@ class _BookingformNoState extends State<BookingformNo> {
         },
         body: jsonEncode({
           'booking_amount': bookingamount.text.toString(),
-          'booking_receipt_no': bookingreceiptno.text.toString(),
-          'vehicle_name': vehiclename.text.toString(),
-          'vehicle_colour': vehiclecolour.text.toString(),
-          'tyre_make': tyremake.text.toString(),
+          // 'booking_receipt_no': bookingreceiptno.text.toString(),
+          // 'vehicle_name': vehiclename.text.toString(),
+          // 'vehicle_colour': vehiclecolour.text.toString(),
           'expected_delivery_date' : deliverydate.text.toString(),
         }),
       );
@@ -140,36 +154,39 @@ class _BookingformNoState extends State<BookingformNo> {
                 ),
                 SizedBox(height: SizeConfig.h(20)),
                 textfieldy(
-                  'Booking Amount',
-                  bookingamount,
-                ),
-                if(bookingamounte.isNotEmpty)
-                errormessage(bookingamounte),
-                textfieldy(
-                  'Booking Receipt No',
-                  bookingreceiptno,
-                  star: false
-                ),
-                if(bookingreceiptnoe.isNotEmpty)
-                errormessage(bookingreceiptnoe),
-                textfieldy(
-                  'Vehicle Name',
+                  'Model Name',
                   vehiclename,
+                  readonly: true
                 ),
                 if(vehiclenamee.isNotEmpty)
                 errormessage(vehiclenamee),
                 textfieldy(
-                  'Vehicle Colour',
+                  'Model Colour',
                   vehiclecolour,
+                  readonly: true
                 ),
                 if(vehiclecoloure.isNotEmpty)
                 errormessage(vehiclecoloure),
                 textfieldy(
-                  'Tyre Make',
-                  tyremake,
+                  'Booking Amount',
+                  bookingamount,
+                  numpad: true,
                 ),
-                if(tyremakee.isNotEmpty)
-                errormessage(tyremakee),
+                if(bookingamounte.isNotEmpty)
+                errormessage(bookingamounte),
+                // textfieldy(
+                //   'Booking Receipt No',
+                //   bookingreceiptno,
+                //   star: false
+                // ),
+                // if(bookingreceiptnoe.isNotEmpty)
+                // errormessage(bookingreceiptnoe),
+                // textfieldy(
+                //   'Tyre Make',
+                //   tyremake,
+                // ),
+                // if(tyremakee.isNotEmpty)
+                // errormessage(tyremakee),
                 Followupdate(
                   title: 'Expected Delivery Date',
                   datecontroller: deliverydate,

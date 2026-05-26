@@ -270,11 +270,6 @@ class _ExchangeMenuUpdateState extends State<ExchangeMenuUpdate> {
                             enquiryid: widget.enquiryid,
                             apiResponse: widget.apiResponse,
                             edit: true,
-                            isEditedform: () {
-                              setState(() {
-                                bookingtrue = false;
-                              });
-                            },
                           ),
                           if(finance == true)
                           EditfinanceMB(
